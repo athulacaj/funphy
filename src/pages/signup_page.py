@@ -2,10 +2,11 @@ import flet as ft
 import sys
 import os
 from .utils import get_background_image, BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
+from .db import UserDatabase
 
 # Find the root directory of the project and add it to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-from src.storage.db import UserDatabase
+from pages.db import UserDatabase
 
 def signup_page(page: ft.Page):
     # Create loading indicator

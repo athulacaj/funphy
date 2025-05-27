@@ -18,7 +18,7 @@ def get_view(page: ft.Page):
                                 bgcolor=PRIMARY_COLOR,
                                 border_radius=70,
                             ),
-                            ft.Text("Game App Name", size=30, weight=ft.FontWeight.BOLD, color=ACCENT_COLOR),
+                            ft.Text("FunPhy", size=30, weight=ft.FontWeight.BOLD, color=ACCENT_COLOR),
                             ft.Container(
                                 content=ft.ElevatedButton(
                                     "Get Started", 

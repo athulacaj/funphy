@@ -5,7 +5,7 @@ from .utils import get_background_image, BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, 
 
 # Find the root directory of the project and add it to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-from src.storage.db import UserDatabase
+from .db import UserDatabase
 
 def get_view(page: ft.Page):
     # Create loading indicator
