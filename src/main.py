@@ -1,59 +1,32 @@
 import flet as ft
-import threading
-import time
-
+from pages import splash_page, welcome_page, login_page, signup_page
+from pages.utils import BG_COLOR
 
 def main(page: ft.Page):
-    # Set page background color
-    page.bgcolor = "transparent"
-    
-    # Create background image from URL
-    background_image = ft.Image(
-        src="https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1600&auto=format&fit=crop",
-        width=page.width,
-        height=page.height,
-        fit=ft.ImageFit.COVER,
-    )
-    
-    counter = ft.Text("0", size=50, data=0, color="white")
+    page.title = "Futuristic Fantasy Game App"
+    page.bgcolor = BG_COLOR
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
-    def increment_click(e):
-        counter.data += 1
-        counter.value = str(counter.data)
-        counter.update()
-    
-    # Auto increment function with threading
-    def auto_increment():
-        while True:
-            time.sleep(2)  # Wait for 2 seconds
-            # Use page.update to make UI changes from another thread
-            counter.data += 1
-            counter.value = str(counter.data)
-            page.update()  # Update the whole page to refresh the counter
-    
-    # Start auto increment in a separate thread
-    threading.Thread(target=auto_increment, daemon=True).start()
+    def route_change(route):
+        page.views.clear()
 
-    page.floating_action_button = ft.FloatingActionButton(
-        icon=ft.Icons.ADD, on_click=increment_click
-    )
-    
-    # Add a Stack control to layer the counter on top of the background image
-    page.add(
-        ft.Stack(
-            [
-                background_image,
-                ft.SafeArea(
-                    ft.Container(
-                        counter,
-                        alignment=ft.alignment.center,
-                    ),
-                    expand=True,
-                )
-            ],
-            expand=True,
-        )
-    )
+        if page.route == "/":
+            # Splash Screen
+            page.views.append(splash_page(page))
+        elif page.route == "/welcome":
+            # Welcome Screen
+            page.views.append(welcome_page(page))
+        elif page.route == "/login":
+            # Login Screen
+            page.views.append(login_page(page))
+        elif page.route == "/signup":
+            # Signup Screen
+            page.views.append(signup_page(page))
+
+        page.update()
+
+    page.on_route_change = route_change
+    page.go(page.route or "/")
 
 
 ft.app(main)

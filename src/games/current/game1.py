@@ -14,6 +14,18 @@ def main(page: ft.Page):
     }
     page.theme = ft.Theme(font_family="Inter")
 
+    def show_info_snackbar(e):
+        page.appbar = ft.AppBar(
+            title=ft.Text("LED Circuit Simulator"),
+            center_title=True,
+            actions=[
+                ft.IconButton(
+                    icon=ft.Icons.INFO_OUTLINE,
+                    tooltip="So, the required current for the LED to be lit safely and visibly is between 5mA and 20mA."
+                )
+            ]
+        )
+
     # Constants for the circuit simulation
     battery_voltage = 9.0  # Volts
     led_vf = 2.0  # LED Forward Voltage Drop in Volts
