@@ -125,5 +125,6 @@ def get_view(page: ft.Page):
                     height=page.window.height if page.window else 600,
                 ),
             ])
-        ]
+        ],
+        bgcolor=BG_COLOR  
     )

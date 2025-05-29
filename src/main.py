@@ -1,11 +1,14 @@
 import flet as ft
-from pages import splash_page, welcome_page, login_page, signup_page, dashboard_page
+from pages import splash_page, welcome_page, login_page, signup_page, dashboard_page,get_assessment_pages
 from pages.utils import BG_COLOR
+
 
 def main(page: ft.Page):
     page.title = "FunPhy - Fun with Physics"
     page.bgcolor = BG_COLOR
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
+
+    page.route="/assessment/question"
 
     def route_change(route):
         page.views.clear()
@@ -25,6 +28,12 @@ def main(page: ft.Page):
         elif page.route == "/dashboard":
             # Dashboard Screen
             page.views.append(dashboard_page(page))
+        elif page.route.startswith("/assessment/"):
+            assessment_view = get_assessment_pages(page)
+            if assessment_view:
+                page.views.append(assessment_view)
+
+            
 
         page.update()
 

@@ -37,17 +37,28 @@ def dashboard_page(page: ft.Page):
                 # Content
                 ft.Container(
                     ft.Column(
-                        [
+                        [   
                             ft.Text(f"Welcome, {user_name}!", size=30, weight=ft.FontWeight.W_600, color=ACCENT_COLOR),
                             ft.Text(f"Email: {user_email}", size=16, color=TEXT_COLOR),
                             
                             ft.Container(height=20),  # Spacer
-                            
                             ft.Container(
                                 ft.Column(
                                     [
                                         ft.Text("Dashboard", size=24, weight=ft.FontWeight.W_500, color=PRIMARY_COLOR),
                                         ft.Text("Your personal dashboard content will appear here.", size=14, color=TEXT_COLOR),
+                                        
+                                        ft.Container(height=20),  # Spacer
+                                        
+                                        ft.ElevatedButton(
+                                            "Start Physics Assessment", 
+                                            on_click=lambda e: page.go("/assessment/intro"),
+                                            style=ft.ButtonStyle(
+                                                bgcolor=ACCENT_COLOR, 
+                                                color=BG_COLOR, 
+                                                padding=BUTTON_PADDING
+                                            )
+                                        ),
                                     ],
                                     spacing=10,
                                 ),
@@ -75,5 +86,6 @@ def dashboard_page(page: ft.Page):
                     height=page.window.height if page.window else 600,
                 ),
             ])
-        ]
+        ],
+        bgcolor=BG_COLOR  
     )
