@@ -13,6 +13,7 @@ def dashboard_page(page: ft.Page):
     # User information from session
     user_name = user.get("name", "User")
     user_email = user.get("email", "")
+    assement_score = user.get("assessment_score", None)
     
     def logout(e):
         # Clear user data from session

@@ -1,0 +1,12 @@
+{
+    "users": {
+        "athul": {
+            "name": "athul",
+            "email": "athul",
+            "password": "123456"
+        }
+    },
+    "logined_user": {
+        "email": "athul"
+    }
+}

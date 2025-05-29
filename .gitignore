@@ -160,4 +160,6 @@ cython_debug/
 #.idea/
 
 # Flet
-storage/
+storage/*
+src/storage/*
+!storage/data/

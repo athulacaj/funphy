@@ -1,14 +1,15 @@
 import flet as ft
 from pages import splash_page, welcome_page, login_page, signup_page, dashboard_page,get_assessment_pages
 from pages.utils import BG_COLOR
+from pages.db import AppDatabase
 
 
-def main(page: ft.Page):
+async def main(page: ft.Page):
     page.title = "FunPhy - Fun with Physics"
     page.bgcolor = BG_COLOR
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
-    page.route="/assessment/question"
+    # page.route="/signup"
 
     def route_change(route):
         page.views.clear()
@@ -37,6 +38,13 @@ def main(page: ft.Page):
 
         page.update()
 
+    await AppDatabase.initialize()  # Ensure database is initialized before any page loads
+    self_user = await AppDatabase.get_self_user()  # Get the currently logged-in user
+    if self_user  is not None:
+        # If user is already logged in, redirect to dashboard
+        page.route = "/dashboard"
+        page.session.set("user", self_user) # Store user data in session
+        
     page.on_route_change = route_change
     page.go(page.route or "/")
 

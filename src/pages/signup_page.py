@@ -2,11 +2,10 @@ import flet as ft
 import sys
 import os
 from .utils import get_background_image, BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
-from .db import UserDatabase
+from .db import AppDatabase
 
 # Find the root directory of the project and add it to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-from pages.db import UserDatabase
 
 def signup_page(page: ft.Page):
     # Create loading indicator
@@ -20,7 +19,6 @@ def signup_page(page: ft.Page):
       # Create error text
     error_text = ft.Text("", color=ft.Colors.RED_400, size=12, visible=False)
     
-    db = UserDatabase(page)
     
     async def submit_signup(e):
         # Show loading indicator
@@ -44,7 +42,7 @@ def signup_page(page: ft.Page):
             return
         
         # Save user to database
-        success, message = await db.save_user(name.value, email.value, password.value)
+        success, message = await AppDatabase.save_user(name.value, email.value, password.value)
         
         if success:
             page.snack_bar = ft.SnackBar(ft.Text("Account created successfully!"), bgcolor=ACCENT_COLOR)

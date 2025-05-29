@@ -5,7 +5,7 @@ from .utils import get_background_image, BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, 
 
 # Find the root directory of the project and add it to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-from .db import UserDatabase
+from .db import AppDatabase
 
 def get_view(page: ft.Page):
     # Create loading indicator
@@ -23,7 +23,6 @@ def get_view(page: ft.Page):
         on_click=lambda e: submit_login(e),
         style=ft.ButtonStyle(color=ACCENT_COLOR)    )
     
-    db = UserDatabase(page)
     
     async def submit_login(e):
         # Show loading indicator
@@ -42,17 +41,9 @@ def get_view(page: ft.Page):
         
         try:
             # Initialize the database before attempting authentication
-            init_success = await db.initialize()
-            if not init_success:
-                error_text.value = "Error connecting to database. Please try again."
-                error_text.visible = True
-                retry_button.visible = True
-                progress_ring.visible = False
-                page.update()
-                return
-                
+
             # Authenticate user with a timeout handling
-            success, result = await db.authenticate_user(email.value, password.value)
+            success, result = await AppDatabase.authenticate_user(email.value, password.value)
             
             if success:
                 # Store user data in session
