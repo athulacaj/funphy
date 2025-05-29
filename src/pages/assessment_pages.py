@@ -246,18 +246,26 @@ def physics_question_page(page: ft.Page):
 
     question_data = physics_questions[current_q_index]
     
-    options_group = ft.RadioGroup(content=ft.Column(spacing=10))
+    # Create a Column to hold the option Rows
+    options_content_column = ft.Column(spacing=10)
 
-    option_controls = []
     for opt in question_data["options"]:
-        option_controls.append(
-            ft.Radio(
-                value=opt["id"],
-                label=f'{opt["id"]}. {opt["text"]}',
-                label_style=ft.TextStyle(color=TEXT_COLOR, size=16)
+        options_content_column.controls.append(
+            ft.Row(
+                controls=[
+                    ft.Radio(value=opt["id"]),  # Radio button
+                    ft.Text(
+                        f"{opt['id']}. {opt['text']}",  # Label as a separate Text control
+                        expand=True,  # Allows text to take available space and wrap
+                        color=TEXT_COLOR,
+                        size=16
+                    )
+                ],
+                vertical_alignment=ft.CrossAxisAlignment.START # Align radio with the start of multi-line text
             )
         )
-    options_group.content.controls = option_controls
+    
+    options_group = ft.RadioGroup(content=options_content_column)
 
     def next_question(e):
         selected_answer = options_group.value
@@ -378,6 +386,9 @@ def assessment_results_page(page: ft.Page):
 
 def view_handler(page: ft.Page):
     route = page.route
+    # remove the query parameters if they exist
+    if '?' in route:
+        route = route.split('?')[0]
     # page.views.clear()
     match route:
         case "/assessment/intro":
