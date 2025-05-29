@@ -120,6 +120,7 @@ class AppDatabase:
             return users_data[user_email]
         return 
 
+    
     @staticmethod
     async def authenticate_user(email, password):
         """Check if user credentials are valid and log them in"""
@@ -139,3 +140,26 @@ class AppDatabase:
                 return False, "Timeout waiting for authentication. Please check your connection and try again."
 
             return False, f"Login failed: {error_msg}"
+
+    @staticmethod
+    async def save_self_user_data(data):
+        """Save the currently logged-in user's data"""
+        try:
+            user_email = AppDatabase.db.get("logined_user", {}).get("email")
+            if not user_email:
+                return False, "No user is currently logged in"
+
+            users = AppDatabase.db.get("users", {})
+            if user_email not in users:
+                return False, "User not found"
+
+            # Update user data
+            users[user_email].update(data)
+            AppDatabase.db["users"] = users
+
+            await AppDatabase.save_db()  # Uses static call
+            return True, "User data updated successfully"
+        except Exception as e:
+            error_msg = str(e)
+            print(f"Error saving user data: {error_msg}")
+            return False, f"Failed to save user data: {error_msg}"

@@ -13,7 +13,7 @@ def dashboard_page(page: ft.Page):
     # User information from session
     user_name = user.get("name", "User")
     user_email = user.get("email", "")
-    assement_score = user.get("assessment_score", None)
+    assessment_score = user.get("assessment_score", None)
     
     def logout(e):
         # Clear user data from session
@@ -51,15 +51,18 @@ def dashboard_page(page: ft.Page):
                                         
                                         ft.Container(height=20),  # Spacer
                                         
-                                        ft.ElevatedButton(
-                                            "Start Physics Assessment", 
-                                            on_click=lambda e: page.go("/assessment/intro"),
-                                            style=ft.ButtonStyle(
-                                                bgcolor=ACCENT_COLOR, 
-                                                color=BG_COLOR, 
-                                                padding=BUTTON_PADDING
+                                        # Conditionally show the button
+                                        *([
+                                            ft.ElevatedButton(
+                                                "Start Physics Assessment", 
+                                                on_click=lambda e: page.go("/assessment/intro"),
+                                                style=ft.ButtonStyle(
+                                                    bgcolor=ACCENT_COLOR, 
+                                                    color=BG_COLOR, 
+                                                    padding=BUTTON_PADDING
+                                                )
                                             )
-                                        ),
+                                        ] if assessment_score is None else []),
                                     ],
                                     spacing=10,
                                 ),

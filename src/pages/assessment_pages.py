@@ -1,5 +1,6 @@
 import flet as ft
 from .utils import get_background_image, BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
+from .db import AppDatabase
 
 # Sample Physics Questions - Can be expanded or loaded from an external source
 physics_questions = [
@@ -240,7 +241,9 @@ def physics_question_page(page: ft.Page):
     current_q_index = assessment_state.current_question_index
     
     if current_q_index >= assessment_state.total_questions:
-        assessment_state.calculate_score()
+        score=assessment_state.calculate_score()
+        # save the score to the database 
+        AppDatabase.save_self_user_data({"assessment": score})
         page.go("/assessment/results")
         return _create_base_view(page, [ft.Text("Loading results...")], "Redirecting", "redirect_results")
 
@@ -267,7 +270,7 @@ def physics_question_page(page: ft.Page):
     
     options_group = ft.RadioGroup(content=options_content_column)
 
-    def next_question(e):
+    async def next_question(e):
         selected_answer = options_group.value
         if selected_answer:
             assessment_state.record_answer(question_data["id"], selected_answer)
@@ -276,7 +279,9 @@ def physics_question_page(page: ft.Page):
                 # Add a unique query parameter to help ensure the page refreshes
                 page.go(f"/assessment/question?qidx={assessment_state.current_question_index}")
             else:
-                assessment_state.calculate_score()
+                score= assessment_state.calculate_score()
+                # save the score to the database
+                await AppDatabase.save_self_user_data({"assessment_score": score,"assessment_feedback":assessment_state.get_level_and_feedback()})
                 page.go("/assessment/results")
         else:
             # Correct way to show a SnackBar
