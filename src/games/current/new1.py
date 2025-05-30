@@ -1,81 +1,27 @@
 import flet as ft
-from typing import List, Tuple, Dict, Any
+import math # Add this import
+from typing import List, Tuple, Set, Dict # Assuming these are used or will be
 from collections import deque # Added for BFS
 
-LEVEL_CONFIGS: Dict[int, Dict[str, Any]] = {
+# Placeholder for level configurations - ensure these are properly defined
+MAX_LEVELS = 2 # Example: 2 levels
+LEVEL_CONFIGS: Dict[int, Dict] = {
     1: {
-        "grid_size": 6,
-        "start_pos": (5, 5),
-        "end_pos": (0, 5),
-        "walls": {
-            (1, 1), (1, 2), (1, 3), (1, 4),
-            (2, 1), (3, 1), (4, 1),
-            (4, 2), (4, 3), (4, 4)
-        },
+        "grid_size": 5,
+        "start_pos": (4, 0),
+        "end_pos": (0, 4),
+        "walls": set([(1,1), (1,2), (1,3), (2,1), (3,1), (3,2), (3,3)]),
         "message": "Level 1: Draw a path from the house to the pizza place!"
     },
     2: {
-        "grid_size": 7,
-        "start_pos": (6, 0),
-        "end_pos": (0, 6),
-        "walls": {
-            (1,1), (1,5), (2,2), (2,3), (2,4), (3,1), (3,5),
-            (4,1), (4,5), (5,2), (5,3), (5,4)
-        },
-        "message": "Level 2: A trickier route awaits!"
-    },
-    3: {
-        "grid_size": 8,
-        "start_pos": (7, 3),
-        "end_pos": (0, 3),
-        "walls": {
-            (1,0), (1,1), (1,2), (1,4), (1,5), (1,6), (1,7),
-            (2,2), (2,5), (3,0), (3,1), (3,3), (3,4), (3,6), (3,7),
-            (4,3), (4,4), (5,0), (5,1), (5,2), (5,5), (5,6), (5,7),
-            (6,2), (6,5)
-        },
-        "message": "Level 3: The final challenge!"
-    },
-    4: {
-        "grid_size": 9,
-        "start_pos": (8, 4),
-        "end_pos": (0, 4),
-        "walls": {
-            (0,0), (0,1), (0,2), (0,3), (0,5), (0,6), (0,7), (0,8),
-            (1,1), (1,3), (1,5), (1,7),
-            (2,0), (2,1), (2,2), (2,4), (2,6), (2,7), (2,8),
-            (3,1), (3,3), (3,5), (3,7),
-            (4,0), (4,2), (4,4), (4,6), (4,8),
-            (5,1), (5,3), (5,5), (5,7),
-            (6,0), (6,2), (6,4), (6,6), (6,8),
-            (7,1), (7,3), (7,5), (7,7),
-            (8,0), (8,1), (8,2), (8,3), (8,5), (8,6), (8,7), (8,8)
-        },
-        "message": "Level 4: The Maze Expands!"
-    },
-    5: {
-        "grid_size": 10,
-        "start_pos": (9, 0),
-        "end_pos": (0, 9),
-        "walls": {
-            # Outer border walls to make it more contained
-            (0,1), (0,2),
-            (1,0), (1,2), (1,4), (1,6), (1,8), (1,9),
-            (2,1), (2,3), (2,5), (2,7), (2,9),
-            (3,0), (3,2), (3,4), (3,6), (3,8),
-            (4,1), (4,3), (4,5), (4,7), (4,9),
-            (5,0), (5,2), (5,4), (5,6), (5,8),
-            (6,1), (6,3), (6,5), (6,7), (6,9),
-            (7,0), (7,2), (7,4), (7,6), (7,8),
-            (8,1), (8,3), (8,5), (8,7), (8,9),
-            (9,1), (9,2), (9,3), (9,4), (9,5), (9,6), (9,7), (9,8),
-            # Inner complex walls
-            (2,2), (2,6), (3,5), (4,2), (4,8), (5,1), (5,7), (6,4), (7,3), (7,7)
-        },
-        "message": "Level 5: The Ultimate Pizza Quest!"
+        "grid_size": 6,
+        "start_pos": (5, 0),
+        "end_pos": (0, 5),
+        "walls": set([(1,1), (1,2), (2,2), (2,4), (3,1), (3,4), (4,1), (4,3)]),
+        "message": "Level 2: Another tricky delivery!"
     }
+    # Add more levels as needed
 }
-MAX_LEVELS = len(LEVEL_CONFIGS)
 
 class PizzaMazeGame(ft.Container):
     def __init__(self, page: ft.Page, level: int = 1):
@@ -85,12 +31,16 @@ class PizzaMazeGame(ft.Container):
         self.current_path: List[Tuple[int, int]] = []
         self.is_drawing = False
         
-        # Scoring
         self.total_score = self.page.session.get("total_score") if self.page.session.contains_key("total_score") else 0
         
         self._load_level_config()
 
-        # UI elements that need to be referenced
+        self.title_text = ft.Text( # Added for dynamic title
+            f"Pizza Delivery Maze - Level {self.current_level}",
+            size=24,
+            weight=ft.FontWeight.W_600,
+            color=ft.Colors.GREY_800
+        )
         self.level_text = ft.Text(size=16, color=ft.Colors.GREY_800)
         self.score_text = ft.Text(f"Total Score: {self.total_score}", size=18, weight=ft.FontWeight.W_600, color=ft.Colors.BLUE_700)
         self.clear_button = ft.ElevatedButton(
@@ -157,13 +107,8 @@ class PizzaMazeGame(ft.Container):
         return ft.Column(
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
-                ft.Text(
-                    f"Pizza Delivery Maze - Level {self.current_level}",
-                    size=24,
-                    weight=ft.FontWeight.W_600,
-                    color=ft.Colors.GREY_800
-                ),
-                self.score_text, # Display the score
+                self.title_text, # Use the dynamic title_text
+                self.score_text, 
                 self.game_grid_container,
                 self.level_text,
                 ft.Row(
@@ -198,36 +143,56 @@ class PizzaMazeGame(ft.Container):
             on_click=self.cell_click
         )
 
+    def get_cell_control(self, row: int, col: int) -> ft.Container | None:
+        if 0 <= row < self.grid_size and 0 <= col < self.grid_size:
+            if self.game_grid_column and \
+               row < len(self.game_grid_column.controls) and \
+               col < len(self.game_grid_column.controls[row].controls):
+                return self.game_grid_column.controls[row].controls[col]
+        return None
+
+    def update_cell_appearance(self, row: int, col: int, is_path: bool):
+        cell = self.get_cell_control(row, col)
+        if not cell: return
+
+        original_bgcolor = cell.bgcolor 
+
+        if (row, col) == self.start_pos:
+            cell.bgcolor = ft.Colors.GREEN_ACCENT_200 if is_path else ft.Colors.GREEN_500
+        elif (row, col) == self.end_pos:
+            cell.bgcolor = ft.Colors.RED_ACCENT_200 if is_path else ft.Colors.RED_500
+        elif (row, col) in self.walls:
+            cell.bgcolor = ft.Colors.GREY_700 
+        elif is_path:
+            cell.bgcolor = ft.Colors.LIGHT_BLUE_ACCENT_200
+        else: 
+            cell.bgcolor = ft.Colors.WHITE
+        
+        if cell.bgcolor != original_bgcolor:
+            cell.update()
+
     def cell_hover(self, e: ft.HoverEvent):
-        # Path drawing on hover is removed. 
-        # This can be used for other visual feedback, like highlighting.
         pass
 
     def cell_click(self, e: ft.ControlEvent):
         row, col = map(int, e.control.data.split(","))
 
+        if (row, col) in self.walls:
+            return
+
         if not self.is_drawing:
-            # If not currently drawing, only a click on the start position can initiate drawing.
             if (row, col) == self.start_pos:
                 self.is_drawing = True
-                self.current_path = [(row, col)]  # Start the path
-                e.control.bgcolor = ft.Colors.GREEN_ACCENT  # Indicate start position clicked
-                e.control.update()
-            return  # If not drawing and not clicking start, do nothing further.
+                self.current_path = [(row, col)]
+                self.update_cell_appearance(row, col, is_path=True)
+            return
 
-        # If self.is_drawing is True:
         if self.is_valid_move(row, col):
             self.add_to_path(row, col)
-            # Mark the cell as part of the path if it's not the start or end cell.
-            if (row, col) != self.start_pos and (row, col) != self.end_pos:
-                e.control.bgcolor = ft.Colors.LIGHT_BLUE_ACCENT_200  # Changed path color
-                e.control.update()
+            self.update_cell_appearance(row, col, is_path=True)
 
-            # If the path has reached the end position, stop drawing.
             if (row, col) == self.end_pos:
                 self.is_drawing = False
-                e.control.bgcolor = ft.Colors.RED_ACCENT  # Indicate end position clicked
-                e.control.update()
         else:
             # Log invalid moves for debugging purposes
             print(f"Invalid move: ({row}, {col})")
@@ -245,20 +210,144 @@ class PizzaMazeGame(ft.Container):
     def add_to_path(self, row: int, col: int):
         self.current_path.append((row, col))
 
-    def clear_path(self, e: ft.ControlEvent):
-        # Reset for the current level
-        self._load_level_config() # Reload config to reset start/end/walls if they were modified
+    def calculate_current_path_distance(self) -> float:
+        if not self.current_path or len(self.current_path) < 2:
+            return 0.0
+
+        total_distance = 0.0
+        for i in range(len(self.current_path) - 1):
+            p1_row, p1_col = self.current_path[i]
+            p2_row, p2_col = self.current_path[i+1]
+
+            delta_row = abs(p1_row - p2_row)
+            delta_col = abs(p1_col - p2_col)
+
+            if delta_row == 1 and delta_col == 1:  # Diagonal move
+                total_distance += math.sqrt(2)
+            elif (delta_row == 1 and delta_col == 0) or \
+                 (delta_row == 0 and delta_col == 1):  # Cardinal move
+                total_distance += 1.0
+        return total_distance
+
+    def enable_game_interactions(self, enabled: bool):
+        for r_idx in range(self.grid_size):
+            for c_idx in range(self.grid_size):
+                cell = self.get_cell_control(r_idx, c_idx)
+                if cell:
+                    if enabled:
+                        cell.on_click = self.cell_click
+                        cell.on_hover = self.cell_hover 
+                    else:
+                        cell.on_click = None
+                        cell.on_hover = None
         
-        # Rebuild the grid visually
-        self.game_grid_container.content = self.build_game_grid()
+        self.check_button.disabled = not enabled
+        self.clear_button.disabled = not enabled
+        # Next level button visibility is handled separately
+
+    def clear_path(self, e: ft.ControlEvent = None):
+        path_to_clear = list(self.current_path)
+        self.current_path = []
+        self.is_drawing = False 
+
+        for r, c in path_to_clear:
+            self.update_cell_appearance(r, c, is_path=False) 
         
-        # Reset button states
+        # Ensure start/end cells are correctly reset if they were part of the path
+        if self.start_pos != (-1,-1) : self.update_cell_appearance(self.start_pos[0], self.start_pos[1], is_path=False)
+        if self.end_pos != (-1,-1) : self.update_cell_appearance(self.end_pos[0], self.end_pos[1], is_path=False)
+
+
+        self.enable_game_interactions(True)
         self.next_level_button.visible = False
-        self.check_button.disabled = False
-        self.clear_button.disabled = False
         
+        self.check_button.update()
+        self.clear_button.update()
+        self.next_level_button.update()
         self.page.update()
-       
+
+    def check_path(self, e: ft.ControlEvent = None):
+        if not self.current_path:
+            # Correct way to show SnackBar
+            self.page.overlay.append(ft.SnackBar(ft.Text("Draw a path first!"), open=True))
+            self.page.update()
+            return
+
+        path_starts_correctly = self.current_path[0] == self.start_pos
+        path_ends_correctly = self.current_path[-1] == self.end_pos
+
+        if not path_starts_correctly:
+            # Correct way to show SnackBar
+            self.page.overlay.append(ft.SnackBar(ft.Text("Path must start at the green square!"), open=True))
+            self.page.update()
+            return
+
+        if not path_ends_correctly:
+            # Correct way to show SnackBar
+            self.page.overlay.append(ft.SnackBar(ft.Text("Path must end at the red square!"), open=True))
+            self.page.update()
+            return
+        distance = self.calculate_current_path_distance()
+        shortest_distance = self.bfs_shortest_path_distance()
+        if distance == 0 or shortest_distance == float('inf'):
+            level_score = 0
+        else:
+            # Score: 100 if optimal, less if longer, min 0
+            level_score = max(0, int(100 * (shortest_distance / distance)))
+        self.total_score += level_score
+        self.page.session.set("total_score", self.total_score)
+        self.score_text.value = f"Total Score: {self.total_score}"
+        
+        # Correct way to show SnackBar
+        self.page.overlay.append(
+            ft.SnackBar(
+                ft.Text(f"Path complete! Distance: {distance:.2f} (Optimal: {shortest_distance:.2f}). You earned {level_score} points."),
+                open=True
+            )
+        )
+        # self.page.update() is called at the end of this method already
+
+        self.enable_game_interactions(False)
+
+        if self.current_level < MAX_LEVELS:
+            self.next_level_button.visible = True
+        else:
+            self.level_text.value = "Congratulations! All levels completed!"
+            self.next_level_button.visible = False
+            self.level_text.update()
+
+        self.score_text.update()
+        self.next_level_button.update()
+        self.check_button.update()
+        self.clear_button.update()
+        self.page.update()
+        
+    def go_to_next_level(self, e: ft.ControlEvent):
+        if self.current_level < MAX_LEVELS:
+            self.current_level += 1
+            self._load_level_config() 
+
+            self.title_text.value = f"Pizza Delivery Maze - Level {self.current_level}"
+            self.level_text.value = self.level_message
+            
+            self.game_grid_container.content = self.build_game_grid()
+            
+            self.enable_game_interactions(True)
+            self.next_level_button.visible = False
+
+            self.title_text.update()
+            self.level_text.update()
+            self.game_grid_container.update()
+            self.check_button.update()
+            self.clear_button.update()
+            self.next_level_button.update()
+            self.page.update()
+        else:
+            # Correct way to show SnackBar
+            self.page.overlay.append(ft.SnackBar(ft.Text("You've completed all levels!"), open=True))
+            self.page.update()
+
+
     # Helper method to get valid neighbors for BFS
     def get_neighbors(self, r: int, c: int) -> List[Tuple[int, int]]:
         neighbors = []
@@ -298,100 +387,33 @@ class PizzaMazeGame(ft.Container):
         
         return float('inf')  # No path found if the queue is exhausted
 
-    def check_path(self, e: ft.ControlEvent):
-        page_to_update = self.page # Use self.page
-        level_score = 0 # Initialize score for the current level
+    # BFS to find the minimal possible path distance (considering diagonals)
+    def bfs_shortest_path_distance(self) -> float:
+        if not self.start_pos or not self.end_pos or self.start_pos == (-1,-1):
+            return float('inf')
+        if self.start_pos in self.walls or self.end_pos in self.walls:
+            return float('inf')
 
-        if not self.current_path:
-            self.show_message("Please draw a path first!", ft.Colors.RED_500, page_to_update)
-            return
+        queue = deque([(self.start_pos, 0.0)])  # (position, current_path_distance)
+        visited = {self.start_pos}
 
-        if self.current_path[-1] != self.end_pos:
-            self.show_message("Path must reach the pizza place!", ft.Colors.RED_500, page_to_update)
-            return
-
-        user_path_length = len(self.current_path)
-        shortest_length = self.bfs_shortest_path_length()
-
-        success = False
-        message = ""
-        message_color = ft.Colors.BLACK
-
-        if shortest_length == float('inf'):
-            message = f"Path drawn ({user_path_length} steps), but maze seems unsolvable by standard paths! You get 2 points."
-            message_color = ft.Colors.ORANGE_500
-            level_score = 2 
-            success = True # Consider this a success for progression
-        elif user_path_length == shortest_length:
-            message = f"Great job! Shortest path! ({user_path_length} steps). +5 points!"
-            message_color = ft.Colors.GREEN_500
-            level_score = 5
-            success = True
-        elif user_path_length == shortest_length + 1:
-            message = f"Good path! ({user_path_length} steps). Almost the shortest. +4 points!"
-            message_color = ft.Colors.LIGHT_GREEN_700 # A slightly different green
-            level_score = 4
-            success = True
-        elif user_path_length > shortest_length + 1:
-            message = f"Path is correct ({user_path_length} steps), but not the shortest ({shortest_length} steps). +2 points."
-            message_color = ft.Colors.AMBER_700
-            level_score = 2
-            success = True # Allow progression
-        else: 
-            message = f"Path ({user_path_length} steps) is shorter than BFS shortest ({shortest_length} steps)? Anomaly! +2 points for finding a way!"
-            message_color = ft.Colors.RED_ACCENT
-            level_score = 2 # Award points for this unusual case
-            success = True # Allow progression
-
-        self.show_message(message, message_color, page_to_update)
-
-        if success:
-            self.total_score += level_score
-            self.page.session.set("total_score", self.total_score)
-            self.score_text.value = f"Total Score: {self.total_score}"
-            
-            if self.current_level < MAX_LEVELS:
-                self.next_level_button.visible = True
-            else:
-                final_message = f"Congratulations! All levels completed! Final Score: {self.total_score}"
-                self.show_message(final_message, ft.Colors.GREEN_500, page_to_update)
-            self.check_button.disabled = True 
-            self.clear_button.disabled = True 
-        
-        page_to_update.update()
-
-    def show_message(self, message: str, color: str, page: ft.Page):
-        # Use a SnackBar to show the message
-        # Ensure 'page' is the correct Page instance.
-        if page:
-            page.open(ft.SnackBar(ft.Text(message, color=color), open=True)) # Added color and open=True
-            # page.update() # SnackBar updates itself, page.update() might not be needed here unless other things changed
-
-    def go_to_next_level(self, e: ft.ControlEvent):
-        if self.current_level < MAX_LEVELS:
-            self.current_level += 1
-            self._load_level_config() # Load new level's settings
-
-            # Update UI elements for the new level
-            self.level_text.value = self.level_message
-            # Find the main title Text control and update it.
-            # Assuming the title is the first control in the main Column.
-            if self.content.controls and isinstance(self.content.controls[0], ft.Text):
-                self.content.controls[0].value = f"Pizza Delivery Maze - Level {self.current_level}"
-
-            self.game_grid_container.content = self.build_game_grid() # Rebuild the grid
-
-            self.next_level_button.visible = False
-            self.check_button.disabled = False
-            self.clear_button.disabled = False
-            
-            self.page.update()
-        else:
-            # This case should ideally be handled after check_path shows the final message
-            self.show_message("You've already completed all levels!", ft.Colors.BLUE_500, self.page)
-            self.next_level_button.visible = False # Hide if somehow still visible
-            self.page.update()
-
+        while queue:
+            (r, c), dist = queue.popleft()
+            if (r, c) == self.end_pos:
+                return dist
+            for dr in [-1, 0, 1]:
+                for dc in [-1, 0, 1]:
+                    if dr == 0 and dc == 0:
+                        continue
+                    nr, nc = r + dr, c + dc
+                    if 0 <= nr < self.grid_size and 0 <= nc < self.grid_size and (nr, nc) not in self.walls:
+                        if (nr, nc) not in visited:
+                            visited.add((nr, nc))
+                            if abs(dr) == 1 and abs(dc) == 1:
+                                queue.append(((nr, nc), dist + math.sqrt(2)))
+                            else:
+                                queue.append(((nr, nc), dist + 1.0))
+        return float('inf')
 
 def main(page: ft.Page):
     page.title = "Pizza Delivery Maze"
