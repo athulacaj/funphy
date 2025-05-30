@@ -85,10 +85,14 @@ class PizzaMazeGame(ft.Container):
         self.current_path: List[Tuple[int, int]] = []
         self.is_drawing = False
         
+        # Scoring
+        self.total_score = self.page.session.get("total_score") if self.page.session.contains_key("total_score") else 0
+        
         self._load_level_config()
 
         # UI elements that need to be referenced
         self.level_text = ft.Text(size=16, color=ft.Colors.GREY_800)
+        self.score_text = ft.Text(f"Total Score: {self.total_score}", size=18, weight=ft.FontWeight.W_600, color=ft.Colors.BLUE_700)
         self.clear_button = ft.ElevatedButton(
             "Clear Path",
             on_click=self.clear_path,
@@ -159,6 +163,7 @@ class PizzaMazeGame(ft.Container):
                     weight=ft.FontWeight.W_600,
                     color=ft.Colors.GREY_800
                 ),
+                self.score_text, # Display the score
                 self.game_grid_container,
                 self.level_text,
                 ft.Row(
@@ -295,6 +300,7 @@ class PizzaMazeGame(ft.Container):
 
     def check_path(self, e: ft.ControlEvent):
         page_to_update = self.page # Use self.page
+        level_score = 0 # Initialize score for the current level
 
         if not self.current_path:
             self.show_message("Please draw a path first!", ft.Colors.RED_500, page_to_update)
@@ -308,41 +314,49 @@ class PizzaMazeGame(ft.Container):
         shortest_length = self.bfs_shortest_path_length()
 
         success = False
+        message = ""
+        message_color = ft.Colors.BLACK
+
         if shortest_length == float('inf'):
-            self.show_message(
-                f"Path drawn to end ({user_path_length} steps), but maze seems unsolvable by standard paths!",
-                ft.Colors.ORANGE_500, 
-                page_to_update
-            )
+            message = f"Path drawn ({user_path_length} steps), but maze seems unsolvable by standard paths! You get 2 points."
+            message_color = ft.Colors.ORANGE_500
+            level_score = 2 
+            success = True # Consider this a success for progression
         elif user_path_length == shortest_length:
-            self.show_message(
-                f"Great job! Path is correct and shortest! ({user_path_length} steps)", 
-                ft.Colors.GREEN_500, 
-                page_to_update
-            )
+            message = f"Great job! Shortest path! ({user_path_length} steps). +5 points!"
+            message_color = ft.Colors.GREEN_500
+            level_score = 5
             success = True
-        elif user_path_length > shortest_length:
-            self.show_message(
-                f"Path is correct, but not the shortest. Yours: {user_path_length}, Shortest: {shortest_length} steps.",
-                ft.Colors.AMBER_700, 
-                page_to_update
-            )
-            # For now, let's consider any valid path to the end a success for level progression
-            success = True # Or keep it False if only shortest path allows progression
+        elif user_path_length == shortest_length + 1:
+            message = f"Good path! ({user_path_length} steps). Almost the shortest. +4 points!"
+            message_color = ft.Colors.LIGHT_GREEN_700 # A slightly different green
+            level_score = 4
+            success = True
+        elif user_path_length > shortest_length + 1:
+            message = f"Path is correct ({user_path_length} steps), but not the shortest ({shortest_length} steps). +2 points."
+            message_color = ft.Colors.AMBER_700
+            level_score = 2
+            success = True # Allow progression
         else: 
-            self.show_message(
-                f"Path ({user_path_length} steps) is shorter than BFS shortest ({shortest_length} steps)? Anomaly detected!",
-                ft.Colors.RED_ACCENT, 
-                page_to_update
-            )
+            message = f"Path ({user_path_length} steps) is shorter than BFS shortest ({shortest_length} steps)? Anomaly! +2 points for finding a way!"
+            message_color = ft.Colors.RED_ACCENT
+            level_score = 2 # Award points for this unusual case
+            success = True # Allow progression
+
+        self.show_message(message, message_color, page_to_update)
 
         if success:
+            self.total_score += level_score
+            self.page.session.set("total_score", self.total_score)
+            self.score_text.value = f"Total Score: {self.total_score}"
+            
             if self.current_level < MAX_LEVELS:
                 self.next_level_button.visible = True
             else:
-                self.show_message("Congratulations! You've completed all levels!", ft.Colors.GREEN_500, page_to_update)
-            self.check_button.disabled = True # Disable check button after successful attempt
-            self.clear_button.disabled = True # Disable clear button
+                final_message = f"Congratulations! All levels completed! Final Score: {self.total_score}"
+                self.show_message(final_message, ft.Colors.GREEN_500, page_to_update)
+            self.check_button.disabled = True 
+            self.clear_button.disabled = True 
         
         page_to_update.update()
 
