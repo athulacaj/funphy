@@ -311,13 +311,14 @@ class PizzaMazeGame(ft.Container):
 
         if self.current_level < MAX_LEVELS:
             self.next_level_button.visible = True
+            self.next_level_button.update()  # Ensure update is called immediately after visibility change
         else:
             self.level_text.value = "Congratulations! All levels completed!"
             self.next_level_button.visible = False
             self.level_text.update()
+            self.next_level_button.update()
 
         self.score_text.update()
-        self.next_level_button.update()
         self.check_button.update()
         self.clear_button.update()
         self.page.update()
@@ -337,7 +338,7 @@ class PizzaMazeGame(ft.Container):
 
             self.title_text.update()
             self.level_text.update()
-            self.game_grid_container.update()
+            self.update()  # Add this line to update the main control
             self.check_button.update()
             self.clear_button.update()
             self.next_level_button.update()
