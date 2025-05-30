@@ -1,7 +1,7 @@
 import flet as ft
 import os
 
-from utils import BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
+from .utils import BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 
 # Game data: emoji, clue, hint, answer
 QUESTIONS = [
@@ -71,9 +71,8 @@ QUESTIONS = [
 
 import random
 import string
-import asyncio
 
-def main(page: ft.Page):
+def build_page(page: ft.Page):
     page.title = "Emoji Science Quiz"
     page.bgcolor = BG_COLOR
     page.horizontal_alignment = "center"
@@ -300,4 +299,18 @@ def main(page: ft.Page):
 
     build_ui()
 
-ft.app(target=main)
+
+def emoji_game(page: ft.Page):
+    def go_back(e):
+        page.go("/dashboard")
+
+    return ft.View("/emoji_game", [
+        build_page(page)
+    ],
+    appbar=ft.AppBar(
+        leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=go_back, tooltip="Back"),
+        title=ft.Text("Emoji Game"),
+        # bgcolor=ft.Colors.BLACK12 # Adjust color as needed
+    ),
+    bgcolor=BG_COLOR
+)

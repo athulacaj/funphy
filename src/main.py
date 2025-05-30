@@ -1,13 +1,22 @@
 import flet as ft
 from pages import splash_page, welcome_page, login_page, signup_page, dashboard_page,get_assessment_pages
-from pages.utils import BG_COLOR
+from pages.utils import BG_COLOR, ACCENT_COLOR
 from pages.db import AppDatabase
+from pages.path_game import path_game 
+from pages.emoji_game import emoji_game 
 
 
 async def main(page: ft.Page):
     page.title = "FunPhy - Fun with Physics"
     page.bgcolor = BG_COLOR
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
+
+    # Set Snackbar theme to BG_COLOR with opacity
+    page.theme = ft.Theme(
+        snackbar_theme=ft.SnackBarTheme(
+            bgcolor=ft.Colors.with_opacity(0.95, ACCENT_COLOR)
+        )
+    )
 
     # page.route="/signup"
 
@@ -33,9 +42,12 @@ async def main(page: ft.Page):
             assessment_view = get_assessment_pages(page)
             if assessment_view:
                 page.views.append(assessment_view)
-
-            
-
+        # Add path game route
+        elif page.route == "/path_game":
+            page.views.append(path_game(page))
+        elif page.route == "/emoji_game":
+            page.views.append(emoji_game(page))
+        
         page.update()
 
     await AppDatabase.initialize()  # Ensure database is initialized before any page loads

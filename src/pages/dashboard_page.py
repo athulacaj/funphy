@@ -11,7 +11,7 @@ STAR_EMPTY_COLOR = ft.Colors.with_opacity(0.5, ft.Colors.WHITE)
 PROGRESS_BAR_COLOR = ft.Colors.GREEN_ACCENT_400 # General progress bar color, can be customized per level
 LOCK_ICON_COLOR = ft.Colors.WHITE70
 
-def create_level_card(icon: ft.Icon, title: str, subtitle: str, progress_value: float, score: str, stars: int, total_stars: int, unlocked: bool, bgcolor: str):
+def create_level_card(icon: ft.Icon, title: str, subtitle: str, progress_value: float, score: str, stars: int, total_stars: int, unlocked: bool, bgcolor: str, on_click=None):
     """Helper function to create a level card."""
     star_icons = [ft.Icon(ft.Icons.STAR, color=STAR_FILLED_COLOR if i < stars else STAR_EMPTY_COLOR) for i in range(total_stars)]
     
@@ -55,7 +55,8 @@ def create_level_card(icon: ft.Icon, title: str, subtitle: str, progress_value: 
             blur_radius=5,
             color=ft.Colors.with_opacity(0.3, ft.Colors.BLACK),
             offset=ft.Offset(2, 2),
-        )
+        ),
+        on_click=on_click
     )
 
 def dashboard_page(page: ft.Page):
@@ -112,7 +113,9 @@ def dashboard_page(page: ft.Page):
                             stars=3,
                             total_stars=5,
                             unlocked=True, # Assuming intermediate is also unlocked for now
-                            bgcolor=INTERMEDIATE_BG_COLOR
+                            bgcolor=INTERMEDIATE_BG_COLOR,
+                            # Add on_click to navigate to path_game
+                            on_click=lambda e: page.go("/path_game")
                         ),
                         create_level_card(
                             icon=ft.Icon(ft.Icons.DIAMOND, color=ft.Colors.BLUE_ACCENT_200, size=30), # Using diamond as a proxy for crystal
@@ -123,7 +126,9 @@ def dashboard_page(page: ft.Page):
                             stars=2,
                             total_stars=5,
                             unlocked=False, # Assuming advanced is locked
-                            bgcolor=ADVANCED_BG_COLOR
+                            bgcolor=ADVANCED_BG_COLOR,
+                            # Add on_click to navigate to emoji_game
+                            on_click=lambda e: page.go("/emoji_game")
                         ),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,

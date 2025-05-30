@@ -3,7 +3,7 @@ import math # Add this import
 from typing import List, Tuple, Set, Dict # Assuming these are used or will be
 from collections import deque # Added for BFS
 
-from utils import BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
+from .utils import BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 
 # Placeholder for level configurations - ensure these are properly defined
 
@@ -234,11 +234,12 @@ class PizzaMazeGame(ft.Container):
     def build(self):
         self.level_text.value = self.level_message
         self.game_grid_container = ft.Container(
-            content=self.build_game_grid(),
-            padding=20,
-            bgcolor=BG_COLOR,  # Use BG_COLOR for grid container
-            border_radius=10
-        )
+                content=self.build_game_grid(),
+                padding=20,
+                bgcolor=BG_COLOR,  # Use BG_COLOR for grid container
+                border_radius=10
+            )
+        
 
         return ft.Container(
             bgcolor=BG_COLOR,  # Use BG_COLOR for main container
@@ -556,31 +557,27 @@ class PizzaMazeGame(ft.Container):
                                 queue.append(((nr, nc), dist + 1.0))
         return float('inf')
 
-def main(page: ft.Page):
-    page.title = "Pizza Delivery Maze"
-    page.theme_mode = ft.ThemeMode.LIGHT
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    page.bgcolor = BG_COLOR
-    page.padding = 20
-    page.window_width = 500  # Adjusted for potentially larger grids
-    page.window_height = 750 # Adjusted for potentially larger grids
-    page.window_resizable = False
+# def addPathGame(page: ft.Page):
+#     def route_change(e):
+#         route = page.route
+#         if route == "/path_game":
+#             page.views.append(ft.View("/path_game", [PizzaMazeGame(page)]))
+#         # ...add other routes as needed...
+#         # else: ...
+#     page.on_route_change = route_change
+#     page.go(page.route)
 
-    def on_back(e):
-        page.go_back() if hasattr(page, 'go_back') else page.window_close()
+def path_game(page: ft.Page):
+    def go_back(e):
+        page.go("/dashboard")
 
-    appbar = ft.AppBar(
-        leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=on_back),
-        title=ft.Text("Pizza Delivery Maze", weight=ft.FontWeight.W_600, color=ft.Colors.WHITE),
-        bgcolor=BG_COLOR,
-        center_title=True,
-        elevation=2,
-    )
-
-    page.appbar = appbar
-    game = PizzaMazeGame(page=page, level=1)  # Start at level 1
-    page.add(game)
-
-if __name__ == "__main__":
-    ft.app(target=main)
+    return ft.View("/path_game", [
+        PizzaMazeGame(page)
+    ],
+    appbar=ft.AppBar(
+        leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=go_back, tooltip="Back"),
+        title=ft.Text("Path Maze Game"),
+        # bgcolor=ft.Colors.BLACK12 # Adjust color as needed
+    ),
+    bgcolor=BG_COLOR
+)
