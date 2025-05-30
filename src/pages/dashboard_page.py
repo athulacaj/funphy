@@ -92,17 +92,17 @@ def dashboard_page(page: ft.Page):
                 ft.Container(height=15),
                 ft.Row(
                     [
-                        create_level_card(
-                            icon=ft.Icon(ft.Icons.GRASS, color=ft.Colors.GREEN_ACCENT_400, size=30),
-                            title="BEGINNER",
-                            subtitle="BEGINNER",
-                            progress_value=0.8, # Example: 80%
-                            score="32,00",
-                            stars=4,
-                            total_stars=5,
-                            unlocked=True,
-                            bgcolor=BEGINNER_BG_COLOR
-                        ),
+                        # create_level_card(
+                        #     icon=ft.Icon(ft.Icons.GRASS, color=ft.Colors.GREEN_ACCENT_400, size=30),
+                        #     title="BEGINNER",
+                        #     subtitle="BEGINNER",
+                        #     progress_value=0.8, # Example: 80%
+                        #     score="32,00",
+                        #     stars=4,
+                        #     total_stars=5,
+                        #     unlocked=True,
+                        #     bgcolor=BEGINNER_BG_COLOR
+                        # ),
                         create_level_card(
                             icon=ft.Icon(ft.Icons.LOCAL_FIRE_DEPARTMENT, color=ft.Colors.ORANGE_ACCENT_400, size=30),
                             title="INTERMEDIATE", # Corrected spelling

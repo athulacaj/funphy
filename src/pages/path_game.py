@@ -3,6 +3,8 @@ import math # Add this import
 from typing import List, Tuple, Set, Dict # Assuming these are used or will be
 from collections import deque # Added for BFS
 
+from utils import BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
+
 # Placeholder for level configurations - ensure these are properly defined
 
 # LEVEL_CONFIGS: Dict[int, Dict[str, Any]] = {
@@ -163,31 +165,38 @@ class PizzaMazeGame(ft.Container):
         self._load_level_config()
 
         self.title_text = ft.Text( # Added for dynamic title
-            f"Pizza Delivery Maze - Level {self.current_level}",
+            f"Level {self.current_level}",
             size=24,
             weight=ft.FontWeight.W_600,
-            color=ft.Colors.GREY_800
+            color=ft.Colors.WHITE
         )
-        self.level_text = ft.Text(size=16, color=ft.Colors.GREY_800)
-        self.score_text = ft.Text(f"Total Score: {self.total_score}", size=18, weight=ft.FontWeight.W_600, color=ft.Colors.BLUE_700)
+        self.level_text = ft.Text(size=16, color=ft.Colors.WHITE)
+        self.score_text = ft.Text(f"Total Score: {self.total_score}", size=18, weight=ft.FontWeight.W_600, color=ACCENT_COLOR)
         self.clear_button = ft.ElevatedButton(
             "Clear Path",
             on_click=self.clear_path,
-            bgcolor=ft.Colors.GREY_500
+            bgcolor=PRIMARY_COLOR,
+            color=TEXT_COLOR
         )
         self.check_button = ft.ElevatedButton(
             "Check Path",
             on_click=self.check_path,
-            bgcolor=ft.Colors.GREY_500
+            bgcolor=PRIMARY_COLOR,
+            color=TEXT_COLOR
         )
         self.next_level_button = ft.ElevatedButton(
             "Next Level",
             on_click=self.go_to_next_level,
-            bgcolor=ft.Colors.GREEN_700,
-            color=ft.Colors.WHITE,
+            bgcolor=PRIMARY_COLOR,
+            color=TEXT_COLOR,
             visible=False  # Initially hidden
         )
         self.game_grid_column = ft.Column(spacing=2) # To hold the grid rows
+
+        self.info_row = ft.Row([
+            ft.Icon(ft.Icons.INFO, color=ft.Colors.BLUE_500),
+            ft.Text("Click the green cell to start marking.", color=ft.Colors.WHITE)
+        ], alignment=ft.MainAxisAlignment.CENTER)
 
         self.content = self.build()
 
@@ -227,26 +236,30 @@ class PizzaMazeGame(ft.Container):
         self.game_grid_container = ft.Container(
             content=self.build_game_grid(),
             padding=20,
-            bgcolor=ft.Colors.BLUE_50,
+            bgcolor=BG_COLOR,  # Use BG_COLOR for grid container
             border_radius=10
         )
 
-        return ft.Column(
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            controls=[
-                self.title_text, # Use the dynamic title_text
-                self.score_text, 
-                self.game_grid_container,
-                self.level_text,
-                ft.Row(
-                    alignment=ft.MainAxisAlignment.CENTER,
-                    controls=[
-                        self.clear_button,
-                        self.check_button,
-                    ]
-                ),
-                self.next_level_button # Add the next level button here
-            ]
+        return ft.Container(
+            bgcolor=BG_COLOR,  # Use BG_COLOR for main container
+            content=ft.Column(
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                controls=[
+                    self.title_text,
+                    self.info_row,
+                    self.score_text, 
+                    self.game_grid_container,
+                    self.level_text,
+                    ft.Row(
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        controls=[
+                            self.clear_button,
+                            self.check_button,
+                        ]
+                    ),
+                    self.next_level_button
+                ]
+            )
         )
 
     def create_cell(self, row: int, col: int) -> ft.Container:
@@ -396,7 +409,7 @@ class PizzaMazeGame(ft.Container):
     def check_path(self, e: ft.ControlEvent = None):
         if not self.current_path:
             # Correct way to show SnackBar
-            self.page.overlay.append(ft.SnackBar(ft.Text("Draw a path first!"), open=True))
+            self.page.overlay.append(ft.SnackBar(ft.Text("Draw a path first!", color=ft.Colors.WHITE), open=True))
             self.page.update()
             return
 
@@ -405,13 +418,13 @@ class PizzaMazeGame(ft.Container):
 
         if not path_starts_correctly:
             # Correct way to show SnackBar
-            self.page.overlay.append(ft.SnackBar(ft.Text("Path must start at the green square!"), open=True))
+            self.page.overlay.append(ft.SnackBar(ft.Text("Path must start at the green square!", color=ft.Colors.WHITE), open=True))
             self.page.update()
             return
 
         if not path_ends_correctly:
             # Correct way to show SnackBar
-            self.page.overlay.append(ft.SnackBar(ft.Text("Path must end at the red square!"), open=True))
+            self.page.overlay.append(ft.SnackBar(ft.Text("Path must end at the red square!", color=ft.Colors.WHITE), open=True))
             self.page.update()
             return
         distance = self.calculate_current_path_distance()
@@ -428,7 +441,7 @@ class PizzaMazeGame(ft.Container):
         # Correct way to show SnackBar
         self.page.overlay.append(
             ft.SnackBar(
-                ft.Text(f"Path complete! Distance: {distance:.2f} (Optimal: {shortest_distance:.2f}). You earned {level_score} points."),
+                ft.Text(f"Path complete! Distance: {distance:.2f} (Optimal: {shortest_distance:.2f}). You earned {level_score} points.", color=ft.Colors.WHITE),
                 open=True
             )
         )
@@ -455,7 +468,7 @@ class PizzaMazeGame(ft.Container):
             self.current_level += 1
             self._load_level_config() 
 
-            self.title_text.value = f"Pizza Delivery Maze - Level {self.current_level}"
+            self.title_text.value = f"Level {self.current_level}"
             self.level_text.value = self.level_message
             
             self.game_grid_container.content = self.build_game_grid()
@@ -472,7 +485,7 @@ class PizzaMazeGame(ft.Container):
             self.page.update()
         else:
             # Correct way to show SnackBar
-            self.page.overlay.append(ft.SnackBar(ft.Text("You've completed all levels!"), open=True))
+            self.page.overlay.append(ft.SnackBar(ft.Text("You've completed all levels!", color=ft.Colors.WHITE), open=True))
             self.page.update()
 
 
@@ -548,12 +561,24 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    page.bgcolor = ft.Colors.BLUE_50
+    page.bgcolor = BG_COLOR
     page.padding = 20
     page.window_width = 500  # Adjusted for potentially larger grids
     page.window_height = 750 # Adjusted for potentially larger grids
     page.window_resizable = False
-    
+
+    def on_back(e):
+        page.go_back() if hasattr(page, 'go_back') else page.window_close()
+
+    appbar = ft.AppBar(
+        leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=on_back),
+        title=ft.Text("Pizza Delivery Maze", weight=ft.FontWeight.W_600, color=ft.Colors.WHITE),
+        bgcolor=BG_COLOR,
+        center_title=True,
+        elevation=2,
+    )
+
+    page.appbar = appbar
     game = PizzaMazeGame(page=page, level=1)  # Start at level 1
     page.add(game)
 

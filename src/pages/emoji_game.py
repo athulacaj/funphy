@@ -1,7 +1,6 @@
 import flet as ft
 import os
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "pages")))
+
 from utils import BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 
 # Game data: emoji, clue, hint, answer
