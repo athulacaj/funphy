@@ -4,7 +4,7 @@ from .utils import get_background_image, BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, 
 # Define colors from the image for better accuracy
 BEGINNER_BG_COLOR = ft.Colors.with_opacity(0.8, ft.Colors.GREEN_ACCENT_700)
 INTERMEDIATE_BG_COLOR = ft.Colors.with_opacity(0.8, ft.Colors.ORANGE_ACCENT_700)
-ADVANCED_BG_COLOR = ft.Colors.with_opacity(0.8, ft.Colors.BLUE_ACCENT_700)
+PROFESSIONAL_BG_COLOR = ft.Colors.with_opacity(0.8, ft.Colors.BLUE_ACCENT_700)
 CARD_TEXT_COLOR = ft.Colors.WHITE
 STAR_FILLED_COLOR = ft.Colors.AMBER
 STAR_EMPTY_COLOR = ft.Colors.with_opacity(0.5, ft.Colors.WHITE)
@@ -116,14 +116,14 @@ def dashboard_page(page: ft.Page):
                         ),
                         create_level_card(
                             icon=ft.Icon(ft.Icons.DIAMOND, color=ft.Colors.BLUE_ACCENT_200, size=30), # Using diamond as a proxy for crystal
-                            title="ADVANCED",
-                            subtitle="ADVANCED",
+                            title="PROFESSIONAL",
+                            subtitle="PROFESSIONAL",
                             progress_value=0.2, # Example: 20%
                             score="22,00",
                             stars=2,
                             total_stars=5,
-                            unlocked=False, # Assuming advanced is locked
-                            bgcolor=ADVANCED_BG_COLOR
+                            unlocked=False, # Assuming professional is locked
+                            bgcolor=PROFESSIONAL_BG_COLOR
                         ),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
