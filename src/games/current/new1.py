@@ -35,6 +35,44 @@ LEVEL_CONFIGS: Dict[int, Dict[str, Any]] = {
             (6,2), (6,5)
         },
         "message": "Level 3: The final challenge!"
+    },
+    4: {
+        "grid_size": 9,
+        "start_pos": (8, 4),
+        "end_pos": (0, 4),
+        "walls": {
+            (0,0), (0,1), (0,2), (0,3), (0,5), (0,6), (0,7), (0,8),
+            (1,1), (1,3), (1,5), (1,7),
+            (2,0), (2,1), (2,2), (2,4), (2,6), (2,7), (2,8),
+            (3,1), (3,3), (3,5), (3,7),
+            (4,0), (4,2), (4,4), (4,6), (4,8),
+            (5,1), (5,3), (5,5), (5,7),
+            (6,0), (6,2), (6,4), (6,6), (6,8),
+            (7,1), (7,3), (7,5), (7,7),
+            (8,0), (8,1), (8,2), (8,3), (8,5), (8,6), (8,7), (8,8)
+        },
+        "message": "Level 4: The Maze Expands!"
+    },
+    5: {
+        "grid_size": 10,
+        "start_pos": (9, 0),
+        "end_pos": (0, 9),
+        "walls": {
+            # Outer border walls to make it more contained
+            (0,1), (0,2),
+            (1,0), (1,2), (1,4), (1,6), (1,8), (1,9),
+            (2,1), (2,3), (2,5), (2,7), (2,9),
+            (3,0), (3,2), (3,4), (3,6), (3,8),
+            (4,1), (4,3), (4,5), (4,7), (4,9),
+            (5,0), (5,2), (5,4), (5,6), (5,8),
+            (6,1), (6,3), (6,5), (6,7), (6,9),
+            (7,0), (7,2), (7,4), (7,6), (7,8),
+            (8,1), (8,3), (8,5), (8,7), (8,9),
+            (9,1), (9,2), (9,3), (9,4), (9,5), (9,6), (9,7), (9,8),
+            # Inner complex walls
+            (2,2), (2,6), (3,5), (4,2), (4,8), (5,1), (5,7), (6,4), (7,3), (7,7)
+        },
+        "message": "Level 5: The Ultimate Pizza Quest!"
     }
 }
 MAX_LEVELS = len(LEVEL_CONFIGS)
@@ -194,7 +232,9 @@ class PizzaMazeGame(ft.Container):
             return False
         
         last_row, last_col = self.current_path[-1]
-        return (abs(row - last_row) + abs(col - last_col) == 1) and \
+        # Allow movement to adjacent cells (horizontally, vertically, or diagonally)
+        return (abs(row - last_row) <= 1 and abs(col - last_col) <= 1) and \
+               (row != last_row or col != last_col) and \
                (row, col) not in self.current_path
 
     def add_to_path(self, row: int, col: int):
@@ -217,12 +257,15 @@ class PizzaMazeGame(ft.Container):
     # Helper method to get valid neighbors for BFS
     def get_neighbors(self, r: int, c: int) -> List[Tuple[int, int]]:
         neighbors = []
-        for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-            nr, nc = r + dr, c + dc
-            if 0 <= nr < self.grid_size and \
-               0 <= nc < self.grid_size and \
-               (nr, nc) not in self.walls:
-                neighbors.append((nr, nc))
+        for dr in [-1, 0, 1]:
+            for dc in [-1, 0, 1]:
+                if dr == 0 and dc == 0:
+                    continue  # Skip the current cell itself
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < self.grid_size and \
+                   0 <= nc < self.grid_size and \
+                   (nr, nc) not in self.walls:
+                    neighbors.append((nr, nc))
         return neighbors
 
     # BFS to find the length of the shortest path
