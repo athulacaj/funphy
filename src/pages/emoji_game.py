@@ -1,5 +1,6 @@
 import flet as ft
 import os
+from .db import AppDatabase
 
 from .utils import BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 
@@ -239,6 +240,10 @@ def build_emoj_game(page: ft.Page):
             current_view.controls = [build_main_content_container()]
             page.update()
 
+    def save_progress():
+           if state["current"] >= len(QUESTIONS) - 1:
+                AppDatabase.save_self_user_data_2({"advanced_feedback":{"score": state["total_score"]}})
+
     def on_letter(ch):
         if state["completed"]:
             # Allow clicking letters even if completed, but it won't change score or guessed set
@@ -262,7 +267,8 @@ def build_emoj_game(page: ft.Page):
             if state["current"] not in state["scored_questions"]:
                 state["total_score"] += state["score"]
                 state["scored_questions"].add(state["current"])
-            state["showNext"] = True 
+                state["showNext"] = True 
+                save_progress()
         
         update_view_content()
 

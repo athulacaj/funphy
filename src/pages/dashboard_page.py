@@ -29,7 +29,7 @@ def create_level_card(icon: ft.Icon, title: str, subtitle: str, progress_value: 
                 ft.Container(height=10),
                 ft.Row(
                     [
-                        ft.Icon(ft.Icons.MONETIZATION_ON_OUTLINED, color=ft.Colors.AMBER_ACCENT_200, size=16),
+                        ft.Icon(ft.Icons.GAMEPAD, color=ft.Colors.AMBER_ACCENT_200, size=16),  # Changed to a points icon
                         ft.Text(score, color=CARD_TEXT_COLOR, size=12),
                         ft.ProgressBar(value=progress_value, width=60, color=PROGRESS_BAR_COLOR, bgcolor=ft.Colors.with_opacity(0.3, ft.Colors.WHITE)),
                         ft.Icon(ft.Icons.STAR, color=ft.Colors.AMBER_ACCENT_200, size=16),
@@ -72,6 +72,26 @@ def dashboard_page(page: ft.Page):
     user_name = user.get("name", "User")
     user_email = user.get("email", "")
     assessment_score = user.get("assessment_score", None)
+    intermediate_feedback = user.get("intermediate_feedback", None)
+    intermediate_score = None
+    intermediate_score_max = 500
+    intermediate_score_star = 0
+    intermediate_progress_value = 0
+    if intermediate_feedback:
+        intermediate_score = intermediate_feedback.get("score", None)
+        intermediate_score_star = round((intermediate_score / intermediate_score_max) * 5, 2) if intermediate_score is not None else 0
+        intermediate_progress_value = intermediate_score / intermediate_score_max if intermediate_score is not None else 0
+
+    advanced_feedback = user.get("advanced_feedback", None)
+    advanced_score = None
+    advanced_score_max = 1000
+    advanced_score_star = 0
+    advanced_progress_value = 0
+    is_advanced_unlocked=intermediate_score is not None
+    if advanced_feedback:
+        advanced_score = advanced_feedback.get("score", None)
+        advanced_score_star = round((advanced_score / advanced_score_max) * 5, 2) if advanced_score is not None else 0
+        advanced_progress_value = advanced_score / advanced_score_max if advanced_score is not None else 0
     
     def logout(e):
         # Clear user data from session
@@ -108,9 +128,9 @@ def dashboard_page(page: ft.Page):
                             icon=ft.Icon(ft.Icons.LOCAL_FIRE_DEPARTMENT, color=ft.Colors.ORANGE_ACCENT_400, size=30),
                             title="INTERMEDIATE", # Corrected spelling
                             subtitle="INTERMEDIATE", # Corrected spelling
-                            progress_value=0.5, # Example: 50%
-                            score="10,00",
-                            stars=3,
+                            progress_value=intermediate_progress_value, # Example: 50%
+                            score=intermediate_score if intermediate_score is not None else "N/A", # Use score from feedback if available
+                            stars=intermediate_score_star,
                             total_stars=5,
                             unlocked=True, # Assuming intermediate is also unlocked for now
                             bgcolor=INTERMEDIATE_BG_COLOR,
@@ -121,14 +141,14 @@ def dashboard_page(page: ft.Page):
                             icon=ft.Icon(ft.Icons.DIAMOND, color=ft.Colors.BLUE_ACCENT_200, size=30), # Using diamond as a proxy for crystal
                             title="ADVANCED",
                             subtitle="ADVANCED",
-                            progress_value=0.2, # Example: 20%
-                            score="22,00",
-                            stars=2,
+                            progress_value=advanced_progress_value, # Example: 50%
+                            score=advanced_score if advanced_score is not None else "N/A", # Use score from feedback if available
+                            stars=advanced_score_star,
                             total_stars=5,
-                            unlocked=False, # Assuming advanced is locked
+                            unlocked=is_advanced_unlocked, # Assuming advanced is locked
                             bgcolor=ADVANCED_BG_COLOR,
-                            # Add on_click to navigate to emoji_game
-                            on_click=lambda e: page.go("/emoji_game")
+                            # Add on_click to navigate to emoji_game if advanced is unlocked
+                            on_click=lambda e: page.go("/emoji_game") if is_advanced_unlocked else None
                         ),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
@@ -158,19 +178,25 @@ def dashboard_page(page: ft.Page):
                         [   
                             ft.Text(f"Welcome, {user_name}!", size=30, weight=ft.FontWeight.W_600, color=ACCENT_COLOR),
                             ft.Text(f"Email: {user_email}", size=16, color=TEXT_COLOR),
+                            ft.ElevatedButton(
+                                "Logout", 
+                                on_click=logout, 
+                                style=ft.ButtonStyle(bgcolor=PRIMARY_COLOR, color=TEXT_COLOR, padding=BUTTON_PADDING)
+                            ),
                             
                             ft.Container(height=20),  # Spacer
                             
-                            # Game Map Section added here
-                            game_map_section,
-                            
-                            ft.Container(height=20), # Spacer
+                            *([
+                                # Game Map Section added here
+                                game_map_section,
+                                
+                                ft.Container(height=20) # Spacer
+                            ] if assessment_score is not None else []),
 
                             ft.Container(
                                 ft.Column(
                                     [
-                                        ft.Text("Dashboard Actions", size=24, weight=ft.FontWeight.W_500, color=PRIMARY_COLOR), # Changed title
-                                        ft.Text("Your personal dashboard content will appear here.", size=14, color=TEXT_COLOR),
+                                        # ft.Text("Dashboard Actions", size=24, weight=ft.FontWeight.W_500, color=PRIMARY_COLOR), # Changed title
                                         
                                         ft.Container(height=20),  # Spacer
                                         
@@ -196,12 +222,6 @@ def dashboard_page(page: ft.Page):
                             ),
                             
                             ft.Container(height=20),  # Spacer
-                            
-                            ft.ElevatedButton(
-                                "Logout", 
-                                on_click=logout, 
-                                style=ft.ButtonStyle(bgcolor=PRIMARY_COLOR, color=TEXT_COLOR, padding=BUTTON_PADDING)
-                            ),
                         ],
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,

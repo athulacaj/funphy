@@ -70,6 +70,11 @@ class AppDatabase:
             f.write(json.dumps(AppDatabase.db, indent=4))
 
     @staticmethod
+    def save_db_2():
+        """Save current DB state to the file"""
+        with open(my_file_path, "w") as f:
+            f.write(json.dumps(AppDatabase.db, indent=4))
+    @staticmethod
     async def save_user(name, email, password):
         """Save a new user to the database"""
         max_retries = 3
@@ -163,3 +168,30 @@ class AppDatabase:
             error_msg = str(e)
             print(f"Error saving user data: {error_msg}")
             return False, f"Failed to save user data: {error_msg}"
+        
+    
+
+    @staticmethod
+    def save_self_user_data_2(data):
+        """Save the currently logged-in user's data"""
+        try:
+            user_email = AppDatabase.db.get("logined_user", {}).get("email")
+            if not user_email:
+                return False, "No user is currently logged in"
+
+            users = AppDatabase.db.get("users", {})
+            if user_email not in users:
+                return False, "User not found"
+
+            # Update user data
+            users[user_email].update(data)
+            AppDatabase.db["users"] = users
+
+            AppDatabase.save_db_2()  # Uses static call
+            return True, "User data updated successfully"
+        except Exception as e:
+            error_msg = str(e)
+            print(f"Error saving user data: {error_msg}")
+            return False, f"Failed to save user data: {error_msg}"
+        
+    

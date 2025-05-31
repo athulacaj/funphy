@@ -36,8 +36,84 @@ physics_questions = [
             {"id": "D", "text": "Velocity"}
         ],
         "correct": "D"
+    },
+    {
+        "id": 4,
+        "question": "A car travels 150 meters in 15 seconds. What is its average velocity?",
+        "options": [
+            {"id": "A", "text": "5 m/s"},
+            {"id": "B", "text": "10 m/s"},
+            {"id": "C", "text": "15 m/s"},
+            {"id": "D", "text": "2250 m/s"}
+        ],
+        "correct": "B"
+    },
+    {
+        "id": 5,
+        "question": "What does a horizontal line on a position vs. time graph indicate about an object’s motion?",
+        "options": [
+            {"id": "A", "text": "The object is moving at a constant positive velocity."},
+            {"id": "B", "text": "The object is at rest."},
+            {"id": "C", "text": "The object is accelerating."},
+            {"id": "D", "text": "The object is moving at a constant negative velocity."}
+        ],
+        "correct": "B"
+    },
+    {
+        "id": 6,
+        "question": "A ball is dropped from rest. Ignoring air resistance, its acceleration is:",
+        "options": [
+            {"id": "A", "text": "Zero"},
+            {"id": "B", "text": "Constant and upwards"},
+            {"id": "C", "text": "Constant and downwards (approx 9.8 m/s²)"},
+            {"id": "D", "text": "Increasing as it falls"}
+        ],
+        "correct": "C"
+    },
+    {
+        "id": 7,
+        "question": "A 1 kg object is released from rest at a height of 5 meters. What is its approximate kinetic energy just before it hits the ground (g = 10 m/s²), assuming no air resistance?",
+        "options": [
+            {"id": "A", "text": "5 J"},
+            {"id": "B", "text": "10 J"},
+            {"id": "C", "text": "25 J"},
+            {"id": "D", "text": "50 J"}
+        ],
+        "correct": "D"
+    },
+    {
+        "id": 8,
+        "question": "A 2 kg object moving at 3 m/s collides with a 1 kg object at rest. If they stick together, what is their final velocity?",
+        "options": [
+            {"id": "A", "text": "1 m/s"},
+            {"id": "B", "text": "1.5 m/s"},
+            {"id": "C", "text": "2 m/s"},
+            {"id": "D", "text": "3 m/s"}
+        ],
+        "correct": "C"
+    },
+    {
+        "id": 9,
+        "question": "A 5 kg object is pushed with a net force of 20 N. What is its acceleration?",
+        "options": [
+            {"id": "A", "text": "0.25 m/s²"},
+            {"id": "B", "text": "4 m/s²"},
+            {"id": "C", "text": "20 m/s²"},
+            {"id": "D", "text": "100 m/s²"}
+        ],
+        "correct": "B"
+    },
+    {
+        "id": 10,
+        "question": "Work done is defined as:",
+        "options": [
+            {"id": "A", "text": "Force divided by distance"},
+            {"id": "B", "text": "Force times distance"},
+            {"id": "C", "text": "Power divided by time"},
+            {"id": "D", "text": "Mass times acceleration"}
+        ],
+        "correct": "B"
     }
-    # Add more questions as needed (e.g., up to 10 as per image)
 ]
 
 # Assessment state to track user progress

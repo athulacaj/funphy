@@ -1,18 +1,21 @@
 {
     "users": {
-        "athul": {
-            "name": "athul",
-            "email": "athul",
+        "test@gmail.com": {
+            "name": "test",
+            "email": "test@gmail.com",
             "password": "123456",
-            "assessment_score": 1,
+            "assessment_score": 3,
             "assessment_feedback": [
                 "Beginner",
                 "Needs significant improvement in understanding basic concepts.",
                 "Start with foundational topics and build up knowledge gradually."
-            ]
+            ],
+            "intermediate_feedback": {
+                "score": 492
+            }
         }
     },
     "logined_user": {
-        "email": "athul"
+        "email": "test@gmail.com"
     }
 }

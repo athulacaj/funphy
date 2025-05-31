@@ -2,6 +2,7 @@ import flet as ft
 import math # Add this import
 from typing import List, Tuple, Set, Dict # Assuming these are used or will be
 from collections import deque # Added for BFS
+from .db import AppDatabase
 
 from .utils import BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 
@@ -195,7 +196,7 @@ class PizzaMazeGame(ft.Container):
 
         self.info_row = ft.Row([
             ft.Icon(ft.Icons.INFO, color=ft.Colors.BLUE_500),
-            ft.Text("Click the green cell to start marking.", color=ft.Colors.WHITE)
+            ft.Text("Click the green cell to start marking. \nReach the red cell to finish.", color=ft.Colors.WHITE)
         ], alignment=ft.MainAxisAlignment.CENTER)
 
         self.content = self.build()
@@ -407,7 +408,7 @@ class PizzaMazeGame(ft.Container):
         self.next_level_button.update()
         self.page.update()
 
-    def check_path(self, e: ft.ControlEvent = None):
+    async def check_path(self, e: ft.ControlEvent = None):
         if not self.current_path:
             # Correct way to show SnackBar
             self.page.overlay.append(ft.SnackBar(ft.Text("Draw a path first!", color=ft.Colors.WHITE), open=True))
@@ -458,6 +459,7 @@ class PizzaMazeGame(ft.Container):
             self.next_level_button.visible = False
             self.level_text.update()
             self.next_level_button.update()
+            await AppDatabase.save_self_user_data({"intermediate_feedback":{"score": self.total_score}})
 
         self.score_text.update()
         self.check_button.update()
