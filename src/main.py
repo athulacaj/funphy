@@ -3,7 +3,7 @@ from pages import splash_page, welcome_page, login_page, signup_page, dashboard_
 from pages.utils import BG_COLOR, ACCENT_COLOR
 from pages.db import AppDatabase
 from pages.path_game import path_game 
-from pages.emoji_game import emoji_game 
+from pages.emoji_game import build_emoj_game 
 
 
 async def main(page: ft.Page):
@@ -46,7 +46,7 @@ async def main(page: ft.Page):
         elif page.route == "/path_game":
             page.views.append(path_game(page))
         elif page.route == "/emoji_game":
-            page.views.append(emoji_game(page))
+            page.views.append(build_emoj_game(page))
         
         page.update()
 
