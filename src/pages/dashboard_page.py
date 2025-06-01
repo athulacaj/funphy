@@ -245,7 +245,6 @@ def dashboard_page(page: ft.Page):
                     ),
                     expand=True,
                     alignment=ft.alignment.center,
-                    height=page.window.height if page.window else 600, # Adjusted to use page.window.height
                 ),
             ])
         ],
