@@ -1,6 +1,6 @@
 import flet as ft
 from pages import splash_page, welcome_page, login_page, signup_page, dashboard_page,get_assessment_pages
-from pages.utils import BG_COLOR, ACCENT_COLOR
+from pages.utils import BG_COLOR, SNACK_COLOR
 from pages.db import AppDatabase
 from pages.path_game import path_game 
 from pages.emoji_game import build_emoj_game 
@@ -15,7 +15,7 @@ async def main(page: ft.Page):
     # Set Snackbar theme to BG_COLOR with opacity
     page.theme = ft.Theme(
         snackbar_theme=ft.SnackBarTheme(
-            bgcolor=ft.Colors.with_opacity(0.95, ACCENT_COLOR)
+            bgcolor=ft.Colors.with_opacity(1, SNACK_COLOR)
         )
     )
 

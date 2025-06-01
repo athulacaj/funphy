@@ -2,7 +2,7 @@ import flet as ft
 import os
 from .db import AppDatabase
 
-from .utils import BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
+from .utils import BG_COLOR,get_background_image, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 
 # Game data: emoji, clue, hint, answer
 QUESTIONS = [
@@ -312,7 +312,13 @@ def build_emoj_game(page: ft.Page):
 
     return ft.View(
         route="/emoji_game",
-        controls=[initial_content],
+        controls=[
+                ft.Stack([
+                # Background image container
+                    get_background_image(),
+                    initial_content
+                ]),
+            ],
         appbar=appbar,
         bgcolor=BG_COLOR # Set bgcolor for the View, consistent with previous version
     )

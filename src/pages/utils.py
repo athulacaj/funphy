@@ -5,6 +5,7 @@ import os
 BG_COLOR = "#0F111A"  # Deep Twilight
 PRIMARY_COLOR = "#7B68EE"  # Medium Slate Blue
 ACCENT_COLOR = "#36F1CD"  # Aqua Mint
+SNACK_COLOR = "#04332A"  # Aqua Mint
 TEXT_COLOR = ft.Colors.WHITE
 BUTTON_PADDING = ft.padding.symmetric(vertical=12, horizontal=24)
 

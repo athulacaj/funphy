@@ -83,7 +83,7 @@ def dashboard_page(page: ft.Page):
         beginner_score = beginner_feedback.get("score", None)
         beginner_score_star = round((beginner_score / beginner_score_max) * 5, 2) if beginner_score is not None else 0
         beginner_progress_value = beginner_score / beginner_score_max if beginner_score is not None else 0
-
+    is_beginner_unlocked = beginner_score is not None
     
     intermediate_feedback = user.get("intermediate_feedback", None)
     intermediate_score = None
@@ -130,9 +130,9 @@ def dashboard_page(page: ft.Page):
                             icon=ft.Icon(ft.Icons.GRASS, color=ft.Colors.GREEN_ACCENT_400, size=30),
                             title="BEGINNER",
                             subtitle="BEGINNER",
-                            progress_value=0.8, # Example: 80%
-                            score="32,00",
-                            stars=4,
+                            progress_value=beginner_progress_value, # Example: 50%
+                            score= beginner_score if beginner_score is not None else "N/A", # Use score from feedback if available
+                            stars=beginner_score_star,
                             total_stars=5,
                             unlocked=True,
                             bgcolor=BEGINNER_BG_COLOR,
@@ -146,10 +146,10 @@ def dashboard_page(page: ft.Page):
                             score=intermediate_score if intermediate_score is not None else "N/A", # Use score from feedback if available
                             stars=intermediate_score_star,
                             total_stars=5,
-                            unlocked=True, # Assuming intermediate is also unlocked for now
+                            unlocked=is_beginner_unlocked, # Assuming intermediate is also unlocked for now
                             bgcolor=INTERMEDIATE_BG_COLOR,
                             # Add on_click to navigate to path_game
-                            on_click=lambda e: page.go("/path_game")
+                            on_click=lambda e: page.go("/path_game") if is_beginner_unlocked else None
                         ),
                         create_level_card(
                             icon=ft.Icon(ft.Icons.DIAMOND, color=ft.Colors.BLUE_ACCENT_200, size=30), # Using diamond as a proxy for crystal
@@ -169,6 +169,7 @@ def dashboard_page(page: ft.Page):
                     spacing=25, # Increased spacing between cards
                     wrap=True, # Allow wrapping on smaller screens
                     vertical_alignment=ft.CrossAxisAlignment.START,
+                    expand=True, # Added to help with wrapping on mobile
                 )
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,

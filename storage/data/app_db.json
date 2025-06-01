@@ -10,8 +10,14 @@
                 "Needs significant improvement in understanding basic concepts.",
                 "Start with foundational topics and build up knowledge gradually."
             ],
+            "beginner_feedback": {
+                "score": 2000
+            },
             "intermediate_feedback": {
-                "score": 492
+                "score": 433
+            },
+            "advanced_feedback": {
+                "score": 920
             }
         }
     },

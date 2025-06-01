@@ -4,7 +4,7 @@ from typing import List, Tuple, Set, Dict # Assuming these are used or will be
 from collections import deque # Added for BFS
 from .db import AppDatabase
 
-from .utils import BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
+from .utils import BG_COLOR,get_background_image, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 
 # Placeholder for level configurations - ensure these are properly defined
 
@@ -161,8 +161,8 @@ class PizzaMazeGame(ft.Container):
         self.current_path: List[Tuple[int, int]] = []
         self.is_drawing = False
         
-        self.total_score = self.page.session.get("total_score") if self.page.session.contains_key("total_score") else 0
-        
+        # self.total_score = self.page.session.get("total_score") if self.page.session.contains_key("total_score") else 0
+        self.total_score = 0
         self._load_level_config()
 
         self.title_text = ft.Text( # Added for dynamic title
@@ -436,6 +436,10 @@ class PizzaMazeGame(ft.Container):
         else:
             # Score: 100 if optimal, less if longer, min 0
             level_score = max(0, int(100 * (shortest_distance / distance)))
+        if(level_score > 100):
+            level_score = 100
+        elif(level_score!=100 and level_score > 20):
+            level_score -=20
         self.total_score += level_score
         self.page.session.set("total_score", self.total_score)
         self.score_text.value = f"Total Score: {self.total_score}"
@@ -574,7 +578,11 @@ def path_game(page: ft.Page):
         page.go("/dashboard")
 
     return ft.View("/path_game", [
-        PizzaMazeGame(page)
+         ft.Stack([
+                # Background image container
+                    get_background_image(),
+                    PizzaMazeGame(page)
+        ]),
     ],
     appbar=ft.AppBar(
         leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=go_back, tooltip="Back"),
