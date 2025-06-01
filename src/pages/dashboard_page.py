@@ -72,6 +72,19 @@ def dashboard_page(page: ft.Page):
     user_name = user.get("name", "User")
     user_email = user.get("email", "")
     assessment_score = user.get("assessment_score", None)
+    
+
+    beginner_feedback = user.get("beginner_feedback", None)
+    beginner_score = None
+    beginner_score_max = 300
+    beginner_score_star = 0
+    beginner_progress_value = 0
+    if beginner_feedback:
+        beginner_score = beginner_feedback.get("score", None)
+        beginner_score_star = round((beginner_score / beginner_score_max) * 5, 2) if beginner_score is not None else 0
+        beginner_progress_value = beginner_score / beginner_score_max if beginner_score is not None else 0
+
+    
     intermediate_feedback = user.get("intermediate_feedback", None)
     intermediate_score = None
     intermediate_score_max = 500
@@ -113,17 +126,18 @@ def dashboard_page(page: ft.Page):
                 ft.Container(height=15),
                 ft.Row(
                     [
-                        # create_level_card(
-                        #     icon=ft.Icon(ft.Icons.GRASS, color=ft.Colors.GREEN_ACCENT_400, size=30),
-                        #     title="BEGINNER",
-                        #     subtitle="BEGINNER",
-                        #     progress_value=0.8, # Example: 80%
-                        #     score="32,00",
-                        #     stars=4,
-                        #     total_stars=5,
-                        #     unlocked=True,
-                        #     bgcolor=BEGINNER_BG_COLOR
-                        # ),
+                        create_level_card(
+                            icon=ft.Icon(ft.Icons.GRASS, color=ft.Colors.GREEN_ACCENT_400, size=30),
+                            title="BEGINNER",
+                            subtitle="BEGINNER",
+                            progress_value=0.8, # Example: 80%
+                            score="32,00",
+                            stars=4,
+                            total_stars=5,
+                            unlocked=True,
+                            bgcolor=BEGINNER_BG_COLOR,
+                            on_click=lambda e: page.go("/word_puzzle")
+                        ),
                         create_level_card(
                             icon=ft.Icon(ft.Icons.LOCAL_FIRE_DEPARTMENT, color=ft.Colors.ORANGE_ACCENT_400, size=30),
                             title="INTERMEDIATE", # Corrected spelling
