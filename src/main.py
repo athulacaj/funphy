@@ -1,5 +1,6 @@
 import flet as ft
 from pages import splash_page, welcome_page, login_page, signup_page, dashboard_page,get_assessment_pages
+from pages.learning_module_pages import learning_modules_view, modules_details_view,lessons_view,lesson_content_view # Added import
 from pages.utils import BG_COLOR, SNACK_COLOR
 from pages.db import AppDatabase
 from pages.path_game import path_game 
@@ -19,7 +20,6 @@ async def main(page: ft.Page):
         )
     )
 
-    # page.route="/signup"
 
     def route_change(route):
         page.views.clear()
@@ -50,6 +50,14 @@ async def main(page: ft.Page):
             page.views.append(build_emoj_game(page))
         elif page.route == "/word_puzzle":
             page.views.append(word_puzzle_page(page))
+        elif page.route == "/learning_modules": # Added route
+            page.views.append(learning_modules_view(page))
+        elif page.route == "/modules_details": # Added route
+            page.views.append(modules_details_view(page))
+        elif page.route == "/lessons": # Added route
+            page.views.append(lessons_view(page))
+        elif page.route == "/lesson_content": # Added route
+            page.views.append(lesson_content_view(page))
         
         page.update()
 
@@ -58,6 +66,8 @@ async def main(page: ft.Page):
     if self_user  is not None:
         # If user is already logged in, redirect to dashboard
         page.route = "/dashboard"
+        page.route="/learning_modules"
+
         page.session.set("user", self_user) # Store user data in session
         
     page.on_route_change = route_change
