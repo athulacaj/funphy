@@ -20,7 +20,6 @@ async def main(page: ft.Page):
         )
     )
 
-    page.route = "/"
     def route_change(route):
         page.views.clear()
 

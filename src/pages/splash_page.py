@@ -34,10 +34,9 @@ def get_view(page: ft.Page):
                         spacing=20,
                     ),
                     expand=True,
-                    alignment=ft.alignment.center,
-                    height=page.window.height if page.window else 600
+                    alignment=ft.alignment.center
                 ),
-            ])
+            ],expand=True,)
         ],
-        bgcolor=BG_COLOR  # Added background color
+        # bgcolor=BG_COLOR  # Added background color
     )

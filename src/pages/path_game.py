@@ -593,6 +593,7 @@ def path_game(page: ft.Page):
     appbar=ft.AppBar(
         leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=go_back, tooltip="Back"),
         title=ft.Text("Path Maze Game"),
+        bgcolor=BG_COLOR, # Defined in utils
         # bgcolor=ft.Colors.BLACK12 # Adjust color as needed
     ),
     bgcolor=BG_COLOR

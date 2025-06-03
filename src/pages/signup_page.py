@@ -90,9 +90,8 @@ def signup_page(page: ft.Page):
                     ),
                     expand=True,
                     alignment=ft.alignment.center,
-                    height=page.window.height if page.window else 600,
                 ),
-            ])
+            ],expand=True)
         ],
         bgcolor=BG_COLOR  
     )

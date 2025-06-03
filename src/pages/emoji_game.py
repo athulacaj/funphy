@@ -119,7 +119,7 @@ def build_emoj_game(page: ft.Page):
         page.go("/dashboard") # Navigate to dashboard
 
     appbar = ft.AppBar(
-        leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=on_back),
+        leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=on_back,),
         title=ft.Text("Emoji Science Quiz", weight=ft.FontWeight.W_600),
         bgcolor=BG_COLOR, # Defined in utils
         center_title=True,

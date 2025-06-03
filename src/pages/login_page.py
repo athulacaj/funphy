@@ -117,9 +117,8 @@ def get_view(page: ft.Page):
                         ),
                     ],
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                    height=page.window.height if page.window else 600,
                 ),
-            ])
+            ],expand=True)
         ],
         bgcolor=BG_COLOR  
     )
