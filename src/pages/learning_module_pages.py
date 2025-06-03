@@ -1,5 +1,7 @@
 import flet as ft
 from .utils import PRIMARY_COLOR, TEXT_COLOR, BUTTON_PADDING, BG_COLOR
+from .db import AppDatabase
+
 
 # Common button style
 common_button_style = ft.ButtonStyle(
@@ -88,7 +90,7 @@ def modules_details_view(page: ft.Page):
         page.go("/lessons") # Changed to navigate to /lessons
 
     def go_to_notes(e):
-        page.show_snack_bar(ft.SnackBar(ft.Text("Notes: Content coming soon!"), open=True))
+        page.go("/notes")
 
     view_content = ft.Column(
         [
@@ -149,16 +151,17 @@ def modules_details_view(page: ft.Page):
 def lessons_view(page: ft.Page):
     # Handler for individual unit clicks
     def on_unit_click(e, ukey, udata):
-        page.session.set("current_unit_key", ukey)  # Save unit_key to session
-        page.session.set("current_unit_data", udata)  # Save unit_data to session
-        page.go("/lesson_content") # Navigate to the new view
+        page.launch_url(udata["html_asset"])  # Open the HTML asset in a new tab
 
     lesson_units = {
-        "Unit 1": {"title": "Reference Frames, Displacement, and Velocity","pdf":"https://example.com/unit1.pdf"},
-        "Unit 2": {"title": "Acceleration"},
-        "Unit 3": {"title": "Momentum and Inertia"},
-        "Unit 4": {"title": "Kinetic Energy"},
-        "Unit 5": {"title": "Interaction 1 Energy"}
+        "unit1": {
+            "title": "Reference Frames, Displacement, and Velocity",
+            "html_asset": "https://funphy.netlify.app/unit1",
+        },
+        "unit2": {"title": "Acceleration","html_asset": "https://funphy.netlify.app/unit2"},
+        "unit3": {"title": "Momentum and Inertia", "html_asset": "https://funphy.netlify.app/unit3"},
+        "unit4": {"title": "Kinetic Energy", "html_asset": "https://funphy.netlify.app/unit4"},
+        "unit5": {"title": "Interaction 1 Energy", "html_asset": "https://funphy.netlify.app/unit5"},
     }
 
     unit_buttons = []
@@ -228,94 +231,117 @@ def lessons_view(page: ft.Page):
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
 
-def lesson_content_view(page: ft.Page):
-    # current_unit_key = page.session.get("current_unit_key") # Retrieve if needed elsewhere
-    current_lesson_data = page.session.get("current_unit_data")
-
-    if not current_lesson_data:
-        # Fallback if session data is missing
-        return ft.View(
-            route="/lesson_content",
-            controls=[
-                ft.AppBar(
-                    title=ft.Text("Error", color=TEXT_COLOR),
-                    leading=ft.IconButton(
-                        ft.Icons.CHEVRON_LEFT,
-                        on_click=lambda _: page.go("/lessons"),
-                        icon_color=TEXT_COLOR,
-                        icon_size=30
-                    ),
-                    bgcolor=BG_COLOR,
-                    elevation=0
-                ),
+def notes_page(page: ft.Page):
+    # Use page-level state for notes
+    user = page.session.get("user") 
+    page.notes = user.get("notes", []) if user else []
+    def refresh_notes():
+        notes_list.controls.clear()
+        for note in page.notes:
+            notes_list.controls.append(
                 ft.Container(
-                    content=ft.Text("Lesson content not found. Please go back to lessons.", color=TEXT_COLOR),
-                    alignment=ft.alignment.center,
-                    expand=True
+                    content=ft.Text(note["title"], size=16, color=TEXT_COLOR),
+                    bgcolor=BG_COLOR,
+                    border=ft.border.all(1, PRIMARY_COLOR),
+                    border_radius=20,
+                    padding=ft.padding.symmetric(vertical=8, horizontal=16),
+                    margin=ft.margin.only(bottom=8),
+                    alignment=ft.alignment.center_left,
+                    expand=False,
+                    on_click=lambda e, n=note: show_note_dialog(n)
                 )
+            )
+        notes_count.value = f"{len(page.notes)} notes"
+        page.update()
+
+    def on_add_note(e):
+        title_field = ft.TextField(label="Title", width=400, color=TEXT_COLOR, bgcolor=BG_COLOR)
+        content_field = ft.TextField(label="Content", multiline=True, min_lines=3, max_lines=5, width=300, color=TEXT_COLOR, bgcolor=BG_COLOR)
+        def add_note_action(ev):
+            page.notes.append({"title": title_field.value, "content": content_field.value})
+            AppDatabase.save_self_user_data_2({"notes":page.notes})  # Save notes to database
+            page.close(dialog)
+            refresh_notes()
+        dialog = ft.AlertDialog(
+            modal=True,
+            title=ft.Text("Add Note", size=20, weight=ft.FontWeight.W_600, color=TEXT_COLOR),
+            content=ft.Column([
+                title_field,
+                content_field
+            ], spacing=10),
+            actions=[
+                ft.TextButton("Add", on_click=add_note_action),
+                ft.TextButton("Cancel", on_click=lambda ev: page.close(dialog)),
             ],
             bgcolor=BG_COLOR,
-            vertical_alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER
         )
+        page.open(dialog)
 
-    unit_title = current_lesson_data.get("title", "Lesson Content")
-    pdf_url = current_lesson_data.get("pdf")
+    def on_search(e):
+        page.show_snack_bar(ft.SnackBar(ft.Text("Search: Feature coming soon!"), open=True))
 
-    content_items = []
-    if pdf_url:
-        content_items.append(ft.Text(f"PDF URL: {pdf_url}", color=TEXT_COLOR, size=16))
-        content_items.append(ft.Container(height=10)) # Spacer
-        content_items.append(
-            ft.ElevatedButton(
-                "Open PDF in browser",
-                on_click=lambda _: page.launch_url(pdf_url),
-                style=common_button_style,
-                width=280,
-                height=50
-            )
+    def show_note_dialog(note):
+        dialog = ft.AlertDialog(
+            title=ft.Text(note["title"], size=20, weight=ft.FontWeight.W_600, color=TEXT_COLOR),
+            content=ft.Text(note["content"], size=16, color=TEXT_COLOR),
+            actions=[ft.TextButton("Close", on_click=lambda e: page.close(dialog))],
+            bgcolor=BG_COLOR,
         )
-    else:
-        content_items.append(
-            ft.Text(
-                "No PDF available for this unit. Content will be available soon.",
-                color=TEXT_COLOR,
-                size=16,
-                italic=True,
-                text_align=ft.TextAlign.CENTER
-            )
-        )
+        page.open(dialog)
 
-    view_content = ft.Column(
-        content_items,
-        alignment=ft.MainAxisAlignment.CENTER,
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-        spacing=20,
-        expand=True
+    notes_count = ft.Text(f"{len(page.notes)} notes", size=14, color=TEXT_COLOR, italic=True)
+    notes_list = ft.Column([], spacing=0, expand=True)
+    refresh_notes()
+
+    fab = ft.FloatingActionButton(
+        icon=ft.Icons.ADD,
+        bgcolor=PRIMARY_COLOR,
+        on_click=on_add_note,
+        shape=ft.CircleBorder(),
+        mini=False
     )
 
     return ft.View(
-        route="/lesson_content",
+        route="/notes",
         controls=[
             ft.AppBar(
-                title=ft.Text(unit_title, color=TEXT_COLOR, weight=ft.FontWeight.W_600),
                 leading=ft.IconButton(
                     ft.Icons.CHEVRON_LEFT,
-                    on_click=lambda _: page.go("/lessons"), # Back to lessons view
+                    on_click=lambda _: page.go("/modules_details"),
                     icon_color=TEXT_COLOR,
                     icon_size=30
                 ),
+                title=ft.Text("My notes", size=28, weight=ft.FontWeight.W_600, color=TEXT_COLOR, italic=True),
+                center_title=True,
                 bgcolor=BG_COLOR,
-                elevation=0
+                elevation=0,
+                actions=[
+                    # ft.IconButton(
+                    #     icon=ft.Icons.SEARCH,
+                    #     icon_color=TEXT_COLOR,
+                    #     on_click=on_search
+                    # ),
+                    # ft.PopupMenuButton(items=[]),
+                ],
             ),
             ft.Container(
-                content=view_content,
+                content=ft.Column([
+                    notes_count,
+                    notes_list,
+                ], expand=True, alignment=ft.MainAxisAlignment.START, horizontal_alignment=ft.CrossAxisAlignment.CENTER),
                 expand=True,
-                alignment=ft.alignment.center,
-                padding=ft.padding.symmetric(horizontal=20, vertical=20)
+                padding=ft.padding.symmetric(horizontal=20, vertical=10),
+                bgcolor=BG_COLOR,
+            ),
+            ft.Container(
+                content=fab,
+                alignment=ft.alignment.bottom_right,
+                padding=ft.padding.only(right=16, bottom=16),
+                expand=False
             )
         ],
         bgcolor=BG_COLOR,
-        vertical_alignment=ft.MainAxisAlignment.CENTER,
+        vertical_alignment=ft.MainAxisAlignment.START,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
+

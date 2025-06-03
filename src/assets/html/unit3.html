@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Notes: Momentum and Inertia, Center of Mass</title>
+    <style>
+        /* Define CSS variables for the color theme */
+        :root {
+            --bg-color: #0F111A; /* Deep Twilight */
+            --primary-color: #7B68EE; /* Medium Slate Blue */
+            --accent-color: #36F1CD; /* Aqua Mint */
+            --text-color: #FFFFFF; /* White */
+        }
+
+        /* Basic body styling */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif; /* Using Inter font as per instructions */
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex; /* Use flexbox for centering content */
+            justify-content: center;
+            align-items: flex-start; /* Align to top, not center vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 900px; /* Max width for readability */
+            width: 100%; /* Fluid width */
+            margin: 20px; /* Margin around the container */
+            padding: 30px;
+            background-color: var(--bg-color); /* Changed to use bg-color for the container */
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Soft shadow */
+            box-sizing: border-box;
+        }
+
+        /* Headings styling */
+        h1, h2, h3 {
+            color: var(--primary-color);
+            padding-bottom: 8px;
+            margin-top: 35px;
+            border-bottom: 2px solid var(--accent-color); /* Accent color for underline */
+            border-radius: 2px; /* Slight rounding for the border */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.8em;
+            color: var(--accent-color); /* Main title in accent color */
+            border-bottom: none; /* No underline for the main title */
+            margin-bottom: 30px;
+            padding-bottom: 0;
+        }
+
+        h2 {
+            font-size: 2.2em;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        /* Paragraph and list styling */
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px; /* Rounded corners for the table */
+            overflow: hidden; /* Ensures rounded corners apply to borders */
+        }
+
+        th, td {
+            border: 1px solid var(--accent-color); /* Accent color for table borders */
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            h2 {
+                font-size: 1.8em;
+            }
+            h3 {
+                font-size: 1.4em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            .container {
+                margin: 5px;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            h3 {
+                font-size: 1.2em;
+            }
+            table, thead, tbody, th, td, tr {
+                display: block; /* Stack table elements on small screens */
+            }
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            tr {
+                margin-bottom: 10px;
+                border: 1px solid var(--accent-color);
+                border-radius: 8px;
+            }
+            td {
+                border: none;
+                border-bottom: 1px solid var(--accent-color);
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+            td:before {
+                position: absolute;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                content: attr(data-label); /* Use data-label for column names */
+                font-weight: bold;
+                text-align: left;
+                color: var(--primary-color);
+            }
+            td:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Physics Notes:<br>Momentum and Inertia, Center of Mass</h1>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>3.1: Inertia</h2>
+        <ul>
+            <li>
+                <p><strong>Definition:</strong> Inertia is the property of an object to resist changes in its state of motion. This means an object at rest tends to stay at rest, and an object in motion tends to stay in motion with the same velocity (speed and direction).</p>
+            </li>
+            <li>
+                <p><strong>Dependence on Mass:</strong> The amount of inertia an object possesses is directly proportional to its mass. A more massive object has greater inertia and is harder to start moving, stop, or change its direction.</p>
+            </li>
+            <li>
+                <p><strong>Connection to Newton's First Law:</strong> Inertia is the fundamental concept behind Newton's First Law of Motion (Law of Inertia), which states that an object will maintain its velocity unless acted upon by a net external force.</p>
+            </li>
+            <li>
+                <p><em>Example:</em> It's much harder to push a stationary car than a bicycle to get it moving, and similarly, harder to stop a moving car than a moving bicycle, because the car has significantly more mass and thus more inertia.</p>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>3.2: Momentum (\(\vec{p}\))</h2>
+        <ul>
+            <li>
+                <p><strong>Definition:</strong> Momentum is a measure of the "quantity of motion" an object has. It is a **vector quantity**, combining an object's mass and its velocity.</p>
+            </li>
+            <li>
+                <p><strong>Symbol:</strong> Usually denoted as \(\vec{p}\).</p>
+            </li>
+            <li>
+                <p><strong>Formula:</strong></p>
+                <p class="latex-equation">$$\vec{p} = m\vec{v}$$</p>
+                <ul>
+                    <li>\(m\): mass of the object (scalar, in kg)</li>
+                    <li>\(\vec{v}\): velocity of the object (vector, in m/s)</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Units:</strong> Kilogram-meters per second (\(kg \cdot m/s\)) in the SI system.</p>
+            </li>
+            <li>
+                <p><strong>Key Characteristics:</strong></p>
+                <ul>
+                    <li><strong>Direction:</strong> The direction of momentum is always the same as the direction of velocity.</li>
+                    <li><strong>Conservation of Momentum:</strong> In a closed system (where no external forces act), the total momentum remains constant. This is a fundamental conservation law in physics.</li>
+                    <li><strong>Impulse-Momentum Theorem:</strong> The change in momentum of an object is equal to the impulse applied to it. Impulse is the product of the average force and the time interval over which it acts:
+                        <p class="latex-equation">$$\Delta \vec{p} = \vec{F}_{avg} \Delta t$$</p>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p><em>Example:</em> A bowling ball moving slowly can have more momentum than a tennis ball moving fast, due to its much larger mass. This is why a bowling ball is harder to stop.</p>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>3.3: Extended Systems and Center of Mass</h2>
+        <ul>
+            <li>
+                <p><strong>Extended Systems:</strong> A system composed of multiple particles or a continuous distribution of mass, rather than a single point mass.</p>
+            </li>
+            <li>
+                <p><strong>Center of Mass (CM or COM):</strong></p>
+                <ul>
+                    <li><strong>Definition:</strong> The unique point where the weighted average of the positions of all the parts of a system lies. It is the point where all the mass of the system can be considered to be concentrated for purposes of analyzing its motion.</li>
+                    <li><strong>Importance:</strong> The center of mass of a system moves as if all the external forces acting on the system were applied at that point, and all the mass of the system were concentrated there. This simplifies the analysis of complex systems.</li>
+                    <li><strong>Formula for Discrete Particles (1D):</strong> For a system of \(n\) particles along the x-axis:
+                        <p class="latex-equation">$$x_{CM} = \frac{m_1x_1 + m_2x_2 + \dots + m_nx_n}{m_1 + m_2 + \dots + m_n} = \frac{\sum m_ix_i}{\sum m_i}$$</p>
+                        Similar formulas apply for \(y_{CM}\) and \(z_{CM}\) in 2D or 3D.
+                    </li>
+                    <li><strong>Velocity of the Center of Mass:</strong>
+                        <p class="latex-equation">$$\vec{v}_{CM} = \frac{\sum m_i\vec{v}_i}{\sum m_i}$$</p>
+                    </li>
+                    <li><strong>Acceleration of the Center of Mass:</strong>
+                        <p class="latex-equation">$$\vec{a}_{CM} = \frac{\sum m_i\vec{a}_i}{\sum m_i} = \frac{\vec{F}_{net, ext}}{M_{total}}$$</p>
+                        where \(\vec{F}_{net, ext}\) is the net external force on the system, and \(M_{total}\) is the total mass of the system. This is essentially Newton's Second Law applied to the system's center of mass.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p><em>Example:</em> When you throw a wrench into the air, it tumbles end over end, but its center of mass follows a smooth parabolic trajectory, just like a single projectile.</p>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>Summary Table: Momentum and Center of Mass</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Concept</th>
+                    <th>Type</th>
+                    <th>Definition</th>
+                    <th>Formula (Common)</th>
+                    <th>Key Feature(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="Concept"><strong>Inertia</strong></td>
+                    <td data-label="Type">Property</td>
+                    <td data-label="Definition">Resistance to change in motion</td>
+                    <td data-label="Formula">N/A</td>
+                    <td data-label="Key Feature(s)">Depends on mass; basis of Newton's 1st Law</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Momentum</strong></td>
+                    <td data-label="Type">Vector</td>
+                    <td data-label="Definition">Quantity of motion (mass x velocity)</td>
+                    <td data-label="Formula">\(\vec{p} = m\vec{v}\)</td>
+                    <td data-label="Key Feature(s)">Conserved in closed systems; \(kg \cdot m/s\)</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Center of Mass (CM)</strong></td>
+                    <td data-label="Type">Point</td>
+                    <td data-label="Definition">Weighted average position of system's mass</td>
+                    <td data-label="Formula">\(x_{CM} = \frac{\sum m_ix_i}{\sum m_i}\)</td>
+                    <td data-label="Key Feature(s)">System's motion can be analyzed via CM; \(\vec{F}_{net, ext} = M_{total}\vec{a}_{CM}\)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

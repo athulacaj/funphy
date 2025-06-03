@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Notes: Acceleration, Law of Inertia, Free Fall</title>
+    <style>
+        /* Define CSS variables for the color theme */
+        :root {
+            --bg-color: #0F111A; /* Deep Twilight */
+            --primary-color: #7B68EE; /* Medium Slate Blue */
+            --accent-color: #36F1CD; /* Aqua Mint */
+            --text-color: #FFFFFF; /* White */
+        }
+
+        /* Basic body styling */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif; /* Using Inter font as per instructions */
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex; /* Use flexbox for centering content */
+            justify-content: center;
+            align-items: flex-start; /* Align to top, not center vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 900px; /* Max width for readability */
+            width: 100%; /* Fluid width */
+            margin: 20px; /* Margin around the container */
+            padding: 30px;
+            background-color: var(--bg-color); /* Changed to use bg-color for the container */
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Soft shadow */
+            box-sizing: border-box;
+        }
+
+        /* Headings styling */
+        h1, h2, h3 {
+            color: var(--primary-color);
+            padding-bottom: 8px;
+            margin-top: 35px;
+            border-bottom: 2px solid var(--accent-color); /* Accent color for underline */
+            border-radius: 2px; /* Slight rounding for the border */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.8em;
+            color: var(--accent-color); /* Main title in accent color */
+            border-bottom: none; /* No underline for the main title */
+            margin-bottom: 30px;
+            padding-bottom: 0;
+        }
+
+        h2 {
+            font-size: 2.2em;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        /* Paragraph and list styling */
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px; /* Rounded corners for the table */
+            overflow: hidden; /* Ensures rounded corners apply to borders */
+        }
+
+        th, td {
+            border: 1px solid var(--accent-color); /* Accent color for table borders */
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            h2 {
+                font-size: 1.8em;
+            }
+            h3 {
+                font-size: 1.4em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            .container {
+                margin: 5px;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            h3 {
+                font-size: 1.2em;
+            }
+            table, thead, tbody, th, td, tr {
+                display: block; /* Stack table elements on small screens */
+            }
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            tr {
+                margin-bottom: 10px;
+                border: 1px solid var(--accent-color);
+                border-radius: 8px;
+            }
+            td {
+                border: none;
+                border-bottom: 1px solid var(--accent-color);
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+            td:before {
+                position: absolute;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                content: attr(data-label); /* Use data-label for column names */
+                font-weight: bold;
+                text-align: left;
+                color: var(--primary-color);
+            }
+            td:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Physics Notes:<br>Acceleration, Law of Inertia, Free Fall</h1>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>2.1: The Law of Inertia (Newton's First Law)</h2>
+        <ul>
+            <li>
+                <p><strong>Statement:</strong> An object at rest stays at rest, and an object in motion stays in motion with the same speed and in the same direction unless acted upon by an unbalanced force.</p>
+            </li>
+            <li>
+                <p><strong>Key Concepts:</strong></p>
+                <ul>
+                    <li><strong>Inertia:</strong> The natural tendency of an object to resist changes in its state of motion. More mass means more inertia.</li>
+                    <li><strong>Unbalanced Force (Net Force):</strong> A force that is not opposed by an equal and opposite force. It is required to change an object's velocity (i.e., to accelerate it).</li>
+                    <li><strong>Constant Velocity:</strong> Implies both constant speed and constant direction. If either changes, there's an unbalanced force acting on the object.</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Importance:</strong></p>
+                <ul>
+                    <li>Defines the concept of an **inertial reference frame** (a frame where this law holds true).</li>
+                    <li>Foundation for understanding forces and motion; objects don't spontaneously change their motion.</li>
+                </ul>
+            </li>
+            <li>
+                <p><em>Example:</em> When a car suddenly brakes, passengers lurch forward due to their inertia (tendency to continue moving forward). When a car accelerates quickly, passengers are pushed back into their seats due to their inertia (tendency to resist starting motion). </p>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>2.2: Acceleration (\(\vec{a}\))</h2>
+        <ul>
+            <li>
+                <p><strong>Definition:</strong> Acceleration is the rate at which the velocity of an object changes. It is a **vector quantity**, meaning it has both magnitude and direction.</p>
+            </li>
+            <li>
+                <p><strong>Key Idea:</strong> An object accelerates if its speed changes, its direction changes, or both change.</p>
+            </li>
+            <li>
+                <p><strong>Symbol:</strong> Usually denoted as \(\vec{a}\).</p>
+            </li>
+            <li>
+                <p><strong>Units:</strong> Meters per second squared (\(m/s^2\)) in the SI system.</p>
+            </li>
+            <li>
+                <p><strong>Formulae:</strong></p>
+                <ul>
+                    <li><strong>Average Acceleration (\(\vec{a}_{avg}\)):</strong> The change in velocity divided by the time interval over which the change occurs.
+                        <p class="latex-equation">$$\vec{a}_{avg} = \frac{\Delta \vec{v}}{\Delta t} = \frac{\vec{v}_{final} - \vec{v}_{initial}}{t_{final} - t_{initial}}$$</p>
+                    </li>
+                    <li><strong>Instantaneous Acceleration (\(\vec{a}\)):</strong> The acceleration of an object at a specific instant in time.
+                        <p class="latex-equation">$$\vec{a} = \lim_{\Delta t \to 0} \frac{\Delta \vec{v}}{\Delta t} = \frac{d\vec{v}}{dt}$$</p>
+                        (The derivative of velocity with respect to time).
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Direction of Acceleration:</strong></p>
+                <ul>
+                    <li>If an object is speeding up in the positive direction, acceleration is positive.</li>
+                    <li>If an object is slowing down in the positive direction, acceleration is negative (often called deceleration).</li>
+                    <li>If an object is speeding up in the negative direction, acceleration is negative.</li>
+                    <li>If an object is slowing down in the negative direction, acceleration is positive.</li>
+                    <li>Acceleration can also be perpendicular to velocity (e.g., in uniform circular motion), causing a change in direction without a change in speed.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>2.3: Free Fall</h2>
+        <ul>
+            <li>
+                <p><strong>Definition:</strong> Free fall is the motion of an object solely under the influence of gravity, with air resistance being negligible.</p>
+            </li>
+            <li>
+                <p><strong>Key Characteristics:</strong></p>
+                <ul>
+                    <li><strong>Constant Acceleration:</strong> All objects in free fall near the Earth's surface experience the same constant downward acceleration, regardless of their mass or shape (in the absence of air resistance).</li>
+                    <li><strong>Acceleration due to Gravity (\(g\)):</strong> This constant acceleration is denoted by \(g\).
+                        <ul>
+                            <li>Its approximate magnitude near the Earth's surface is \(g \approx 9.8 \, m/s^2\).</li>
+                            <li>The direction of \(g\) is always vertically downward.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Equations of Motion:</strong> The kinematic equations for constant acceleration can be applied to free fall, often by replacing \(a\) with \(-g\) (if upward is positive) or \(+g\) (if downward is positive).
+                        <ul>
+                            <li>\(\vec{v} = \vec{v}_0 + \vec{a}t \implies v_y = v_{0y} - gt\)</li>
+                            <li>\(\Delta \vec{y} = \vec{v}_0 t + \frac{1}{2}\vec{a}t^2 \implies \Delta y = v_{0y}t - \frac{1}{2}gt^2\)</li>
+                            <li>\(v^2 = v_0^2 + 2\vec{a}\Delta \vec{y} \implies v_y^2 = v_{0y}^2 - 2g\Delta y\)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p><em>Example:</em> A dropped ball, a tossed coin after leaving the hand, or a skydiver before opening their parachute (ignoring air resistance). A feather and a hammer dropped in a vacuum will hit the ground at the same time.</p>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>Summary Table: Acceleration, Law of Inertia, Free Fall</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Concept</th>
+                    <th>Type</th>
+                    <th>Definition</th>
+                    <th>Formula (Common)</th>
+                    <th>Key Feature(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="Concept"><strong>Law of Inertia (Newton's 1st)</strong></td>
+                    <td data-label="Type">Principle</td>
+                    <td data-label="Definition">Object resists change in motion unless acted on by net force</td>
+                    <td data-label="Formula">N/A</td>
+                    <td data-label="Key Feature(s)">Defines inertial frames; explains inertia</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Acceleration</strong></td>
+                    <td data-label="Type">Vector</td>
+                    <td data-label="Definition">Rate of change of velocity</td>
+                    <td data-label="Formula">\(\vec{a}_{avg} = \frac{\Delta \vec{v}}{\Delta t}\)</td>
+                    <td data-label="Key Feature(s)">Change in speed, direction, or both; \(m/s^2\)</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Free Fall</strong></td>
+                    <td data-label="Type">Specific Motion</td>
+                    <td data-label="Definition">Motion under gravity only (negligible air resistance)</td>
+                    <td data-label="Formula">\(g \approx 9.8 \, m/s^2\) (downward)</td>
+                    <td data-label="Key Feature(s)">Constant downward acceleration \(g\); mass-independent</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

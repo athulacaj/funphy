@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Notes: Interactions I - Energy</title>
+    <style>
+        /* Define CSS variables for the color theme */
+        :root {
+            --bg-color: #0F111A; /* Deep Twilight */
+            --primary-color: #7B68EE; /* Medium Slate Blue */
+            --accent-color: #36F1CD; /* Aqua Mint */
+            --text-color: #FFFFFF; /* White */
+        }
+
+        /* Basic body styling */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif; /* Using Inter font as per instructions */
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex; /* Use flexbox for centering content */
+            justify-content: center;
+            align-items: flex-start; /* Align to top, not center vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 900px; /* Max width for readability */
+            width: 100%; /* Fluid width */
+            margin: 20px; /* Margin around the container */
+            padding: 30px;
+            background-color: var(--bg-color); /* Changed to use bg-color for the container */
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Soft shadow */
+            box-sizing: border-box;
+        }
+
+        /* Headings styling */
+        h1, h2, h3 {
+            color: var(--primary-color);
+            padding-bottom: 8px;
+            margin-top: 35px;
+            border-bottom: 2px solid var(--accent-color); /* Accent color for underline */
+            border-radius: 2px; /* Slight rounding for the border */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.8em;
+            color: var(--accent-color); /* Main title in accent color */
+            border-bottom: none; /* No underline for the main title */
+            margin-bottom: 30px;
+            padding-bottom: 0;
+        }
+
+        h2 {
+            font-size: 2.2em;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        /* Paragraph and list styling */
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px; /* Rounded corners for the table */
+            overflow: hidden; /* Ensures rounded corners apply to borders */
+        }
+
+        th, td {
+            border: 1px solid var(--accent-color); /* Accent color for table borders */
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            h2 {
+                font-size: 1.8em;
+            }
+            h3 {
+                font-size: 1.4em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            .container {
+                margin: 5px;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            h3 {
+                font-size: 1.2em;
+            }
+            table, thead, tbody, th, td, tr {
+                display: block; /* Stack table elements on small screens */
+            }
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            tr {
+                margin-bottom: 10px;
+                border: 1px solid var(--accent-color);
+                border-radius: 8px;
+            }
+            td {
+                border: none;
+                border-bottom: 1px solid var(--accent-color);
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+            td:before {
+                position: absolute;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                content: attr(data-label); /* Use data-label for column names */
+                font-weight: bold;
+                text-align: left;
+                color: var(--primary-color);
+            }
+            td:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Physics Notes:<br>Interactions I - Energy</h1>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>5.1: Conservative Interactions</h2>
+        <ul>
+            <li>
+                <p><strong>Definition:</strong> A conservative interaction (or force) is one for which the work done by the force on an object depends only on the initial and final positions of the object, and not on the path taken between these positions.</p>
+            </li>
+            <li>
+                <p><strong>Key Characteristics:</strong></p>
+                <ul>
+                    <li>Work done in a closed loop (starting and ending at the same point) by a conservative force is zero.</li>
+                    <li>Associated with a potential energy function. The work done by a conservative force is equal to the negative change in potential energy: \(W_c = -\Delta U\).</li>
+                    <li>Mechanical energy (sum of kinetic and potential energy) is conserved if only conservative forces do work.</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                    <li><strong>Gravitational Force:</strong> The work done by gravity depends only on the change in vertical height, not the path.</li>
+                    <li><strong>Elastic Spring Force:</strong> The work done by an ideal spring depends only on the initial and final compression/extension, not the path.</li>
+                    <li><strong>Electrostatic Force:</strong> The work done by an electric field on a charge.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>5.2: Dissipation of Energy and Thermal Energy</h2>
+        <ul>
+            <li>
+                <p><strong>Dissipative Interactions (Non-Conservative Forces):</strong></p>
+                <ul>
+                    <li><strong>Definition:</strong> A dissipative interaction (or non-conservative force) is one for which the work done by the force on an object *does* depend on the path taken.</li>
+                    <li><strong>Key Characteristics:</strong>
+                        <ul>
+                            <li>Work done in a closed loop by a non-conservative force is generally non-zero.</li>
+                            <li>These forces convert mechanical energy into other forms of energy, often thermal energy.</li>
+                            <li>Mechanical energy is *not* conserved when dissipative forces do work.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Examples:</strong>
+                        <ul>
+                            <li><strong>Friction:</strong> Always opposes motion and converts kinetic energy into thermal energy (heat).</li>
+                            <li><strong>Air Resistance (Drag):</strong> Opposes motion and converts kinetic energy into thermal energy and sound.</li>
+                            <li><strong>Viscous Forces:</strong> In fluids.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Thermal Energy (\(E_{th}\)):</strong></p>
+                <ul>
+                    <li><strong>Definition:</strong> The internal energy of a system associated with the random motion of its atoms and molecules. It is often perceived as heat.</li>
+                    <li><strong>Origin:</strong> Dissipative forces increase the thermal energy of the system and its surroundings. For example, friction causes surfaces to heat up.</li>
+                    <li><strong>Relationship to Work:</strong> The work done by a dissipative force is often equal to the increase in thermal energy of the system and its environment.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>5.3: Fundamental Interactions, and Other Forms of Energy</h2>
+        <ul>
+            <li>
+                <p><strong>Fundamental Interactions (Forces):</strong> The four fundamental forces that govern all interactions in the universe:</p>
+                <ul>
+                    <li><strong>Gravitational Force:</strong> Acts between any two objects with mass. Always attractive. (Weakest, but long-range).</li>
+                    <li><strong>Electromagnetic Force:</strong> Acts between charged particles. Can be attractive or repulsive. Responsible for light, electricity, magnetism, and chemical bonds. (Long-range).</li>
+                    <li><strong>Strong Nuclear Force:</strong> Binds quarks together to form protons and neutrons, and binds protons and neutrons together in the atomic nucleus. (Strongest, but very short-range).</li>
+                    <li><strong>Weak Nuclear Force:</strong> Responsible for radioactive decay (e.g., beta decay). (Very short-range).</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Other Forms of Energy:</strong> Energy exists in many forms, all interconvertible:</p>
+                <ul>
+                    <li><strong>Potential Energy (\(U\)):</strong> Stored energy due to an object's position or configuration.
+                        <ul>
+                            <li>Gravitational Potential Energy: \(U_g = mgh\)</li>
+                            <li>Elastic Potential Energy: \(U_s = \frac{1}{2}kx^2\)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Chemical Energy:</strong> Stored in the bonds of molecules (e.g., food, fuel).</li>
+                    <li><strong>Nuclear Energy:</strong> Stored in the nucleus of atoms (e.g., fission, fusion).</li>
+                    <li><strong>Radiant Energy (Light Energy):</strong> Energy carried by electromagnetic waves.</li>
+                    <li><strong>Sound Energy:</strong> Energy carried by vibrations in a medium.</li>
+                    <li><strong>Mass-Energy Equivalence:</strong> \(E = mc^2\), where mass itself is a form of energy.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>5.4: Conservation of Energy</h2>
+        <ul>
+            <li>
+                <p><strong>Statement (Law of Conservation of Energy):</strong> Energy cannot be created or destroyed, only transformed from one form to another or transferred from one system to another. The total energy of an isolated system remains constant.</p>
+            </li>
+            <li>
+                <p><strong>Mathematical Formulation:</strong></p>
+                <ul>
+                    <li>For a system where only conservative forces do work:
+                        <p class="latex-equation">$$E_{mechanical} = K + U = \text{constant}$$</p>
+                        Where \(K\) is kinetic energy and \(U\) is potential energy.
+                    </li>
+                    <li>For a system where non-conservative forces (like friction) also do work:
+                        <p class="latex-equation">$$\Delta E_{system} = \Delta K + \Delta U + \Delta E_{th} + \Delta E_{chem} + \dots = W_{ext}$$</p>
+                        If the system is isolated (\(W_{ext} = 0\)), then the total energy change is zero:
+                        <p class="latex-equation">$$\Delta E_{total} = \Delta K + \Delta U + \Delta E_{th} = 0$$</p>
+                        This means any decrease in mechanical energy (\(K+U\)) is accounted for by an increase in thermal energy (\(E_{th}\)) or other internal energy forms.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Importance:</strong> One of the most fundamental and powerful principles in all of physics, applicable across all scales from subatomic particles to galaxies.</p>
+            </li>
+            <li>
+                <p><em>Example:</em> A ball falling from a height converts gravitational potential energy into kinetic energy. When it hits the ground and stops, that kinetic energy is converted into thermal energy (heat and sound) and deformation of the ball and ground.</p>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>Summary Table: Interactions and Energy</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Concept</th>
+                    <th>Type</th>
+                    <th>Definition</th>
+                    <th>Formula (Common)</th>
+                    <th>Key Feature(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="Concept"><strong>Conservative Interaction</strong></td>
+                    <td data-label="Type">Force/Interaction</td>
+                    <td data-label="Definition">Work depends only on start/end points</td>
+                    <td data-label="Formula">\(W_c = -\Delta U\)</td>
+                    <td data-label="Key Feature(s)">Associated with potential energy; conserves mechanical energy</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Dissipative Interaction</strong></td>
+                    <td data-label="Type">Force/Interaction</td>
+                    <td data-label="Definition">Work depends on path taken</td>
+                    <td data-label="Formula">N/A (often \(W_{nc} = \Delta E_{th}\))</td>
+                    <td data-label="Key Feature(s)">Converts mechanical energy to thermal; e.g., friction</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Thermal Energy</strong></td>
+                    <td data-label="Type">Energy Form</td>
+                    <td data-label="Definition">Internal energy from random molecular motion</td>
+                    <td data-label="Formula">N/A</td>
+                    <td data-label="Key Feature(s)">Perceived as heat; increased by dissipative forces</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Conservation of Energy</strong></td>
+                    <td data-label="Type">Law</td>
+                    <td data-label="Definition">Energy cannot be created/destroyed, only transformed</td>
+                    <td data-label="Formula">\(\Delta E_{total} = 0\) (isolated system)</td>
+                    <td data-label="Key Feature(s)">Total energy of isolated system is constant</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

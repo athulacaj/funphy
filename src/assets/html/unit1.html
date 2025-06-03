@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Notes: Reference Frames, Displacement, and Velocity</title>
+    <style>
+        /* Define CSS variables for the color theme */
+        :root {
+            --bg-color: #0F111A; /* Deep Twilight */
+            --primary-color: #7B68EE; /* Medium Slate Blue */
+            --accent-color: #36F1CD; /* Aqua Mint */
+            /* Removed snack-color as it's no longer distinct from bg-color for the container */
+            --text-color: #FFFFFF; /* White */
+        }
+
+        /* Basic body styling */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif; /* Using Inter font as per instructions */
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex; /* Use flexbox for centering content */
+            justify-content: center;
+            align-items: flex-start; /* Align to top, not center vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 900px; /* Max width for readability */
+            width: 100%; /* Fluid width */
+            margin: 20px; /* Margin around the container */
+            padding: 30px;
+            background-color: var(--bg-color); /* Changed to use bg-color for the container */
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Soft shadow */
+            box-sizing: border-box;
+        }
+
+        /* Headings styling */
+        h1, h2, h3 {
+            color: var(--primary-color);
+            padding-bottom: 8px;
+            margin-top: 35px;
+            border-bottom: 2px solid var(--accent-color); /* Accent color for underline */
+            border-radius: 2px; /* Slight rounding for the border */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.8em;
+            color: var(--accent-color); /* Main title in accent color */
+            border-bottom: none; /* No underline for the main title */
+            margin-bottom: 30px;
+            padding-bottom: 0;
+        }
+
+        h2 {
+            font-size: 2.2em;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        /* Paragraph and list styling */
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px; /* Rounded corners for the table */
+            overflow: hidden; /* Ensures rounded corners apply to borders */
+        }
+
+        th, td {
+            border: 1px solid var(--accent-color); /* Accent color for table borders */
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            h2 {
+                font-size: 1.8em;
+            }
+            h3 {
+                font-size: 1.4em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            .container {
+                margin: 5px;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            h3 {
+                font-size: 1.2em;
+            }
+            table, thead, tbody, th, td, tr {
+                display: block; /* Stack table elements on small screens */
+            }
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            tr {
+                margin-bottom: 10px;
+                border: 1px solid var(--accent-color);
+                border-radius: 8px;
+            }
+            td {
+                border: none;
+                border-bottom: 1px solid var(--accent-color);
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+            td:before {
+                position: absolute;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                content: attr(data-label); /* Use data-label for column names */
+                font-weight: bold;
+                text-align: left;
+                color: var(--primary-color);
+            }
+            td:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Physics Notes:<br>Reference Frames, Displacement, and Velocity</h1>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>1. Reference Frames</h2>
+        <ul>
+            <li>
+                <p><strong>Definition:</strong> A reference frame is a system for specifying the precise location of objects in space and their changes in position over time. It's essentially a coordinate system (e.g., Cartesian x-y-z axes) with an associated clock.</p>
+            </li>
+            <li>
+                <p><strong>Key Idea:</strong> All measurements of position, displacement, and velocity are made *relative to a chosen reference frame*.</p>
+            </li>
+            <li>
+                <p><strong>Importance:</strong></p>
+                <ul>
+                    <li>
+                        <p><strong>Relativity of Motion:</strong> The description of motion depends on the reference frame from which it is observed. An object might appear stationary in one frame but moving in another.</p>
+                        <ul>
+                            <li><em>Example:</em> A person sitting on a train is stationary relative to the train, but moving relative to the ground.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p><strong>Simplification:</strong> Choosing an appropriate reference frame can significantly simplify the analysis of a problem.</p>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Types of Reference Frames:</strong></p>
+                <ul>
+                    <li>
+                        <p><strong>Inertial Reference Frame:</strong></p>
+                        <ul>
+                            <li>A reference frame in which Newton's First Law (Law of Inertia) holds true.</li>
+                            <li>An object at rest remains at rest, and an object in motion continues in motion with constant velocity, unless acted upon by a net external force.</li>
+                            <li>These frames are either at rest or moving with constant velocity (no acceleration).</li>
+                            <li><em>Example:</em> A laboratory fixed to the Earth's surface (approximately), or a spaceship drifting in deep space with its engines off.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p><strong>Non-Inertial Reference Frame:</strong></p>
+                        <ul>
+                            <li>A reference frame that is accelerating.</li>
+                            <li>Newton's First Law does not directly apply without introducing "fictitious" or "inertial" forces (e.g., centrifugal force, Coriolis force).</li>
+                            <li><em>Example:</em> A rotating carousel, a car accelerating or decelerating, or a train rounding a curve.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>2. Displacement (\(\Delta \vec{x}\) or \(\Delta \vec{r}\))</h2>
+        <ul>
+            <li>
+                <p><strong>Definition:</strong> Displacement is the *change in position* of an object. It is a **vector quantity**, meaning it has both magnitude and direction.</p>
+            </li>
+            <li>
+                <p><strong>Symbol:</strong> Usually denoted as \(\Delta \vec{x}\) (for motion along x-axis) or \(\Delta \vec{r}\) (for general 2D/3D motion).</p>
+            </li>
+            <li>
+                <p><strong>Formula:</strong></p>
+                <p class="latex-equation">$$\Delta \vec{x} = \vec{x}_{final} - \vec{x}_{initial}$$</p>
+                <ul>
+                    <li>\(\vec{x}_{final}\): final position vector</li>
+                    <li>\(\vec{x}_{initial}\): initial position vector</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Key Characteristics:</strong></p>
+                <ul>
+                    <li><strong>Vector Quantity:</strong> Always specify direction.</li>
+                    <li><strong>Path Independent:</strong> Displacement only depends on the initial and final positions, not on the actual path taken between them.
+                        <ul>
+                            <li><em>Example:</em> Walking 5 meters north, then 5 meters south, results in a net displacement of 0 meters, even though the total distance traveled is 10 meters.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Units:</strong> Meters (m) in the SI system.</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Distinction from Distance:</strong></p>
+                <ul>
+                    <li><strong>Distance:</strong> A **scalar quantity** that represents the total length of the path traveled. It is always non-negative.</li>
+                    <li><strong>Displacement:</strong> A **vector quantity** that represents the straight-line change in position from start to end. Can be positive, negative, or zero.</li>
+                    <li><em>Analogy:</em> If you walk around a circular track and end up at your starting point, your distance traveled is the circumference of the track, but your displacement is zero.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>3. Velocity (\(\vec{v}\))</h2>
+        <ul>
+            <li>
+                <p><strong>Definition:</strong> Velocity is the rate of change of an object's position with respect to time. It is a **vector quantity**.</p>
+            </li>
+            <li>
+                <p><strong>Key Characteristics:</strong></p>
+                <ul>
+                    <li><strong>Vector Quantity:</strong> Has both magnitude (speed) and direction.</li>
+                    <li><strong>Units:</strong> Meters per second (m/s) in the SI system.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Types of Velocity:</h3>
+        <ul>
+            <li>
+                <p><strong>Average Velocity (\(\vec{v}_{avg}\)):</strong></p>
+                <ul>
+                    <li><strong>Definition:</strong> The total displacement divided by the total time taken for that displacement.</li>
+                    <li><strong>Formula:</strong>
+                        <p class="latex-equation">$$\vec{v}_{avg} = \frac{\Delta \vec{x}}{\Delta t} = \frac{\vec{x}_{final} - \vec{x}_{initial}}{t_{final} - t_{initial}}$$</p>
+                    </li>
+                    <li><strong>Key Idea:</strong> It tells you the overall, straight-line rate of motion over a period, without considering any changes in speed or direction during that period.</li>
+                    <li><em>Graphical Interpretation (1D):</em> The slope of the secant line connecting two points on a position-time graph.</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Instantaneous Velocity (\(\vec{v}\)):</strong></p>
+                <ul>
+                    <li><strong>Definition:</strong> The velocity of an object at a specific instant in time.</li>
+                    <li><strong>Formula:</strong>
+                        <p class="latex-equation">$$\vec{v} = \lim_{\Delta t \to 0} \frac{\Delta \vec{x}}{\Delta t} = \frac{d\vec{x}}{dt}$$</p>
+                        (This involves calculus, representing the derivative of position with respect to time).
+                    </li>
+                    <li><strong>Key Idea:</strong> It tells you how fast and in what direction an object is moving at a precise moment.</li>
+                    <li><em>Graphical Interpretation (1D):</em> The slope of the tangent line to the position-time graph at a specific point in time.</li>
+                    <li><strong>Magnitude of Instantaneous Velocity:</strong> The magnitude of instantaneous velocity is called **instantaneous speed**.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Distinction from Speed:</h3>
+        <ul>
+            <li>
+                <p><strong>Speed:</strong> A **scalar quantity** that represents how fast an object is moving (the magnitude of velocity). It does not include direction.</p>
+                <ul>
+                    <li><strong>Average Speed:</strong> Total distance traveled divided by total time.</li>
+                    <li><strong>Formula:</strong> Average Speed = <span class="latex-equation">$$\frac{\text{Total Distance}}{\text{Total Time}}$$</span></li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Velocity:</strong> A **vector quantity** that tells both how fast an object is moving and in what direction.</p>
+            </li>
+            <li>
+                <p><em>Example:</em> A car traveling at 60 km/h has a speed of 60 km/h. If it's traveling at 60 km/h North, that's its velocity.</p>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>Summary Table:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Concept</th>
+                    <th>Type</th>
+                    <th>Definition</th>
+                    <th>Formula (Common)</th>
+                    <th>Key Feature(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="Concept"><strong>Reference Frame</strong></td>
+                    <td data-label="Type">System</td>
+                    <td data-label="Definition">A coordinate system with a clock for measuring motion</td>
+                    <td data-label="Formula">N/A</td>
+                    <td data-label="Key Feature(s)">All motion is relative to a chosen frame</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Displacement</strong></td>
+                    <td data-label="Type">Vector</td>
+                    <td data-label="Definition">Change in position from start to end</td>
+                    <td data-label="Formula">\(\Delta \vec{x} = \vec{x}_{final} - \vec{x}_{initial}\)</td>
+                    <td data-label="Key Feature(s)">Path-independent; has magnitude & direction</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Distance</strong></td>
+                    <td data-label="Type">Scalar</td>
+                    <td data-label="Definition">Total length of path traveled</td>
+                    <td data-label="Formula">N/A</td>
+                    <td data-label="Key Feature(s)">Path-dependent; always non-negative</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Average Velocity</strong></td>
+                    <td data-label="Type">Vector</td>
+                    <td data-label="Definition">Total displacement per unit time</td>
+                    <td data-label="Formula">\(\vec{v}_{avg} = \frac{\Delta \vec{x}}{\Delta t}\)</td>
+                    <td data-label="Key Feature(s)">Overall rate of position change</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Instantaneous Velocity</strong></td>
+                    <td data-label="Type">Vector</td>
+                    <td data-label="Definition">Velocity at a specific instant</td>
+                    <td data-label="Formula">\(\vec{v} = \lim_{\Delta t \to 0} \frac{\Delta \vec{x}}{\Delta t} = \frac{d\vec{x}}{dt}\)</td>
+                    <td data-label="Key Feature(s)">Tells "what's happening now"; tangent slope</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Speed</strong></td>
+                    <td data-label="Type">Scalar</td>
+                    <td data-label="Definition">Magnitude of velocity</td>
+                    <td data-label="Formula">N/A</td>
+                    <td data-label="Key Feature(s)">How fast; always non-negative</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

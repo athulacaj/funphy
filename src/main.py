@@ -1,6 +1,6 @@
 import flet as ft
 from pages import splash_page, welcome_page, login_page, signup_page, dashboard_page,get_assessment_pages
-from pages.learning_module_pages import learning_modules_view, modules_details_view,lessons_view,lesson_content_view # Added import
+from pages.learning_module_pages import learning_modules_view, modules_details_view,lessons_view,notes_page # Added import
 from pages.utils import BG_COLOR, SNACK_COLOR
 from pages.db import AppDatabase
 from pages.path_game import path_game 
@@ -56,9 +56,8 @@ async def main(page: ft.Page):
             page.views.append(modules_details_view(page))
         elif page.route == "/lessons": # Added route
             page.views.append(lessons_view(page))
-        elif page.route == "/lesson_content": # Added route
-            page.views.append(lesson_content_view(page))
-        
+        elif page.route == "/notes": # Added route
+            page.views.append(notes_page(page))
         page.update()
 
     await AppDatabase.initialize()  # Ensure database is initialized before any page loads

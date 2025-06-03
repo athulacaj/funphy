@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Notes: Index</title>
+    <style>
+        /* Define CSS variables for the color theme */
+        :root {
+            --bg-color: #0F111A; /* Deep Twilight */
+            --primary-color: #7B68EE; /* Medium Slate Blue */
+            --accent-color: #36F1CD; /* Aqua Mint */
+            --text-color: #FFFFFF; /* White */
+        }
+
+        /* Basic body styling */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif; /* Using Inter font as per instructions */
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex; /* Use flexbox for centering content */
+            justify-content: center;
+            align-items: flex-start; /* Align to top, not center vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 900px; /* Max width for readability */
+            width: 100%; /* Fluid width */
+            margin: 20px; /* Margin around the container */
+            padding: 30px;
+            background-color: var(--bg-color);
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Soft shadow */
+            box-sizing: border-box;
+        }
+
+        /* Headings styling */
+        h1, h2, h3 {
+            color: var(--primary-color);
+            padding-bottom: 8px;
+            margin-top: 35px;
+            border-bottom: 2px solid var(--accent-color); /* Accent color for underline */
+            border-radius: 2px; /* Slight rounding for the border */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.8em;
+            color: var(--accent-color); /* Main title in accent color */
+            border-bottom: none; /* No underline for the main title */
+            margin-bottom: 30px;
+            padding-bottom: 0;
+        }
+
+        h2 {
+            font-size: 2.2em;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        /* List for lesson units */
+        .lesson-list {
+            list-style-type: none; /* Remove default bullet points */
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .lesson-list li {
+            background-color: rgba(123, 104, 238, 0.1); /* Light primary color background */
+            margin-bottom: 15px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .lesson-list li:hover {
+            background-color: rgba(123, 104, 238, 0.2); /* Slightly darker on hover */
+            transform: translateY(-3px); /* Slight lift effect */
+        }
+
+        .lesson-list a {
+            color: var(--text-color); /* White text for links */
+            text-decoration: none; /* Remove underline */
+            font-size: 1.4em;
+            font-weight: bold;
+            display: block; /* Make the whole list item clickable */
+            padding: 5px 0; /* Add some padding inside the link */
+        }
+
+        .lesson-list a:hover {
+            color: var(--accent-color); /* Accent color on hover */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .lesson-list a {
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            .container {
+                margin: 5px;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .lesson-list a {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Physics Notes: Index</h1>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>Lesson Units</h2>
+        <ul class="lesson-list">
+            <li><a href="/unit1">Unit 1: Reference Frames, Displacement, and Velocity</a></li>
+            <li><a href="/unit2">Unit 2: Acceleration</a></li>
+            <li><a href="/unit3">Unit 3: Momentum and Inertia</a></li>
+            <li><a href="/unit4">Unit 4: Kinetic Energy</a></li>
+            <li><a href="/unit5">Unit 5: Interactions I - Energy</a></li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Notes: Kinetic Energy</title>
+    <style>
+        /* Define CSS variables for the color theme */
+        :root {
+            --bg-color: #0F111A; /* Deep Twilight */
+            --primary-color: #7B68EE; /* Medium Slate Blue */
+            --accent-color: #36F1CD; /* Aqua Mint */
+            --text-color: #FFFFFF; /* White */
+        }
+
+        /* Basic body styling */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif; /* Using Inter font as per instructions */
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex; /* Use flexbox for centering content */
+            justify-content: center;
+            align-items: flex-start; /* Align to top, not center vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 900px; /* Max width for readability */
+            width: 100%; /* Fluid width */
+            margin: 20px; /* Margin around the container */
+            padding: 30px;
+            background-color: var(--bg-color); /* Changed to use bg-color for the container */
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Soft shadow */
+            box-sizing: border-box;
+        }
+
+        /* Headings styling */
+        h1, h2, h3 {
+            color: var(--primary-color);
+            padding-bottom: 8px;
+            margin-top: 35px;
+            border-bottom: 2px solid var(--accent-color); /* Accent color for underline */
+            border-radius: 2px; /* Slight rounding for the border */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.8em;
+            color: var(--accent-color); /* Main title in accent color */
+            border-bottom: none; /* No underline for the main title */
+            margin-bottom: 30px;
+            padding-bottom: 0;
+        }
+
+        h2 {
+            font-size: 2.2em;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        /* Paragraph and list styling */
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px; /* Rounded corners for the table */
+            overflow: hidden; /* Ensures rounded corners apply to borders */
+        }
+
+        th, td {
+            border: 1px solid var(--accent-color); /* Accent color for table borders */
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            h2 {
+                font-size: 1.8em;
+            }
+            h3 {
+                font-size: 1.4em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            .container {
+                margin: 5px;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            h3 {
+                font-size: 1.2em;
+            }
+            table, thead, tbody, th, td, tr {
+                display: block; /* Stack table elements on small screens */
+            }
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            tr {
+                margin-bottom: 10px;
+                border: 1px solid var(--accent-color);
+                border-radius: 8px;
+            }
+            td {
+                border: none;
+                border-bottom: 1px solid var(--accent-color);
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+            td:before {
+                position: absolute;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                content: attr(data-label); /* Use data-label for column names */
+                font-weight: bold;
+                text-align: left;
+                color: var(--primary-color);
+            }
+            td:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Physics Notes:<br>Kinetic Energy</h1>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>4.1: Kinetic Energy (\(K\))</h2>
+        <ul>
+            <li>
+                <p><strong>Definition:</strong> Kinetic energy is the energy an object possesses due to its motion. It is a **scalar quantity**, meaning it only has magnitude.</p>
+            </li>
+            <li>
+                <p><strong>Symbol:</strong> Usually denoted as \(K\) or \(KE\).</p>
+            </li>
+            <li>
+                <p><strong>Formula:</strong></p>
+                <p class="latex-equation">$$K = \frac{1}{2}mv^2$$</p>
+                <ul>
+                    <li>\(m\): mass of the object (in kg)</li>
+                    <li>\(v\): speed of the object (magnitude of velocity, in m/s)</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Units:</strong> Joules (\(J\)) in the SI system. \(1 \, J = 1 \, kg \cdot m^2/s^2\).</p>
+            </li>
+            <li>
+                <p><strong>Key Characteristics:</strong></p>
+                <ul>
+                    <li>Always positive or zero (cannot be negative).</li>
+                    <li>Depends on the square of the speed, so doubling the speed quadruples the kinetic energy.</li>
+                    <li>Related to work by the Work-Energy Theorem: The net work done on an object equals its change in kinetic energy (\(W_{net} = \Delta K\)).</li>
+                </ul>
+            </li>
+            <li>
+                <p><em>Example:</em> A car moving at high speed has a large kinetic energy, which is why it can cause significant damage in a collision.</p>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>4.2: "Convertible" and "Translational" Kinetic Energy</h2>
+        <ul>
+            <li>
+                <p><strong>Translational Kinetic Energy (\(K_{trans}\)):</strong></p>
+                <ul>
+                    <li><strong>Definition:</strong> This is the kinetic energy associated with the overall motion of an object's center of mass through space. It's the type of kinetic energy calculated using the standard formula \(K = \frac{1}{2}mv^2\), where \(v\) is the speed of the center of mass.</li>
+                    <li><strong>Focus:</strong> Deals with the object moving from one point to another without considering any internal rotations or vibrations.</li>
+                    <li><em>Example:</em> A car driving straight down a road, a ball flying through the air (ignoring its spin).</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>"Convertible" Kinetic Energy:</strong></p>
+                <ul>
+                    <li>This term is often used in the context of collisions or systems where kinetic energy can be transformed into other forms of energy (like potential energy, thermal energy, or internal energy) or vice-versa.</li>
+                    <li>It highlights the idea that kinetic energy is not always conserved in its "translational" form, especially in inelastic collisions where some kinetic energy is converted into other forms (e.g., deformation, heat, sound).</li>
+                    <li>In a broader sense, all kinetic energy is "convertible" to other forms of energy according to the law of conservation of energy. However, in some contexts, "convertible" kinetic energy might specifically refer to the portion that *can* be easily transformed, often implying a loss of mechanical energy.</li>
+                    <li>It can also refer to the kinetic energy associated with the internal motion of parts of a system relative to its center of mass (e.g., rotational kinetic energy, vibrational kinetic energy), which can be converted to/from translational kinetic energy or other forms.</li>
+                    <li><em>Example:</em> In an inelastic collision, some translational kinetic energy is "converted" into internal energy (heat and deformation) of the colliding objects.</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Relationship:</strong> For a rigid body, the total kinetic energy can be expressed as the sum of its translational kinetic energy and its rotational kinetic energy about its center of mass. In many introductory contexts, "kinetic energy" primarily refers to translational kinetic energy unless rotational motion is explicitly considered.</p>
+            </li>
+        </ul>
+
+        <hr style="border-color: var(--accent-color); margin: 30px 0;">
+
+        <h2>Summary Table: Kinetic Energy</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Concept</th>
+                    <th>Type</th>
+                    <th>Definition</th>
+                    <th>Formula (Common)</th>
+                    <th>Key Feature(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="Concept"><strong>Kinetic Energy</strong></td>
+                    <td data-label="Type">Scalar</td>
+                    <td data-label="Definition">Energy due to motion</td>
+                    <td data-label="Formula">\(K = \frac{1}{2}mv^2\)</td>
+                    <td data-label="Key Feature(s)">Always non-negative; \(J\); related to work</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>Translational Kinetic Energy</strong></td>
+                    <td data-label="Type">Scalar</td>
+                    <td data-label="Definition">Kinetic energy of overall CM motion</td>
+                    <td data-label="Formula">\(K_{trans} = \frac{1}{2}mv_{CM}^2\)</td>
+                    <td data-label="Key Feature(s)">Motion through space; standard \(K\) formula</td>
+                </tr>
+                <tr>
+                    <td data-label="Concept"><strong>"Convertible" Kinetic Energy</strong></td>
+                    <td data-label="Type">Concept</td>
+                    <td data-label="Definition">Kinetic energy transformable to other forms (e.g., heat, internal)</td>
+                    <td data-label="Formula">N/A</td>
+                    <td data-label="Key Feature(s)">Relevant in inelastic collisions; internal motion</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
