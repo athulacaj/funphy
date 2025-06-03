@@ -20,7 +20,7 @@ async def main(page: ft.Page):
         )
     )
 
-    page.route = "/"
+
     def route_change(route):
         page.views.clear()
 
@@ -68,7 +68,6 @@ async def main(page: ft.Page):
 
     await AppDatabase.initialize()  # Ensure database is initialized before any page loads
     self_user = await AppDatabase.get_self_user()  # Get the currently logged-in user
-    # self_user=None
     if self_user  is not None:
         # If user is already logged in, redirect to dashboard
         page.route = "/dashboard"
@@ -80,5 +79,4 @@ async def main(page: ft.Page):
     page.go(page.route or "/")
 
 
-ft.app(main)
-# ft.app(target=main, port=8550)
+ft.app(target=main, port=8550)

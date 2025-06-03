@@ -163,3 +163,4 @@ cython_debug/
 storage/*
 src/storage/*
 !storage/data/
+app/

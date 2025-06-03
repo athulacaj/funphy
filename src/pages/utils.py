@@ -1,5 +1,4 @@
 import flet as ft
-import os
 import random
 import threading
 from .db import AppDatabase
@@ -13,7 +12,7 @@ SNACK_COLOR = "#04332A"  # Aqua Mint
 TEXT_COLOR = ft.Colors.WHITE
 BUTTON_PADDING = ft.padding.symmetric(vertical=12, horizontal=24)
 # Path to background image
-BG_IMAGE_PATH = os.path.join(os.path.dirname(__file__), "..", "assets", "icon.png")
+# BG_IMAGE_PATH = os.path.join(os.path.dirname(__file__), "..", "assets", "icon.png")
 
 # Define reusable components
 def get_background_image():
@@ -21,7 +20,7 @@ def get_background_image():
         expand=True,
         alignment=ft.alignment.bottom_right,
         content=ft.Image(
-            src=BG_IMAGE_PATH,
+            src="icon.png",  # Ensure this path is correct
             fit=ft.ImageFit.COVER,
             opacity=0.2,
         ),

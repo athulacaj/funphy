@@ -1,5 +1,4 @@
 import flet as ft
-import os
 from .db import AppDatabase
 
 from .utils import BG_COLOR,get_background_image, PRIMARY_COLOR,ConfettiWidget, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING

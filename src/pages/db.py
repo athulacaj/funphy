@@ -1,31 +1,32 @@
 # filepath: c:\Users\athul\OneDrive\Desktop\projects\md first-flet-app\my-app\src\storage\db.py
-import os
+# import os
 import json
 import asyncio
 import flet as ft
 
-app_data_path = os.getenv("FLET_APP_STORAGE_DATA")
-app_temp_path = os.getenv("FLET_APP_STORAGE_TEMP")
+# app_data_path = os.getenv("FLET_APP_STORAGE_DATA")
+# app_temp_path = os.getenv("FLET_APP_STORAGE_TEMP")
 
-# Determine the base directory of the application (my-app)
-# __file__ is .../my-app/src/pages/db.py
-# os.path.dirname(__file__) is .../my-app/src/pages
-# os.path.join(os.path.dirname(__file__), "..", "..") is .../my-app
-APP_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+# # Determine the base directory of the application (my-app)
+# # __file__ is .../my-app/src/pages/db.py
+# # os.path.dirname(__file__) is .../my-app/src/pages
+# # os.path.join(os.path.dirname(__file__), "..", "..") is .../my-app
+# APP_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-if app_data_path is None:
-    app_data_path = os.path.join(APP_ROOT_DIR, "storage", "data")
-    # Create the directory if it doesn't exist
-    if not os.path.exists(app_data_path):
-        os.makedirs(app_data_path, exist_ok=True)
+# if app_data_path is None:
+#     app_data_path = os.path.join(APP_ROOT_DIR, "storage", "data")
+#     # Create the directory if it doesn't exist
+#     if not os.path.exists(app_data_path):
+#         os.makedirs(app_data_path, exist_ok=True)
 
-if app_temp_path is None:
-    app_temp_path = os.path.join(APP_ROOT_DIR, "storage", "temp")
-    # Create the directory if it doesn't exist
-    if not os.path.exists(app_temp_path):
-        os.makedirs(app_temp_path, exist_ok=True)
+# if app_temp_path is None:
+#     app_temp_path = os.path.join(APP_ROOT_DIR, "storage", "temp")
+#     # Create the directory if it doesn't exist
+#     if not os.path.exists(app_temp_path):
+#         os.makedirs(app_temp_path, exist_ok=True)
 
-my_file_path = os.path.join(app_data_path, "app_db.json")
+# my_file_path = os.path.join(app_data_path, "app_db.json")
+my_file_path = "app_db.json"
 
 class AppDatabase:
     db = {

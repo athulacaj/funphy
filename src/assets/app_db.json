@@ -1,0 +1,28 @@
+{
+    "users": {
+        "test@gmail.com": {
+            "name": "funphy",
+            "email": "funphy@gmail.com",
+            "password": "123456",
+            "assessment_score": 3,
+            "assessment_feedback": [
+                "Beginner",
+                "Needs significant improvement in understanding basic concepts.",
+                "Start with foundational topics and build up knowledge gradually."
+            ],
+            "beginner_feedback": {
+                "score": 1600
+            },
+            "intermediate_feedback": {
+                "score": 500
+            },
+            "advanced_feedback": {
+                "score": 920
+            },
+            "notes": []
+        }
+    },
+    "logined_user": {
+        "email": "funphy@gmail.com"
+    }
+}
