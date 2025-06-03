@@ -4,6 +4,7 @@ python -m venv .venv
 .venv\Scripts\activate
 on windows:
  pip install flet[all]
+ pip install flet_audio 
 
 
 mkdir my-app

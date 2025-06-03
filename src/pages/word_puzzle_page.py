@@ -1,5 +1,5 @@
 import flet as ft
-from .utils import BG_COLOR,get_background_image, TEXT_COLOR, PRIMARY_COLOR, ACCENT_COLOR
+from .utils import BG_COLOR,get_background_image,ConfettiWidget, TEXT_COLOR, PRIMARY_COLOR, ACCENT_COLOR
 from .db import AppDatabase
 
 # Word search puzzle data based on the image
@@ -235,6 +235,7 @@ class WordSearchGame:
         
         if found_word_details:
             actual_found_word = found_word_details[0]
+            self.page.confetti.animate_confetti()
             self.answered_words.append(actual_found_word)
 
             # Show Snackbar with word description
@@ -301,8 +302,9 @@ class WordSearchGame:
 
     def cell_clicked(self, e: ft.ControlEvent):
         if e.control.on_click is None:
+            self.page.confetti.play_error_sound()
             return
-
+        self.page.confetti.play_click_sound()
         r, c = e.control.data
         clicked_cell_container = e.control 
         current_click_coords = (r, c)
@@ -310,6 +312,7 @@ class WordSearchGame:
         if clicked_cell_container in self.selected_cell_containers:
             if clicked_cell_container == self.selected_cell_containers[-1]:
                 self.selected_cells.pop()
+                self.page.confetti.play_error_sound()
                 popped_container = self.selected_cell_containers.pop()
                 # Check if the popped cell is part of an already found word
                 if popped_container.data in self.found_word_cells_coords:
@@ -363,6 +366,7 @@ class WordSearchGame:
             clicked_cell_container.update()
         else:
             self._reset_ui_for_current_selection() 
+            self.page.confetti.play_error_sound()
             self.selected_cells.clear()
             self.selected_cell_containers.clear()
             self.score = max(100, self.score - 100) # Decrease score
@@ -409,7 +413,8 @@ def word_puzzle_page(page: ft.Page):
         center_title=True,
         elevation=2,
     )
-
+    confetti = ConfettiWidget()
+    page.confetti=confetti
     return ft.View(
         "/word_puzzle",
         [
@@ -423,7 +428,8 @@ def word_puzzle_page(page: ft.Page):
                     alignment=ft.alignment.center,
                     # bgcolor=ft.Colors.with_opacity(0.6, BG_COLOR), # Assuming BG_COLOR is defined
                     bgcolor=ft.Colors.with_opacity(0.6, "0x2E2E2E") # Example, replace with your BG_COLOR
-                )
+                ),
+                confetti
             ])
         ],
         # bgcolor=BG_COLOR, # Assuming BG_COLOR is defined

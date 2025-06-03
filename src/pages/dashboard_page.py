@@ -72,7 +72,10 @@ def dashboard_page(page: ft.Page):
     user_name = user.get("name", "User")
     user_email = user.get("email", "")
     assessment_score = user.get("assessment_score", None)
-    
+    assessment_feedback_list = user.get("assessment_feedback", [])
+    assessment_feedback = None
+    if(len(assessment_feedback_list[0])>0):
+        assessment_feedback=assessment_feedback_list[0]
 
     beginner_feedback = user.get("beginner_feedback", None)
     beginner_score = None
@@ -183,6 +186,37 @@ def dashboard_page(page: ft.Page):
     return ft.View(
         "/dashboard",
         [
+            ft.AppBar(
+                # leading=ft.IconButton(
+                #     ft.Icons.CHEVRON_LEFT,
+                #     on_click=lambda _: page.go("/modules_details"),
+                #     icon_color=TEXT_COLOR,
+                #     icon_size=30
+                # ),
+                title=ft.Text(f"Welcome, {user_name}! ({assessment_feedback})", size=30, weight=ft.FontWeight.W_600, color=ACCENT_COLOR),
+                center_title=True,
+                bgcolor=BG_COLOR,
+                elevation=0,
+                actions=[
+                    # ft.IconButton(
+                    #     icon=ft.Icons.SEARCH,
+                    #     icon_color=TEXT_COLOR,
+                    #     on_click=on_search
+                    # ),
+                    ft.PopupMenuButton(items=[
+                         ft.PopupMenuItem(
+                            text="Logout",
+                            icon=ft.Icons.LOGOUT,
+                            on_click=logout
+                        ),
+                        ft.PopupMenuItem(
+                            text="Settings",
+                            icon=ft.Icons.SETTINGS,
+                            on_click=lambda e: page.go("/settings")
+                        ),
+                    ]),
+                ],
+            ),
             ft.Stack([
                 # Background image container
                 get_background_image(),
@@ -191,13 +225,14 @@ def dashboard_page(page: ft.Page):
                 ft.Container(
                     ft.Column(
                         [   
-                            ft.Text(f"Welcome, {user_name}!", size=30, weight=ft.FontWeight.W_600, color=ACCENT_COLOR),
                             ft.Text(f"Email: {user_email}", size=16, color=TEXT_COLOR),
-                            ft.ElevatedButton(
-                                "Logout", 
-                                on_click=logout, 
-                                style=ft.ButtonStyle(bgcolor=PRIMARY_COLOR, color=TEXT_COLOR, padding=BUTTON_PADDING)
-                            ),
+                            ft.Row([
+                                ft.ElevatedButton(
+                                    "Learning Modules",
+                                    on_click=lambda e: page.go("/learning_modules"),
+                                    style=ft.ButtonStyle(bgcolor=PRIMARY_COLOR, color=TEXT_COLOR, padding=BUTTON_PADDING)
+                                )
+                            ], spacing=10, alignment=ft.MainAxisAlignment.CENTER),
                             
                             ft.Container(height=20),  # Spacer
                             
@@ -250,4 +285,30 @@ def dashboard_page(page: ft.Page):
         ],
         bgcolor=BG_COLOR,
         scroll=ft.ScrollMode.AUTO # Added scroll for potentially long content
+    )
+
+
+def settings_page(page: ft.Page):
+    return ft.View(
+        "/settings",
+        [
+            ft.AppBar(
+                title=ft.Text("Settings", size=30, weight=ft.FontWeight.W_600, color=ACCENT_COLOR),
+                center_title=True,
+                bgcolor=BG_COLOR,
+                elevation=0,
+                leading=ft.IconButton(
+                    ft.Icons.CHEVRON_LEFT,
+                    on_click=lambda _: page.go("/dashboard"),
+                    icon_color=TEXT_COLOR,
+                    icon_size=30
+                ),
+            ),
+            ft.Container(
+                ft.Text("Settings Page Content Goes Here", size=24, color=TEXT_COLOR),
+                padding=20,
+                alignment=ft.alignment.center
+            )
+        ],
+        bgcolor=BG_COLOR
     )

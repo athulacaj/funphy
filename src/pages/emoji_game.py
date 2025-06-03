@@ -2,7 +2,7 @@ import flet as ft
 import os
 from .db import AppDatabase
 
-from .utils import BG_COLOR,get_background_image, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
+from .utils import BG_COLOR,get_background_image, PRIMARY_COLOR,ConfettiWidget, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 
 # Game data: emoji, clue, hint, answer
 QUESTIONS = [
@@ -97,6 +97,7 @@ def build_emoj_game(page: ft.Page):
         "completed": False, # Track if question is completed
         "total_score": 0, # Track total score only in state
         "scored_questions": set(), # Track which questions have been scored
+        "can_show_animation":False
     }
 
     def get_letter_choices(answer):
@@ -186,7 +187,7 @@ def build_emoj_game(page: ft.Page):
                 width=44,
                 height=44,
                 on_click=lambda e, ch=c: on_letter(ch),
-                disabled=(c in state["guessed"] and state["completed"]) or (c in state["guessed"]), # Disable if guessed, or if completed and guessed
+                # disabled=(c in state["guessed"] and state["completed"]) or (c in state["guessed"]), # Disable if guessed, or if completed and guessed
                 style=ft.ButtonStyle(
                     color=TEXT_COLOR,
                     bgcolor=PRIMARY_COLOR,
@@ -234,33 +235,54 @@ def build_emoj_game(page: ft.Page):
             expand=False
         )
 
-    def update_view_content():
+    def update_view_content(can_show_animation=False):
+        confetti = ConfettiWidget()
+        page.confetti=confetti
+        page.confetti=confetti
         if page.views:
             current_view = page.views[-1]
-            current_view.controls = [build_main_content_container()]
+            current_view.controls = [
+                ft.Stack([
+                # Background image container
+                    get_background_image(),
+                    build_main_content_container(),
+                    confetti
+                ]),
+            ]
+            
             page.update()
+            if(can_show_animation):
+                page.confetti.animate_confetti()
+ 
 
     def save_progress():
            if state["current"] >= len(QUESTIONS) - 1:
                 AppDatabase.save_self_user_data_2({"advanced_feedback":{"score": state["total_score"]}})
 
     def on_letter(ch):
+        if (ch in state["guessed"] and state["completed"]) or (ch in state["guessed"]):
+            # If the letter is already guessed and the question is completed, do nothing
+            state["click_count"] += 1
+            page.confetti.play_error_sound()
+            return                                          
         if state["completed"]:
             # Allow clicking letters even if completed, but it won't change score or guessed set
             # state["click_count"] += 1 # Optionally count clicks after completion
+            page.confetti.play_error_sound()
             return
 
         if ch in state["guessed"]:
             state["click_count"] += 1 # Count clicks on already guessed letters
             # No UI update needed as the letter is already shown as guessed
+            page.confetti.play_error_sound()
             return
-
+        page.confetti.play_click_sound()
         state["guessed"].add(ch)
         state["click_count"] += 1
         
         current_q_data = QUESTIONS[state["current"]]
         answer_str = current_q_data["answer"].upper()
-
+        can_show_animation=False
         if all((not c.isalpha()) or (c in state["guessed"]) for c in answer_str):
             state["completed"] = True
             state["score"] = calculate_score(answer_str, state["click_count"], state["hint_used"])
@@ -268,9 +290,10 @@ def build_emoj_game(page: ft.Page):
                 state["total_score"] += state["score"]
                 state["scored_questions"].add(state["current"])
                 state["showNext"] = True 
+                can_show_animation=True
                 save_progress()
         
-        update_view_content()
+        update_view_content(can_show_animation)
 
     def on_hint(e):
         if state["hints_left"] > 0 and not state["show_hint"]:
@@ -302,21 +325,24 @@ def build_emoj_game(page: ft.Page):
             state["hint_used"] = 0
             state["showNext"] = False 
             state["completed"] = (state["current"] in state["scored_questions"])
+            state["can_show_animation"]=True
             if state["completed"]: # If the next question was already completed, showNext should be true
                  state["showNext"] = True
             update_view_content()
-        else: 
-            page.go("/dashboard")
+        # else: 
+        #     page.go("/dashboard")
 
     initial_content = build_main_content_container()
-
+    confetti = ConfettiWidget()
+    page.confetti=confetti
     return ft.View(
         route="/emoji_game",
         controls=[
                 ft.Stack([
                 # Background image container
                     get_background_image(),
-                    initial_content
+                    initial_content,
+                    confetti
                 ]),
             ],
         appbar=appbar,

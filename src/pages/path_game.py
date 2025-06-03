@@ -4,7 +4,7 @@ from typing import List, Tuple, Set, Dict # Assuming these are used or will be
 from collections import deque # Added for BFS
 from .db import AppDatabase
 
-from .utils import BG_COLOR,get_background_image, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
+from .utils import BG_COLOR,get_background_image,ConfettiWidget, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 
 # Placeholder for level configurations - ensure these are properly defined
 
@@ -320,7 +320,9 @@ class PizzaMazeGame(ft.Container):
         row, col = map(int, e.control.data.split(","))
 
         if (row, col) in self.walls:
+            self.page.confetti.play_error_sound()
             return
+        self.page.confetti.play_click_sound()
 
         if not self.is_drawing:
             if (row, col) == self.start_pos:
@@ -456,9 +458,11 @@ class PizzaMazeGame(ft.Container):
         self.enable_game_interactions(False)
 
         if self.current_level < MAX_LEVELS:
+            self.page.confetti.animate_confetti() 
             self.next_level_button.visible = True
             self.next_level_button.update()  # Ensure update is called immediately after visibility change
         else:
+            self.page.confetti.animate_confetti() 
             self.level_text.value = "Congratulations! All levels completed!"
             self.next_level_button.visible = False
             self.level_text.update()
@@ -576,12 +580,14 @@ class PizzaMazeGame(ft.Container):
 def path_game(page: ft.Page):
     def go_back(e):
         page.go("/dashboard")
-
+    confetti = ConfettiWidget()
+    page.confetti=confetti
     return ft.View("/path_game", [
          ft.Stack([
                 # Background image container
                     get_background_image(),
-                    PizzaMazeGame(page)
+                    PizzaMazeGame(page),
+                    confetti
         ]),
     ],
     appbar=ft.AppBar(

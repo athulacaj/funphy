@@ -1,6 +1,6 @@
 import flet as ft
-from pages import splash_page, welcome_page, login_page, signup_page, dashboard_page,get_assessment_pages
-from pages.learning_module_pages import learning_modules_view, modules_details_view,lessons_view,notes_page # Added import
+from pages import splash_page, welcome_page, login_page, signup_page, dashboard_page,settings_page,get_assessment_pages
+from pages.learning_module_pages import learning_modules_view, modules_details_view,lessons_view,notes_page,references_page,videos_view # Added import
 from pages.utils import BG_COLOR, SNACK_COLOR
 from pages.db import AppDatabase
 from pages.path_game import path_game 
@@ -39,6 +39,8 @@ async def main(page: ft.Page):
         elif page.route == "/dashboard":
             # Dashboard Screen
             page.views.append(dashboard_page(page))
+        elif page.route == "/settings":
+            page.views.append(settings_page(page))
         elif page.route.startswith("/assessment/"):
             assessment_view = get_assessment_pages(page)
             if assessment_view:
@@ -58,6 +60,10 @@ async def main(page: ft.Page):
             page.views.append(lessons_view(page))
         elif page.route == "/notes": # Added route
             page.views.append(notes_page(page))
+        elif page.route == "/references": # Added route
+            page.views.append(references_page(page))
+        elif page.route == "/videos": # Added route
+            page.views.append(videos_view(page))
         page.update()
 
     await AppDatabase.initialize()  # Ensure database is initialized before any page loads
@@ -65,7 +71,7 @@ async def main(page: ft.Page):
     if self_user  is not None:
         # If user is already logged in, redirect to dashboard
         page.route = "/dashboard"
-        page.route="/learning_modules"
+        # page.route="/learning_modules"
 
         page.session.set("user", self_user) # Store user data in session
         

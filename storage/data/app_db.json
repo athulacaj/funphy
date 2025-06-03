@@ -11,17 +11,15 @@
                 "Start with foundational topics and build up knowledge gradually."
             ],
             "beginner_feedback": {
-                "score": 2000
+                "score": 1600
             },
             "intermediate_feedback": {
-                "score": 433
+                "score": 500
             },
             "advanced_feedback": {
                 "score": 920
             },
-            "notes": [
-                
-            ]
+            "notes": []
         }
     },
     "logined_user": {

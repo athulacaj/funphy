@@ -1,5 +1,8 @@
 import flet as ft
 import os
+import random
+import threading
+
 
 # Define theme colors
 BG_COLOR = "#0F111A"  # Deep Twilight
@@ -23,3 +26,97 @@ def get_background_image():
             opacity=0.2,
         ),
     )
+
+
+def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
+    click1_audio = ft.Audio(
+        src="audio/click1.wav",
+        autoplay=False,
+    )
+    error_audio = ft.Audio(
+        src="audio/error1.wav",
+        autoplay=False,
+    )
+    audio1 = ft.Audio(
+        src="audio/win1.wav",
+        autoplay=False,
+    )
+    def play_click_sound():
+        click1_audio.play()
+    def play_error_sound():
+        click1_audio.pause()
+        click1_audio.seek(0)  # Reset audio position
+        error_audio.play()
+
+    def create_confetti_piece():
+        return ft.Container(
+            width=6,
+            height=6,
+            bgcolor=random.choice([
+                ft.Colors.RED_400,
+                ft.Colors.BLUE_500,
+                ft.Colors.GREEN_400,
+                ft.Colors.AMBER_ACCENT,
+                ft.Colors.PURPLE_400,
+                ft.Colors.PINK_400
+            ]),
+            border_radius=3,
+            left=random.randint(0, distance),
+            top=random.randint(0, distance),
+            margin=2,
+            animate_position=ft.Animation(
+                random.randint(800, 1400),
+                curve=random.choice([
+                    ft.AnimationCurve.BOUNCE_OUT,
+                    ft.AnimationCurve.EASE_IN_OUT,
+                    ft.AnimationCurve.ELASTIC_OUT,
+                    ft.AnimationCurve.EASE_OUT_BACK
+                ])
+            ),
+        )
+
+    confetti_pieces = [create_confetti_piece() for _ in range(dot_count)]
+    confetti_stack = ft.Stack(controls=confetti_pieces, expand=True if width is None else False, width=width, height=height, visible=False)
+
+    def clearview():
+        confetti_stack.visible=False
+        confetti_stack.update()
+        column.update()
+
+    def animate_confetti(e=None):
+        if(confetti_stack.visible is False):
+            threading.Timer(0.1, animate_confetti).start()
+            audio1.play()
+            threading.Timer(1.5,clearview).start()
+        
+        confetti_stack.visible = True
+        for piece in confetti_pieces:
+            piece.left = random.randint(0, distance)
+            piece.top = random.randint(0, distance)
+            piece.animate_position = ft.Animation(
+                random.randint(1500, 2200),
+                curve=random.choice([
+                    ft.AnimationCurve.BOUNCE_OUT,
+                    ft.AnimationCurve.EASE_IN_OUT,
+                    ft.AnimationCurve.ELASTIC_OUT,
+                    ft.AnimationCurve.EASE_OUT_BACK
+                ])
+            )
+        confetti_stack.update()
+        column.update()
+
+    confetti_button = ft.ElevatedButton("Confetti!", on_click=animate_confetti, bgcolor=ft.Colors.BLUE_500, color=ft.Colors.WHITE)
+
+    column = ft.Column([
+        audio1,
+        click1_audio,
+        error_audio,
+        confetti_stack,
+        # confetti_button
+    ])
+    column.animate_confetti = animate_confetti  # Expose animate_confetti as an attribute
+    column.play_click_sound = play_click_sound  # Expose play_click_sound as an attribute
+    column.play_error_sound = play_error_sound  # Expose play_error_sound as an attribute
+    return column
+
+

@@ -16,10 +16,10 @@ def learning_modules_view(page: ft.Page):
         page.go("/modules_details")
 
     def go_to_references(e):
-        page.show_snack_bar(ft.SnackBar(ft.Text("References: Content coming soon!"), open=True))
+        page.go("/references")
 
     def go_to_videos(e):
-        page.show_snack_bar(ft.SnackBar(ft.Text("Videos: Content coming soon!"), open=True))
+        page.go("/videos")
 
     view_content = ft.Column(
         [
@@ -342,6 +342,225 @@ def notes_page(page: ft.Page):
         ],
         bgcolor=BG_COLOR,
         vertical_alignment=ft.MainAxisAlignment.START,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER
+    )
+
+def references_page(page: ft.Page):
+    references = [
+        {
+            "text": "Halliday, D., Resnick, R., & Walker, J. (2014). Fundamentals of Physics (10th ed.). Wiley.",
+            "link": "https://elearn.daffodilvarsity.edu.bd/pluginfile.php/987150/mod_label/intro/fundamentals-of-physics-textbook.pdf"
+        },
+        {
+            "text": "Fundamentals-of-Physics-Mechanics-Relativity-and-Thermodynamics-R.-Shankar-Edisi-1-2014",
+            "link": "https://industri.fatek.unpatti.ac.id/wp-content/uploads/2019/03/041-Fundamentals-of-Physics-Mechanics-Relativity-and-Thermodynamics-R.-Shankar-Edisi-1-2014.pdf"
+        }
+    ]
+    
+    def create_ref_control(ref):
+        return ft.Column([
+            ft.Text(ref["text"], size=16, color=TEXT_COLOR, italic=False),
+            ft.TextButton(
+                "Visit Link",
+                on_click=lambda e, url=ref["link"]: page.launch_url(url),
+                style=ft.ButtonStyle(
+                    color=PRIMARY_COLOR,
+                )
+            )
+        ], spacing=4)
+
+    ref_controls = [create_ref_control(ref) for ref in references]
+    
+    return ft.View(
+        route="/references",
+        controls=[
+            ft.AppBar(
+                leading=ft.IconButton(
+                    ft.Icons.CHEVRON_LEFT,
+                    on_click=lambda _: page.go("/learning_modules"),
+                    icon_color=TEXT_COLOR,
+                    icon_size=30
+                ),
+                title=ft.Text("References", size=28, weight=ft.FontWeight.W_600, color=TEXT_COLOR, italic=True),
+                center_title=True,
+                bgcolor=BG_COLOR,
+                elevation=0
+            ),
+            ft.Container(
+                content=ft.Column(ref_controls, spacing=16, expand=True),
+                expand=True,
+                alignment=ft.alignment.top_left,
+                padding=ft.padding.symmetric(horizontal=20, vertical=20),
+                bgcolor=BG_COLOR,
+            )
+        ],
+        bgcolor=BG_COLOR,
+        vertical_alignment=ft.MainAxisAlignment.START,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER
+    )
+
+
+def videos_view(page: ft.Page):
+    physics_videos = {
+        "Unit 1: Reference Frames, Displacement, and Velocity": {
+            "1.2: Position, Displacement, Velocity": [
+                "https://youtu.be/NxAvWfs92U4?si=hTY0bNmNfxZWGMXv",
+                "https://youtu.be/-Py2zI29THg?si=dz-xWefZlpFsNaUd",
+                "https://youtu.be/QaU9jMHh7gE?si=68rG8qINT6kjpjxx",
+                "https://youtu.be/yfnM0PNm9Q8?si=C3Ct4OuVMH8gGezG",
+                "https://youtu.be/apewLkLAR-U?si=zSOp5Uz2w1CzB2U1"
+            ],
+            "1.3: Reference Frame Changes and Relative Motion": [
+                "https://youtu.be/3yaZ7lkQPUQ?si=Qky-HjPjuZPxQ27F",
+                "https://youtu.be/pdX74x3xiMk?si=Lwinn4JFWVf16hxK",
+                "https://youtu.be/pygnrS75HLs?si=XDt8G1sNAY9Ab9qJ",
+                "https://youtu.be/wD7C4V9smG4?si=OyS5orSlA4oIWwrr",
+                "https://youtu.be/b97NEQh99kA?si=7Y0Nhl23Ka7IEqmu"
+            ]
+        },
+        "Unit 2: Acceleration": {
+            "2.1: The Law of Inertia": [
+                "https://youtu.be/g550H4e5FCY?si=8bLoS-dTbb6xoeyL",
+                "https://youtu.be/Fr5EMXZaujc?si=_iODXVdp26jVEOmG",
+                "https://youtu.be/LQyFshgm-hU?si=6chFeng-DuM9Uhny"
+            ],
+            "2.2: Acceleration": [
+                "https://youtu.be/P0UYC8S4kUI?si=8A2Yk_5dcqsSyPml",
+                "https://youtu.be/JSPwCtIPfQw?si=m29ownVJuZYG7X3N",
+                "https://youtu.be/NAobjpuboRE?si=l7hs-X9lhlW1VNeh"
+            ],
+            "2.3: Free Fall": [
+                "https://youtu.be/6mFGzESlmxI?si=wRKxY2CFW3tS1dYn",
+                "https://youtu.be/XlFhOygrDoM?si=AVVvhHpLL48ppQvR",
+                "https://youtu.be/BVgemK1Y2wA?si=bs8VV1cEL0X5uqy-",
+                "https://youtu.be/MIDSMgeben0?si=ezRONtzZYdztqbSv"
+            ]
+        },
+        "Unit 3: Momentum and Inertia": {
+            "3.1: Inertia": [
+                "https://youtu.be/lZhjyP3-lME?si=K7JOz_pVKkycZJBB",
+                "https://youtu.be/wL9XopHoevU?si=apftGPAIk3VaYaSl"
+            ],
+            "3.2: Momentum": [
+                "https://youtu.be/F8DnNqBhUfQ?si=A_NS5AVKapHX9e7i",
+                "https://youtu.be/ZU6rJQTz7FI?si=VGCyknccguzFd6Wn",
+                "https://youtu.be/ZJlFKCGPTjU?si=imvd4rEb1ztexey8",
+                "https://youtu.be/SP2hy3Uf0Ls?si=UYgC-aNxqSR6Ndy7"
+            ],
+            "3.3: Extended Systems and Center of Mass": [
+                "https://youtu.be/WLoBo-enxAw?si=I8skbJWU4p5ebyGL",
+                "https://youtu.be/nyJeaUe7wXM?si=DjaE1Uwo9e7W_t9x",
+                "https://youtu.be/O-q-MAYpNLI?si=D5C_Rz5DiLAaffey",
+                "https://youtu.be/a4KhrJJvD3w?si=cXvpqa0meq0G7356",
+                "https://youtu.be/2uszSnvzBEU?si=9ILyW79bdI3ZflQv"
+            ]
+        },
+        "Unit 4: Kinetic Energy": {
+            "4.1: Kinetic Energy": [
+                "https://youtu.be/WrFCHt21kVA?si=hxijKSyVxffDvFqN",
+                "https://youtu.be/eVW8X_TsBzE?si=G531rBVwFseudUWO",
+                "https://youtu.be/g7u6pIfUVy4?si=MDdYLO28NvMw2FIO",
+                "https://youtu.be/DyaVgHGssos?si=nrBYoWa40QoAdJgq"
+            ],
+            "4.2: \"Convertible\" and \"Translational\" Kinetic Energy": [
+                "https://youtu.be/N_qP72ugYyE?si=_16th3fyrQqg5L13",
+                "https://youtu.be/MjM6fUV1Qz4?si=w6Cocp86L4RygYM8",
+                "https://youtu.be/DpywKXIYLnM?si=nEPVIz8OM1BBLpFh",
+                "https://youtu.be/PD9m9uLEVQY?si=Qz9oT1JutgLrYN4W",
+                "https://youtu.be/bg5d5BFANVU?si=gZCJkjrR7o0SPNIy",
+                "https://youtu.be/m6HhlBS5_WM?si=vJCK0fwVICE7I3HW"
+            ]
+        },
+        "Unit 5: Interactions I - Energy": {
+            "5.1: Conservative Interactions": [
+                "https://youtu.be/N7DAqKuSCsk?si=LxhAWiiLKHkDA3iG",
+                "https://youtu.be/OTK9JrKC6EY?si=Zp1GN0uWMylwngqO",
+                "https://youtu.be/_DwG8fukuj4?si=Qd657N_XwJ7GYBec"
+            ],
+            "5.2: Dissipation of Energy and Thermal Energy": [
+                "https://youtube.com/playlist?list=PLQ4ifcaxRmEhzHcRRqDeOA7SyzreSBKOu&si=H7ok2_8cPxfF2qof",
+                "https://youtube.com/playlist?list=PLbxp2OQvwuKgmJ1DImFskp-Gpm_ilPXdY&si=CbsXPYuBVlvQhjDm",
+                "https://youtu.be/-7Gl-yKF6Y4?si=y--k9ZJD9V2nwC6R",
+                "https://youtu.be/egURSFBCaOU?si=gPjX6pmx90oYIwY5",
+                "https://youtu.be/qlX-dah7MlU?si=_MJlXepX4ANkmPbZ"
+            ],
+            "5.3: Fundamental Interactions, and Other Forms of Energy": [
+                "https://youtu.be/669QUJrF4u0?si=29UU5E-1R2ZiDp9X",
+                "https://youtu.be/k1jaDh97Q_g?si=TQF41iw0RQ3Xhuxp",
+                "https://youtu.be/wlb7ZVS2L38?si=WEw4SfgIgT0tM-HM",
+                "https://youtu.be/T1xqwVvtcf8?si=Xb91zM554t3sauNF",
+                "https://youtu.be/XiNx7YBnM-s?si=BBmDTbxsWcd5UAwZ",
+                "https://youtu.be/jhKejoBqiYc?si=pc5Rk0oMpRlH4AnA"
+            ],
+            "5.4: Conservation of Energy": [
+                "https://youtu.be/BcZfRSlaw7s?si=bajmNj3nbSUL3Zk6",
+                "https://youtu.be/TLUZnCvuGBk?si=lh8tm_FipL3q6KJn",
+                "https://youtu.be/LjijcG-IbR4?si=zVY4avYvWYlNtxq6"
+            ]
+        }
+    }
+    def create_video_button(unit, video):
+        return ft.ElevatedButton(
+            content=ft.Text(video, text_align=ft.TextAlign.CENTER),
+            on_click=lambda e: page.launch_url(physics_videos[unit][video][0]),
+            style=common_button_style,
+            width=320,
+            height=60
+        )
+    video_buttons = []
+    for unit, videos in physics_videos.items():
+        video_buttons.append(ft.Text(unit, size=20, weight=ft.FontWeight.W_600, color=TEXT_COLOR))
+        for video in videos:
+            video_buttons.append(create_video_button(unit, video))
+            video_buttons.append(ft.Container(height=10))  # Spacer between buttons
+    view_content = ft.Column(
+        [
+            ft.Text(
+                "Physics Videos",
+                size=32,
+                weight=ft.FontWeight.W_600,
+                color=TEXT_COLOR
+            ),
+            ft.Container(height=20),  # Spacer
+            *video_buttons,  # Unpack the list of buttons
+            ft.Container(height=20),  # Spacer
+            ft.Text(
+                "More videos are coming soon!",
+                size=16,
+                color=TEXT_COLOR,
+                italic=True,
+                text_align=ft.TextAlign.CENTER
+            )
+        ],
+        alignment=ft.MainAxisAlignment.START,  # Align content to the start (top)
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        expand=True,
+        spacing=15,  # Spacing between elements in the main column
+        scroll=ft.ScrollMode.AUTO  # Enable scrolling if content overflows
+    )
+
+    return ft.View(
+        route="/videos",
+        controls=[
+            ft.AppBar(
+                leading=ft.IconButton(
+                    ft.Icons.CHEVRON_LEFT,
+                    on_click=lambda _: page.go("/modules_details"),  # Back to modules_details
+                    icon_color=TEXT_COLOR,
+                    icon_size=30
+                ),
+                bgcolor=BG_COLOR,
+                elevation=0
+            ),
+            ft.Container(
+                content=view_content,
+                expand=True,
+                alignment=ft.alignment.top_center,  # Align content to top_center
+                padding=ft.padding.symmetric(horizontal=20, vertical=20)  # Add padding
+            )
+        ],
+        bgcolor=BG_COLOR,
+        vertical_alignment=ft.MainAxisAlignment.START,  # Align view content to start
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
 
