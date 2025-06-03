@@ -2,6 +2,7 @@ import flet as ft
 import os
 import random
 import threading
+from .db import AppDatabase
 
 
 # Define theme colors
@@ -11,7 +12,6 @@ ACCENT_COLOR = "#36F1CD"  # Aqua Mint
 SNACK_COLOR = "#04332A"  # Aqua Mint
 TEXT_COLOR = ft.Colors.WHITE
 BUTTON_PADDING = ft.padding.symmetric(vertical=12, horizontal=24)
-
 # Path to background image
 BG_IMAGE_PATH = os.path.join(os.path.dirname(__file__), "..", "assets", "icon.png")
 
@@ -41,12 +41,16 @@ def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
         src="audio/win1.wav",
         autoplay=False,
     )
+    play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
     def play_click_sound():
-        click1_audio.play()
+        if play_sound: 
+            click1_audio.play()
     def play_error_sound():
+       
         click1_audio.pause()
         click1_audio.seek(0)  # Reset audio position
-        error_audio.play()
+        if play_sound: 
+            click1_audio.play()
 
     def create_confetti_piece():
         return ft.Container(

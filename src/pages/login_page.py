@@ -11,6 +11,7 @@ def get_view(page: ft.Page):
     # Create loading indicator
     progress_ring = ft.ProgressRing(width=16, height=16, stroke_width=2, color=ACCENT_COLOR, visible=False)
     
+    
     # Create form fields
     email = ft.TextField(label="Email", color=TEXT_COLOR, border_color=ACCENT_COLOR, focused_border_color=ACCENT_COLOR)
     password = ft.TextField(label="Password", password=True, can_reveal_password=True, color=TEXT_COLOR, border_color=ACCENT_COLOR, focused_border_color=ACCENT_COLOR)
@@ -51,7 +52,10 @@ def get_view(page: ft.Page):
                 
                 page.snack_bar = ft.SnackBar(ft.Text("Login successful!"), bgcolor=ACCENT_COLOR)
                 page.snack_bar.open = True
-                page.go("/dashboard")  # Navigate to dashboard
+                if(result.get("assessment_score") is None):
+                    page.go("/assessment/intro")
+                else:
+                    page.go("/dashboard")  # Navigate to dashboard
             else:
                 if "Timeout" in str(result):
                     error_text.value = "Connection timeout. Please check your network and try again."

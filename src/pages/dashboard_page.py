@@ -1,5 +1,6 @@
 import flet as ft
 from .utils import get_background_image, BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
+from .db import AppDatabase
 
 # Define colors from the image for better accuracy
 BEGINNER_BG_COLOR = ft.Colors.with_opacity(0.8, ft.Colors.GREEN_ACCENT_700)
@@ -61,7 +62,7 @@ def create_level_card(icon: ft.Icon, title: str, subtitle: str, progress_value: 
 
 def dashboard_page(page: ft.Page):
     # Check if user is logged in
-    user = page.session.get("user")
+    user = AppDatabase.get_self_user_2()  # Get the currently logged-in user from the database
     
     if not user:
         # If not logged in, redirect to login page
@@ -74,7 +75,7 @@ def dashboard_page(page: ft.Page):
     assessment_score = user.get("assessment_score", None)
     assessment_feedback_list = user.get("assessment_feedback", [])
     assessment_feedback = None
-    if(len(assessment_feedback_list[0])>0):
+    if(len(assessment_feedback_list) and len(assessment_feedback_list[0])>0):
         assessment_feedback=assessment_feedback_list[0]
 
     beginner_feedback = user.get("beginner_feedback", None)
@@ -287,28 +288,3 @@ def dashboard_page(page: ft.Page):
         scroll=ft.ScrollMode.AUTO # Added scroll for potentially long content
     )
 
-
-def settings_page(page: ft.Page):
-    return ft.View(
-        "/settings",
-        [
-            ft.AppBar(
-                title=ft.Text("Settings", size=30, weight=ft.FontWeight.W_600, color=ACCENT_COLOR),
-                center_title=True,
-                bgcolor=BG_COLOR,
-                elevation=0,
-                leading=ft.IconButton(
-                    ft.Icons.CHEVRON_LEFT,
-                    on_click=lambda _: page.go("/dashboard"),
-                    icon_color=TEXT_COLOR,
-                    icon_size=30
-                ),
-            ),
-            ft.Container(
-                ft.Text("Settings Page Content Goes Here", size=24, color=TEXT_COLOR),
-                padding=20,
-                alignment=ft.alignment.center
-            )
-        ],
-        bgcolor=BG_COLOR
-    )

@@ -71,11 +71,11 @@ async def main(page: ft.Page):
     if self_user  is not None:
         # If user is already logged in, redirect to dashboard
         page.route = "/dashboard"
-        # page.route="/learning_modules"
 
         page.session.set("user", self_user) # Store user data in session
         
     page.on_route_change = route_change
+    page.session.set("play_sound", True)  # Store user data in session
     page.go(page.route or "/")
 
 

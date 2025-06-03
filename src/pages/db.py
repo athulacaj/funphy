@@ -124,6 +124,14 @@ class AppDatabase:
         if user_email and user_email in users_data:
             return users_data[user_email]
         return 
+    @staticmethod
+    def get_self_user_2():
+        """Get the currently logged-in user's details"""
+        user_email = AppDatabase.db.get("logined_user", {}).get("email")
+        users_data = AppDatabase.db.get("users", {})
+        if user_email and user_email in users_data:
+            return users_data[user_email]
+        return 
 
     
     @staticmethod
@@ -169,7 +177,22 @@ class AppDatabase:
             print(f"Error saving user data: {error_msg}")
             return False, f"Failed to save user data: {error_msg}"
         
-    
+    @staticmethod
+    def delete_self_user():
+        email = AppDatabase.db.get("logined_user", {}).get("email")
+        """Delete a user from the database"""
+        try:
+            users = AppDatabase.db.get("users", {})
+            if email in users:
+                del users[email]
+                AppDatabase.db["users"] = users
+                AppDatabase.save_db_2()  # Uses static call
+                return True, "User deleted successfully"
+            return False, "User not found"
+        except Exception as e:
+            error_msg = str(e)
+            print(f"Error deleting user: {error_msg}")
+            return False, f"Failed to delete user: {error_msg}"
 
     @staticmethod
     def save_self_user_data_2(data):
