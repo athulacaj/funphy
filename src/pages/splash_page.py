@@ -38,5 +38,5 @@ def get_view(page: ft.Page):
                 ),
             ],expand=True,)
         ],
-        # bgcolor=BG_COLOR  # Added background color
+        bgcolor=BG_COLOR  # Added background color
     )
