@@ -1,6 +1,8 @@
 import flet as ft
 from .utils import get_background_image, BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 from .db import AppDatabase
+import random
+import asyncio
 
 # Define colors from the image for better accuracy
 BEGINNER_BG_COLOR = ft.Colors.with_opacity(0.8, ft.Colors.GREEN_ACCENT_700)
@@ -230,6 +232,45 @@ def dashboard_page(page: ft.Page):
         padding=ft.padding.symmetric(vertical=30, horizontal=20),
     )
 
+    # --- Animated White Stars Logic ---
+    num_stars = 16
+    star_states = [dict(left=0, top=0, size=16, visible=False) for _ in range(num_stars)]
+    star_controls = [ft.Container() for _ in range(num_stars)]
+
+    def update_stars():
+        for i, state in enumerate(star_states):
+            star_controls[i].content = ft.AnimatedSwitcher(
+                content=ft.Icon(ft.Icons.STAR, color=ft.Colors.with_opacity(0.15, ft.Colors.WHITE), size=state['size']) if state['visible'] else ft.Container(),
+                duration=300,
+            )
+            star_controls[i].left = state['left']
+            star_controls[i].top = state['top']
+            star_controls[i].width = 32
+            star_controls[i].height = 32
+        page.update()
+
+    async def star_pop_loop(i):
+        while True:
+            if(page.route != "/dashboard"):
+                break
+            await asyncio.sleep(random.uniform(0.8, 2.5))
+            star_states[i]['left'] = random.randint(0, 220)
+            star_states[i]['top'] = random.randint(0, 350)
+            star_states[i]['size'] = random.randint(12, 28)
+            star_states[i]['visible'] = True
+            update_stars()
+            await asyncio.sleep(random.uniform(0.5, 1.2))
+            star_states[i]['visible'] = False
+            update_stars()
+
+    async def start_star_animation():
+        await asyncio.sleep(0.5)
+        for i in range(num_stars):
+            asyncio.create_task(star_pop_loop(i))
+
+    # Schedule the animation to start after the page is loaded
+    page.run_task(start_star_animation)
+
     # Dashboard content
     return ft.View(
         "/dashboard",
@@ -273,7 +314,8 @@ def dashboard_page(page: ft.Page):
             ft.Stack([
                 # Background image container
                 get_background_image(),
-                
+                # Animated white stars (no custom control)
+                ft.Stack(star_controls, width=250, height=380),
                 # Content
                 ft.Container(
                     ft.Column(
@@ -359,6 +401,6 @@ def dashboard_page(page: ft.Page):
             ])
         ],
         bgcolor=BG_COLOR,
-        scroll=ft.ScrollMode.AUTO # Added scroll for potentially long content
+        # scroll=ft.ScrollMode.AUTO # Added scroll for potentially long content
     )
 

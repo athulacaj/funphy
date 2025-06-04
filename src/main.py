@@ -21,7 +21,7 @@ async def main(page: ft.Page):
         )
     )
 
-    def route_change(route): 
+    def route_change(route):    
         page.views.clear()  
 
         if page.route == "/":
@@ -39,19 +39,19 @@ async def main(page: ft.Page):
         elif page.route == "/dashboard":
             # Dashboard Screen
             page.views.append(dashboard_page(page))
-        elif page.route == "/profile":
+        elif page.route == "/profile":  
             page.views.append(profile_page(page))
-        elif page.route == "/settings":
-            page.views.append(settings_page(page))
+        elif page.route == "/settings": 
+            page.views.append(settings_page(page))  
         elif page.route.startswith("/assessment/"):
             assessment_view = get_assessment_pages(page)
             if assessment_view:
                 page.views.append(assessment_view)
         # Add path game route
-        elif page.route == "/path_game":
+        elif page.route == "/path_game":   
             page.views.append(path_game(page))
         elif page.route == "/emoji_game":
-            page.views.append(build_emoj_game(page))
+            page.views.append(build_emoj_game(page)) 
         elif page.route == "/word_puzzle":
             page.views.append(word_puzzle_page(page))
         elif page.route == "/learning_modules": # Added route
@@ -65,7 +65,7 @@ async def main(page: ft.Page):
         elif page.route == "/references": # Added route
             page.views.append(references_page(page))
         elif page.route == "/videos": # Added route
-            page.views.append(videos_view(page))
+            page.views.append(videos_view(page)) 
         page.update()
 
     await AppDatabase.initialize()  # Ensure database is initialized before any page loads

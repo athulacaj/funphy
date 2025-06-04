@@ -73,6 +73,8 @@ class WordSearchGame:
             child_aspect_ratio=1.0,
             spacing=self.spacing_val,
             run_spacing=self.spacing_val,
+            expand_loose= True, # Allow GridView to expand based on content,
+            auto_scroll=False
         )
         self.level_status_text = ft.Text(value="", color=TEXT_COLOR, size=14, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER)
 
@@ -118,7 +120,7 @@ class WordSearchGame:
         #     text_align=ft.TextAlign.CENTER
         # )
         
-        game_layout = ft.Row(
+        game_layout = ft.Column(
             [
                 ft.Column([self.grid_view], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, expand=2),
                 ft.Column([
@@ -133,7 +135,8 @@ class WordSearchGame:
                 )
             ],
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-            vertical_alignment=ft.CrossAxisAlignment.START,
+            # vertical_alignment=ft.CrossAxisAlignment.START,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=20
         )
         self._update_level_status_display(initial_call=True) # Initial call to set status, no update
@@ -403,8 +406,9 @@ def word_puzzle_page(page: ft.Page):
 
     # Add AppBar with back button
     def on_back(e):
-        # page.go_back() if hasattr(page, 'go_back') else page.window_close()
         page.go("/dashboard") # Navigate to dashboard
+
+
 
     appbar = ft.AppBar(
         leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=on_back),
@@ -437,5 +441,6 @@ def word_puzzle_page(page: ft.Page):
         appbar=appbar,
         padding=0,
         vertical_alignment=ft.MainAxisAlignment.CENTER,
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        scroll=ft.ScrollMode.AUTO, # Enable scrolling if content overflows
     )
