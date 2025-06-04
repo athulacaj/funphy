@@ -6,6 +6,7 @@ from pages.db import AppDatabase
 from pages.path_game import path_game 
 from pages.emoji_game import build_emoj_game 
 from pages.word_puzzle_page import word_puzzle_page
+from pages.profile_page import profile_page
 
 
 async def main(page: ft.Page):
@@ -20,8 +21,8 @@ async def main(page: ft.Page):
         )
     )
 
-    def route_change(route):
-        page.views.clear()
+    def route_change(route): 
+        page.views.clear()  
 
         if page.route == "/":
             # Splash Screen
@@ -38,6 +39,8 @@ async def main(page: ft.Page):
         elif page.route == "/dashboard":
             # Dashboard Screen
             page.views.append(dashboard_page(page))
+        elif page.route == "/profile":
+            page.views.append(profile_page(page))
         elif page.route == "/settings":
             page.views.append(settings_page(page))
         elif page.route.startswith("/assessment/"):

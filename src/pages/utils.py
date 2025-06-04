@@ -2,6 +2,7 @@ import flet as ft
 import random
 import threading
 from .db import AppDatabase
+import flet_audio as fa
 
 
 # Define theme colors
@@ -28,15 +29,15 @@ def get_background_image():
 
 
 def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
-    click1_audio = ft.Audio(
+    click1_audio = fa.Audio(
         src="audio/click1.wav",
         autoplay=False,
     )
-    error_audio = ft.Audio(
+    error_audio = fa.Audio(
         src="audio/error1.wav",
         autoplay=False,
     )
-    audio1 = ft.Audio(
+    audio1 = fa.Audio(
         src="audio/win1.wav",
         autoplay=False,
     )

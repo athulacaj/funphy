@@ -28,13 +28,44 @@ import flet as ft
 # my_file_path = os.path.join(app_data_path, "app_db.json")
 my_file_path = "app_db.json"
 
-class AppDatabase:
-    db = {
-        "users": {},
-        "logined_user": {}
+global_db={
+    "users": {
+        "funphy@gmail.com": {
+            "name": "funphy",
+            "email": "funphy@gmail.com",
+            "password": "123456",
+            "assessment_score": 3,
+            "assessment_feedback": [
+                "Beginner",
+                "Needs significant improvement in understanding basic concepts.",
+                "Start with foundational topics and build up knowledge gradually."
+            ],
+            "beginner_feedback": {
+                "score": 1600
+            },
+            "intermediate_feedback": {
+                "score": 500
+            },
+            "advanced_feedback": {
+                "score": 920
+            },
+            "notes": [],
+            "play_sound": True
+        }
+    },
+    "logined_user": {
+        "email": "funphy@gmail.com"
     }
+}
 
+class AppDatabase:
+    # db = {
+    #     "users": {},
+    #     "logined_user": {}
+    # }
+    db=global_db
 
+    
     @staticmethod
     async def initialize():
         """Initialize the database if it doesn't exist"""

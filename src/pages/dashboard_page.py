@@ -60,6 +60,7 @@ def create_level_card(icon: ft.Icon, title: str, subtitle: str, progress_value: 
         on_click=on_click
     )
 
+
 def dashboard_page(page: ft.Page):
     # Check if user is logged in
     user = AppDatabase.get_self_user_2()  # Get the currently logged-in user from the database
@@ -194,7 +195,7 @@ def dashboard_page(page: ft.Page):
                 #     icon_color=TEXT_COLOR,
                 #     icon_size=30
                 # ),
-                title=ft.Text(f"Welcome, {user_name}! ({assessment_feedback})", size=30, weight=ft.FontWeight.W_600, color=ACCENT_COLOR),
+                title=ft.Text(f"Welcome, {user_name}!", size=25, weight=ft.FontWeight.W_600, color=ACCENT_COLOR),
                 center_title=True,
                 bgcolor=BG_COLOR,
                 elevation=0,
@@ -205,6 +206,11 @@ def dashboard_page(page: ft.Page):
                     #     on_click=on_search
                     # ),
                     ft.PopupMenuButton(items=[
+                        ft.PopupMenuItem(
+                            text="Profile",
+                            icon=ft.Icons.PERSON,
+                            on_click=lambda e: page.go("/profile")
+                        ),
                          ft.PopupMenuItem(
                             text="Logout",
                             icon=ft.Icons.LOGOUT,
@@ -226,12 +232,34 @@ def dashboard_page(page: ft.Page):
                 ft.Container(
                     ft.Column(
                         [   
-                            ft.Text(f"Email: {user_email}", size=16, color=TEXT_COLOR),
+                            # ft.Text(f"Email: {user_email}", size=16, color=TEXT_COLOR),
                             ft.Row([
-                                ft.ElevatedButton(
-                                    "Learning Modules",
-                                    on_click=lambda e: page.go("/learning_modules"),
-                                    style=ft.ButtonStyle(bgcolor=PRIMARY_COLOR, color=TEXT_COLOR, padding=BUTTON_PADDING)
+                                ft.Container(
+                                    content=ft.Row(
+                                        [
+                                            ft.Icon(ft.Icons.MENU_BOOK, color=ACCENT_COLOR, size=26),
+                                            ft.ElevatedButton(
+                                                "Learning Modules",
+                                                on_click=lambda e: page.go("/learning_modules"),
+                                                style=ft.ButtonStyle(
+                                                    bgcolor=PRIMARY_COLOR,
+                                                    color=TEXT_COLOR,
+                                                    padding=BUTTON_PADDING
+                                                )
+                                            )
+                                        ],
+                                        alignment=ft.MainAxisAlignment.CENTER,
+                                        spacing=8
+                                    ),
+                                    bgcolor=ft.Colors.with_opacity(0.12, PRIMARY_COLOR),
+                                    border_radius=16,
+                                    padding=ft.padding.symmetric(vertical=8, horizontal=18),
+                                    shadow=ft.BoxShadow(
+                                        spread_radius=1,
+                                        blur_radius=6,
+                                        color=ft.Colors.with_opacity(0.18, PRIMARY_COLOR),
+                                        offset=ft.Offset(1, 2),
+                                    ),
                                 )
                             ], spacing=10, alignment=ft.MainAxisAlignment.CENTER),
                             
