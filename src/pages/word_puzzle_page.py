@@ -1,5 +1,5 @@
 import flet as ft
-from .utils import BG_COLOR,APPBAR_FONT_SIZE,get_background_image,ConfettiWidget, TEXT_COLOR, PRIMARY_COLOR, ACCENT_COLOR
+from .utils import play_audio1,play_click_sound,play_error_sound,BG_COLOR,APPBAR_FONT_SIZE,get_background_image,ConfettiWidget, TEXT_COLOR, PRIMARY_COLOR, ACCENT_COLOR
 from .db import AppDatabase
 
 # Word search puzzle data based on the image
@@ -123,20 +123,23 @@ class WordSearchGame:
         game_layout = ft.Column(
             [
                 ft.Column([self.grid_view], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, expand=2),
-                ft.Column([
-                    ft.Text("WORDS TO FIND:", weight=ft.FontWeight.BOLD, color=TEXT_COLOR, size=18),
-                    self.level_status_text, # Added level status text
-                    ft.Divider(height=5, color=ft.Colors.TRANSPARENT), # Optional: add some spacing
-                    self.words_list_view
-                    ], 
-                    alignment=ft.MainAxisAlignment.START, 
-                    horizontal_alignment=ft.CrossAxisAlignment.START,
-                    expand=1
+                ft.Container(
+                    ft.Column([
+                        ft.Text("WORDS TO FIND:", weight=ft.FontWeight.BOLD, color=TEXT_COLOR, size=18),
+                        self.level_status_text, # Added level status text
+                        ft.Divider(height=5, color=ft.Colors.TRANSPARENT), # Optional: add some spacing
+                        self.words_list_view
+                        ], 
+                        alignment=ft.MainAxisAlignment.START, 
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        expand=1,
+                    ),
+                    padding=ft.padding.all(22),
                 )
             ],
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-            # vertical_alignment=ft.CrossAxisAlignment.START,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            # vertical_alignment=ft.CrossAxisAlignment.START,
             spacing=20
         )
         self._update_level_status_display(initial_call=True) # Initial call to set status, no update
@@ -238,6 +241,7 @@ class WordSearchGame:
         
         if found_word_details:
             actual_found_word = found_word_details[0]
+            play_audio1()       
             self.page.confetti.animate_confetti()
             self.answered_words.append(actual_found_word)
 
@@ -382,9 +386,10 @@ class WordSearchGame:
             clicked_cell_container.update()
             self.selection_direction = None 
         if play_cilck_sound:
-            self.page.confetti.play_click_sound()
+            # self.page.confetti.play_click_sound()
+            play_click_sound()
         else:
-            self.page.confetti.play_error_sound()
+            play_error_sound()
         if self.selected_cells: 
             self._check_for_word()
         
@@ -435,7 +440,7 @@ def word_puzzle_page(page: ft.Page):
                 ft.Container(
                     content=content,
                     expand=True,
-                    padding=ft.padding.all(30),
+                    padding=ft.padding.all(8),
                     alignment=ft.alignment.center,
                     # bgcolor=ft.Colors.with_opacity(0.6, BG_COLOR), # Assuming BG_COLOR is defined
                     # bgcolor=ft.Colors.with_opacity(0.6, "0x2E2E2E") # Example, replace with your BG_COLOR

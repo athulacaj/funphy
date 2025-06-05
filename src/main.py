@@ -1,7 +1,7 @@
 import flet as ft
 from pages import splash_page, welcome_page, login_page, signup_page, dashboard_page,settings_page,get_assessment_pages
 from pages.learning_module_pages import learning_modules_view, modules_details_view,lessons_view,notes_page,references_page,videos_view # Added import
-from pages.utils import BG_COLOR, SNACK_COLOR
+from pages.utils import BG_COLOR, SNACK_COLOR,click1_audio,error_audio,audio1
 from pages.db import AppDatabase
 from pages.path_game import path_game 
 from pages.emoji_game import build_emoj_game 
@@ -23,7 +23,10 @@ async def main(page: ft.Page):
     )
 
     def route_change(route):    
-        page.views.clear()  
+        page.views.clear()
+        page.views.append(audio1)  
+        page.views.append(click1_audio)  
+        page.views.append(error_audio)  
 
         if page.route == "/":
             # Splash Screen

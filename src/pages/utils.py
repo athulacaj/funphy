@@ -7,7 +7,7 @@ import flet_audio as fa
 
 # Define theme colors
 # BG_COLOR = "#0F111A"  # Deep Twilight
-BG_COLOR = "#120C6E"  # Deep Twilight
+BG_COLOR = "#0d0745"  # Deep Twilight
 PRIMARY_COLOR = "#7B68EE"  # Medium Slate Blue
 ACCENT_COLOR = "#36F1CD"  # Aqua Mint
 SNACK_COLOR = "#04332A"  # Aqua Mint
@@ -44,7 +44,7 @@ def get_background_image(showImage=True):
                 end=ft.alignment.bottom_center,
                 colors=[
                     ft.Colors.with_opacity(1,BG_COLOR),  # hsla(244, 80%, 24%, 1)
-                    ft.Colors.with_opacity(1,"#571A8F"),  # hsla(271, 94%, 49%, 1)
+                    ft.Colors.with_opacity(1,"#140c71"),  # hsla(271, 94%, 49%, 1)
                     ft.Colors.with_opacity(1,BG_COLOR),
                 ],
                 stops=[0.0, 0.5, 1.0],
@@ -60,25 +60,38 @@ error_audio = fa.Audio(
     autoplay=False,
 )
 audio1 = fa.Audio(
-    src="audio/win1.wav",
+    src="audio/win2.wav",
     autoplay=False,
 )
+
+def play_click_sound():
+    play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
+    if play_sound:
+        try:
+            click1_audio.seek(0)
+            click1_audio.play()
+        except Exception as e:
+            pass
+def play_error_sound():
+    play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
+    if play_sound: 
+        try:
+            error_audio.seek(0)
+            error_audio.play()
+        except Exception as e:
+            pass
+
+def play_audio1():
+    play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
+    if play_sound:
+        try:
+            # audio1.seek(0)
+            audio1.play()
+        except Exception as e:
+            pass
+
 def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
-    def play_click_sound():
-        if play_sound:
-            try:
-                click1_audio.seek(0)
-                click1_audio.play()
-            except Exception as e:
-                pass
-    def play_error_sound():       
-        if play_sound: 
-            try:
-                error_audio.seek(0)
-                error_audio.play()
-            except Exception as e:
-                pass
 
     def create_confetti_piece():
         return ft.Container(
@@ -118,12 +131,6 @@ def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     def animate_confetti(e=None):
         if(confetti_stack.visible is False):
             threading.Timer(0.1, animate_confetti).start()
-            if play_sound:
-                try:
-                    audio1.seek(0)
-                    audio1.play()
-                except Exception as e:
-                    pass
             threading.Timer(1.5,clearview).start()
         
         confetti_stack.visible = True
@@ -145,7 +152,6 @@ def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     confetti_button = ft.ElevatedButton("Confetti!", on_click=animate_confetti, bgcolor=ft.Colors.BLUE_500, color=ft.Colors.WHITE)
 
     column = ft.Column([
-        audio1,
         click1_audio,
         error_audio,
         confetti_stack,
