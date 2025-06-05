@@ -6,7 +6,8 @@ import flet_audio as fa
 
 
 # Define theme colors
-BG_COLOR = "#0F111A"  # Deep Twilight
+# BG_COLOR = "#0F111A"  # Deep Twilight
+BG_COLOR = "#120C6E"  # Deep Twilight
 PRIMARY_COLOR = "#7B68EE"  # Medium Slate Blue
 ACCENT_COLOR = "#36F1CD"  # Aqua Mint
 SNACK_COLOR = "#04332A"  # Aqua Mint
@@ -17,40 +18,58 @@ BUTTON_PADDING = ft.padding.symmetric(vertical=12, horizontal=24)
 
 # Define reusable components
 def get_background_image():
+    # return ft.Container(
+    #     expand=True,
+    #     alignment=ft.alignment.bottom_right,
+    #     content=ft.Image(
+    #         src="icon.png",  # Ensure this path is correct
+    #         fit=ft.ImageFit.COVER,
+    #         opacity=0.2,
+    #     ),
+    # )
+
     return ft.Container(
-        expand=True,
-        alignment=ft.alignment.bottom_right,
-        content=ft.Image(
-            src="icon.png",  # Ensure this path is correct
-            fit=ft.ImageFit.COVER,
-            opacity=0.2,
-        ),
-    )
+            content=ft.Image(
+                src="icon.png",  # Ensure this path is correct
+                fit=ft.ImageFit.COVER,
+                opacity=0.2,
+            ),
+            alignment=ft.alignment.center,  # Center content within container
+            expand=True,
+            margin=0,
+            padding=0,  # Remove inbuilt padding
+            gradient=ft.LinearGradient(
+                begin=ft.alignment.top_center,
+                end=ft.alignment.bottom_center,
+                colors=[
+                    ft.Colors.with_opacity(1,BG_COLOR),  # hsla(244, 80%, 24%, 1)
+                    ft.Colors.with_opacity(1,"#400576"),  # hsla(271, 94%, 49%, 1)
+                    ft.Colors.with_opacity(1,BG_COLOR),
+                ],
+                stops=[0.0, 0.5, 1.0],
+            ),
+        )
 
-
+click1_audio = fa.Audio(
+    src="audio/click1.wav",
+    autoplay=False,
+)
+error_audio = fa.Audio(
+    src="audio/error1.wav",
+    autoplay=False,
+)
+audio1 = fa.Audio(
+    src="audio/win1.wav",
+    autoplay=False,
+)
 def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
-    click1_audio = fa.Audio(
-        src="audio/click1.wav",
-        autoplay=False,
-    )
-    error_audio = fa.Audio(
-        src="audio/error1.wav",
-        autoplay=False,
-    )
-    audio1 = fa.Audio(
-        src="audio/win1.wav",
-        autoplay=False,
-    )
     play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
     def play_click_sound():
         if play_sound: 
             click1_audio.play()
-    def play_error_sound():
-       
-        click1_audio.pause()
-        click1_audio.seek(0)  # Reset audio position
+    def play_error_sound():       
         if play_sound: 
-            click1_audio.play()
+            error_audio.play()
 
     def create_confetti_piece():
         return ft.Container(

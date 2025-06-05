@@ -307,15 +307,16 @@ class WordSearchGame:
         if e.control.on_click is None:
             self.page.confetti.play_error_sound()
             return
-        self.page.confetti.play_click_sound()
+        # self.page.confetti.play_click_sound()
         r, c = e.control.data
         clicked_cell_container = e.control 
         current_click_coords = (r, c)
+        play_cilck_sound=True
 
         if clicked_cell_container in self.selected_cell_containers:
             if clicked_cell_container == self.selected_cell_containers[-1]:
                 self.selected_cells.pop()
-                self.page.confetti.play_error_sound()
+                play_cilck_sound=False # Don't play sound on deselection
                 popped_container = self.selected_cell_containers.pop()
                 # Check if the popped cell is part of an already found word
                 if popped_container.data in self.found_word_cells_coords:
@@ -337,6 +338,7 @@ class WordSearchGame:
                 print(f"Invalid selection reset. Score: {self.score}") # For debugging
                 self._reset_ui_for_current_selection() 
                 self.selected_cells.clear()
+                play_cilck_sound=False
                 self.selected_cell_containers.clear() # Clear selection
                 self.selection_direction = None
             # self._check_for_word() # Check if the modified selection forms a word (might be needed if deselecting forms a word)
@@ -369,7 +371,7 @@ class WordSearchGame:
             clicked_cell_container.update()
         else:
             self._reset_ui_for_current_selection() 
-            self.page.confetti.play_error_sound()
+            play_cilck_sound=False # Don't play sound on invalid selection
             self.selected_cells.clear()
             self.selected_cell_containers.clear()
             self.score = max(100, self.score - 100) # Decrease score
@@ -379,7 +381,10 @@ class WordSearchGame:
             clicked_cell_container.bgcolor = ACCENT_COLOR
             clicked_cell_container.update()
             self.selection_direction = None 
-
+        if play_cilck_sound:
+            self.page.confetti.play_click_sound()
+        else:
+            self.page.confetti.play_error_sound()
         if self.selected_cells: 
             self._check_for_word()
         
@@ -436,8 +441,7 @@ def word_puzzle_page(page: ft.Page):
                 confetti
             ])
         ],
-        # bgcolor=BG_COLOR, # Assuming BG_COLOR is defined
-        bgcolor="0x1F1F1F", # Example, replace with your BG_COLOR
+        bgcolor=BG_COLOR, # Assuming BG_COLOR is defined
         appbar=appbar,
         padding=0,
         vertical_alignment=ft.MainAxisAlignment.CENTER,

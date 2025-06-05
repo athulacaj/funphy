@@ -145,6 +145,7 @@ def dashboard_page(page: ft.Page):
                         color=ft.Colors.with_opacity(0.25, border_color),
                         offset=ft.Offset(2, 4),
                     ),
+                
                 ),
                 ft.Container(height=6),
                 ft.Text(label, size=14, weight=ft.FontWeight.BOLD, color=border_color if unlocked else ft.Colors.GREY_400),
@@ -166,6 +167,41 @@ def dashboard_page(page: ft.Page):
                 ft.Container(
                     content=ft.Stack(
                         [
+                            # White path connector with box shadow
+                            ft.Container(
+                                width=4,
+                                height=70,
+                                left=100,
+                                bottom=120,
+                                rotate=ft.Rotate(45),
+                                bgcolor=ft.Colors.with_opacity(0.4, ft.Colors.WHITE),
+                                border_radius=6,
+                                
+                                shadow=ft.BoxShadow(
+                                    spread_radius=10,
+                                    blur_radius=24,
+                                    color=ft.Colors.with_opacity(0.7, ft.Colors.WHITE),
+                                    offset=ft.Offset(0, 0),
+                                ),
+                            ),
+                            
+                            ft.Container(
+                                width=4,
+                                height=80,
+                                left=125,
+                                top=65,
+                                rotate=ft.Rotate(-.8),
+                                bgcolor=ft.Colors.with_opacity(0.4, ft.Colors.WHITE),
+                                border_radius=6,
+                                
+                                shadow=ft.BoxShadow(
+                                    spread_radius=10,
+                                    blur_radius=24,
+                                    color=ft.Colors.with_opacity(0.7, ft.Colors.WHITE),
+                                    offset=ft.Offset(0, 0),
+                                ),
+                            ),
+                            
                             ft.Container(
                                 planet_level(
                                     icon=ft.Icons.PUBLIC,
@@ -181,7 +217,7 @@ def dashboard_page(page: ft.Page):
                                 ),
                                 
                                 right=0,  # Zigzag: align right
-                                top=120,
+                                top=115,
                             ),
                             ft.Container(height=30),  # Spacer between levels
                             ft.Container(
@@ -218,16 +254,14 @@ def dashboard_page(page: ft.Page):
                                 bottom=0  # Zigzag: align left at bottom
                             ),
                         ],
-                        height=380,
+                        height=400,
                         width=250,
                     ),
                     alignment=ft.alignment.center,
                     expand=True,
                 ),
             ],
-            # horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=10,
-            # height= 400,  # Fixed height for the game map section
         ),
         padding=ft.padding.symmetric(vertical=30, horizontal=20),
     )
@@ -320,8 +354,18 @@ def dashboard_page(page: ft.Page):
                 ft.Container(
                     ft.Column(
                         [   
-                            # ft.Text(f"Email: {user_email}", size=16, color=TEXT_COLOR),
-                            ft.Row([
+                            
+                            # ft.Container(height=20),  # Spacer
+                            
+                            *([
+                                # Game Map Section added here
+                                game_map_section,
+                                
+                                ft.Container(height=20) # Spacer
+                            ] if True else []),
+
+
+                              ft.Row([
                                 ft.Container(
                                     content=ft.Row(
                                         [
@@ -351,44 +395,6 @@ def dashboard_page(page: ft.Page):
                                 )
                             ], spacing=10, alignment=ft.MainAxisAlignment.CENTER),
                             
-                            ft.Container(height=20),  # Spacer
-                            
-                            *([
-                                # Game Map Section added here
-                                game_map_section,
-                                
-                                ft.Container(height=20) # Spacer
-                            ] if assessment_score is not None else []),
-
-                            ft.Container(
-                                ft.Column(
-                                    [
-                                        # ft.Text("Dashboard Actions", size=24, weight=ft.FontWeight.W_500, color=PRIMARY_COLOR), # Changed title
-                                        
-                                        ft.Container(height=20),  # Spacer
-                                        
-                                        # Conditionally show the button
-                                        *([
-                                            ft.ElevatedButton(
-                                                "Start Physics Assessment", 
-                                                on_click=lambda e: page.go("/assessment/intro"),
-                                                style=ft.ButtonStyle(
-                                                    bgcolor=ACCENT_COLOR, 
-                                                    color=BG_COLOR, 
-                                                    padding=BUTTON_PADDING
-                                                )
-                                            )
-                                        ] if assessment_score is None else []),
-                                    ],
-                                    spacing=10,
-                                ),
-                                padding=20,
-                                border_radius=10,
-                                bgcolor=ft.Colors.BLACK12, # Kept original bgcolor for this specific container
-                                width=400, # Kept original width
-                            ),
-                            
-                            ft.Container(height=20),  # Spacer
                         ],
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -398,9 +404,10 @@ def dashboard_page(page: ft.Page):
                     expand=True,
                     alignment=ft.alignment.center,
                 ),
-            ])
+            ],expand=True),
         ],
         bgcolor=BG_COLOR,
+        padding=0
         # scroll=ft.ScrollMode.AUTO # Added scroll for potentially long content
     )
 

@@ -13,6 +13,7 @@ async def main(page: ft.Page):
     page.title = "FunPhy - Fun with Physics"
     page.bgcolor = BG_COLOR
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.padding = 0  # Remove page padding
 
     # Set Snackbar theme to BG_COLOR with opacity
     page.theme = ft.Theme(
@@ -71,8 +72,8 @@ async def main(page: ft.Page):
     await AppDatabase.initialize()  # Ensure database is initialized before any page loads
     self_user = await AppDatabase.get_self_user()  # Get the currently logged-in user
     # self_user=None
-    if self_user  is not None:
-        # If user is already logged in, redirect to dashboard
+    if self_user  is not None:  
+        # If user is already logged in, redirect to dashboard    
         page.route = "/dashboard"
 
         page.session.set("user", self_user) # Store user data in session
