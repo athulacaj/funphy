@@ -80,6 +80,7 @@ def play_error_sound():
         except Exception as e:
             pass
 
+
 def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
     # def play_click_sound():

@@ -7,6 +7,7 @@ from pages.path_game import path_game
 from pages.emoji_game import build_emoj_game 
 from pages.word_puzzle_page import word_puzzle_page
 from pages.profile_page import profile_page
+import flet_audio as fa
 
 
 async def main(page: ft.Page):
@@ -21,11 +22,55 @@ async def main(page: ft.Page):
             bgcolor=ft.Colors.with_opacity(1, SNACK_COLOR)
         )
     )
+    click1_audio = fa.Audio(
+    src="audio/click1.wav",
+    autoplay=False,
+)
+    error_audio = fa.Audio(
+        src="audio/error1.wav",
+        autoplay=False,
+    )
+    audio1 = fa.Audio(
+        src="audio/win1.wav",
+        autoplay=False,
+    )
+    
+    page.overlay.append(click1_audio)
+    page.overlay.append(error_audio)
+    page.overlay.append(audio1)
+    def play_click_sound():
+        play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
+        if play_sound:
+            try:
+                click1_audio.seek(0)
+                click1_audio.play()
+            except Exception as e:
+                pass
+    def play_error_sound():
+        play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True   
+        if play_sound: 
+            try:
+                error_audio.seek(0)
+                error_audio.play()
+            except Exception as e:
+                pass
+    def play_audio1():
+        play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True   
+        if play_sound:
+            try:
+                audio1.seek(0)
+                audio1.play()
+            except Exception as e:
+                pass
+
+    
+    page.play_click_sound = play_click_sound
+    page.play_error_sound = play_error_sound
+    page.play_audio1 = play_audio1
 
 
     def route_change(route):    
         page.views.clear()
-        page.overlay.clear()  # Clear the overlay for new route
     
      
         if page.route == "/":

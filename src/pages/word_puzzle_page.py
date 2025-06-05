@@ -1,13 +1,7 @@
 import flet as ft
 from .utils import BG_COLOR,APPBAR_FONT_SIZE,get_background_image,ConfettiWidget, TEXT_COLOR, PRIMARY_COLOR, ACCENT_COLOR
 from .db import AppDatabase
-# play_click_sound,play_error_sound
-def play_click_sound():
-    pass
-def play_error_sound():
-    pass
-def play_audio1():
-    pass
+
 
 # Word search puzzle data based on the image
 WORD_GRID = [
@@ -249,7 +243,7 @@ class WordSearchGame:
         if found_word_details:
             actual_found_word = found_word_details[0]
             self.page.confetti.animate_confetti()
-            play_audio1()
+            self.page.play_audio1()
             self.answered_words.append(actual_found_word)
 
             # Show Snackbar with word description
@@ -316,7 +310,7 @@ class WordSearchGame:
 
     def cell_clicked(self, e: ft.ControlEvent):
         if e.control.on_click is None:
-            self.page.confetti.play_error_sound()
+            self.page.play_error_sound()
             return
         # self.page.confetti.play_click_sound()
         r, c = e.control.data
@@ -394,9 +388,9 @@ class WordSearchGame:
             self.selection_direction = None 
         if play_cilck_sound:
             # self.page.confetti.play_click_sound()
-            play_click_sound()
+            self.page.play_click_sound()
         else:
-            play_error_sound()
+            self.page.play_error_sound()
         if self.selected_cells: 
             self._check_for_word()
         
