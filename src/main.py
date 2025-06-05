@@ -30,7 +30,9 @@ async def main(page: ft.Page):
             page.views.append(splash_page(page))
         elif page.route == "/welcome":
             # Welcome Screen
-            page.views.append(welcome_page(page))        
+            # page.views.append(welcome_page(page)) 
+            page.views.append(splash_page(page))
+       
         elif page.route == "/login":
             # Login Screen
             page.views.append(login_page(page))
@@ -75,7 +77,7 @@ async def main(page: ft.Page):
     if self_user  is not None:  
         # If user is already logged in, redirect to dashboard    
         page.route = "/dashboard"
-
+        page.route="/"
         page.session.set("user", self_user) # Store user data in session
         
     page.on_route_change = route_change

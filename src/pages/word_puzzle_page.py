@@ -421,6 +421,8 @@ def word_puzzle_page(page: ft.Page):
         bgcolor=BG_COLOR, # Defined in utils
         center_title=True,
         elevation=2,
+        color=TEXT_COLOR,
+
     )
     confetti = ConfettiWidget()
     page.confetti=confetti

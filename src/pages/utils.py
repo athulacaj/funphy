@@ -17,7 +17,7 @@ BUTTON_PADDING = ft.padding.symmetric(vertical=12, horizontal=24)
 # BG_IMAGE_PATH = os.path.join(os.path.dirname(__file__), "..", "assets", "icon.png")
 
 # Define reusable components
-def get_background_image():
+def get_background_image(showImage=True):
     # return ft.Container(
     #     expand=True,
     #     alignment=ft.alignment.bottom_right,
@@ -33,7 +33,7 @@ def get_background_image():
                 src="icon.png",  # Ensure this path is correct
                 fit=ft.ImageFit.COVER,
                 opacity=0.2,
-            ),
+            ) if showImage else None,  # Show image only if showImage is True
             alignment=ft.alignment.center,  # Center content within container
             expand=True,
             margin=0,
@@ -65,11 +65,19 @@ audio1 = fa.Audio(
 def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
     def play_click_sound():
-        if play_sound: 
-            click1_audio.play()
+        if play_sound:
+            try:
+                click1_audio.seek(0)
+                click1_audio.play()
+            except Exception as e:
+                pass
     def play_error_sound():       
         if play_sound: 
-            error_audio.play()
+            try:
+                error_audio.seek(0)
+                error_audio.play()
+            except Exception as e:
+                pass
 
     def create_confetti_piece():
         return ft.Container(
@@ -109,7 +117,12 @@ def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     def animate_confetti(e=None):
         if(confetti_stack.visible is False):
             threading.Timer(0.1, animate_confetti).start()
-            audio1.play()
+            if play_sound:
+                try:
+                    audio1.seek(0)
+                    audio1.play()
+                except Exception as e:
+                    pass
             threading.Timer(1.5,clearview).start()
         
         confetti_stack.visible = True

@@ -93,5 +93,6 @@ def signup_page(page: ft.Page):
                 ),
             ],expand=True)
         ],
-        bgcolor=BG_COLOR  
+        bgcolor=BG_COLOR,
+        padding=0
     )

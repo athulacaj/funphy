@@ -120,5 +120,6 @@ def get_view(page: ft.Page):
                 ),
             ],expand=True)
         ],
-        bgcolor=BG_COLOR  
+        bgcolor=BG_COLOR,
+        padding=0
     )

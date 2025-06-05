@@ -123,6 +123,7 @@ def build_emoj_game(page: ft.Page):
         title=ft.Text("Emoji Science Quiz", weight=ft.FontWeight.W_600),
         bgcolor=BG_COLOR, # Defined in utils
         center_title=True,
+        color=TEXT_COLOR,
         elevation=2,
     )
 
