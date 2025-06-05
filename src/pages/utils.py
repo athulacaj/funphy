@@ -51,7 +51,7 @@ def get_background_image(showImage=True):
             ),
         )
 
-click1_audio = fa.Audio(
+click1_audio = ft.Audio(
     src="audio/click1.wav",
     autoplay=False,
 )
@@ -60,10 +60,9 @@ error_audio = fa.Audio(
     autoplay=False,
 )
 audio1 = fa.Audio(
-    src="audio/win2.wav",
+    src="audio/win1.wav",
     autoplay=False,
 )
-
 def play_click_sound():
     play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
     if play_sound:
@@ -73,7 +72,7 @@ def play_click_sound():
         except Exception as e:
             pass
 def play_error_sound():
-    play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
+    play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True   
     if play_sound: 
         try:
             error_audio.seek(0)
@@ -81,17 +80,22 @@ def play_error_sound():
         except Exception as e:
             pass
 
-def play_audio1():
-    play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
-    if play_sound:
-        try:
-            # audio1.seek(0)
-            audio1.play()
-        except Exception as e:
-            pass
-
 def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
+    # def play_click_sound():
+    #     if play_sound:
+    #         try:
+    #             click1_audio.seek(0)
+    #             click1_audio.play()
+    #         except Exception as e:
+    #             pass
+    # def play_error_sound():       
+    #     if play_sound: 
+    #         try:
+    #             error_audio.seek(0)
+    #             error_audio.play()
+    #         except Exception as e:
+    #             pass
 
     def create_confetti_piece():
         return ft.Container(
@@ -131,6 +135,11 @@ def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     def animate_confetti(e=None):
         if(confetti_stack.visible is False):
             threading.Timer(0.1, animate_confetti).start()
+            if play_sound:
+                try:
+                    audio1.play()
+                except Exception as e:
+                    pass
             threading.Timer(1.5,clearview).start()
         
         confetti_stack.visible = True
@@ -158,8 +167,8 @@ def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
         # confetti_button
     ])
     column.animate_confetti = animate_confetti  # Expose animate_confetti as an attribute
-    column.play_click_sound = play_click_sound  # Expose play_click_sound as an attribute
-    column.play_error_sound = play_error_sound  # Expose play_error_sound as an attribute
+    # column.play_click_sound = play_click_sound  # Expose play_click_sound as an attribute
+    # column.play_error_sound = play_error_sound  # Expose play_error_sound as an attribute
     return column
 
 

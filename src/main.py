@@ -22,12 +22,12 @@ async def main(page: ft.Page):
         )
     )
 
+
     def route_change(route):    
         page.views.clear()
-        page.views.append(audio1)  
-        page.views.append(click1_audio)  
-        page.views.append(error_audio)  
-
+        page.overlay.clear()  # Clear the overlay for new route
+    
+     
         if page.route == "/":
             # Splash Screen
             page.views.append(splash_page(page))
@@ -72,6 +72,9 @@ async def main(page: ft.Page):
             page.views.append(references_page(page))
         elif page.route == "/videos": # Added route
             page.views.append(videos_view(page)) 
+        
+        # page.overlay.append(error_audio)
+        # page.overlay.append(audio1)
         page.update()
 
     await AppDatabase.initialize()  # Ensure database is initialized before any page loads
@@ -85,6 +88,7 @@ async def main(page: ft.Page):
         
     page.on_route_change = route_change
     page.session.set("play_sound", True)  # Store user data in session
+
     page.go(page.route or "/")
 
 

@@ -1,6 +1,13 @@
 import flet as ft
-from .utils import play_audio1,play_click_sound,play_error_sound,BG_COLOR,APPBAR_FONT_SIZE,get_background_image,ConfettiWidget, TEXT_COLOR, PRIMARY_COLOR, ACCENT_COLOR
+from .utils import BG_COLOR,APPBAR_FONT_SIZE,get_background_image,ConfettiWidget, TEXT_COLOR, PRIMARY_COLOR, ACCENT_COLOR
 from .db import AppDatabase
+# play_click_sound,play_error_sound
+def play_click_sound():
+    pass
+def play_error_sound():
+    pass
+def play_audio1():
+    pass
 
 # Word search puzzle data based on the image
 WORD_GRID = [
@@ -241,8 +248,8 @@ class WordSearchGame:
         
         if found_word_details:
             actual_found_word = found_word_details[0]
-            play_audio1()       
             self.page.confetti.animate_confetti()
+            play_audio1()
             self.answered_words.append(actual_found_word)
 
             # Show Snackbar with word description
