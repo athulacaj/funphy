@@ -77,7 +77,7 @@ async def main(page: ft.Page):
     if self_user  is not None:  
         # If user is already logged in, redirect to dashboard    
         page.route = "/dashboard"
-        page.route="/"
+        # page.route="/login"
         page.session.set("user", self_user) # Store user data in session
         
     page.on_route_change = route_change
@@ -86,4 +86,4 @@ async def main(page: ft.Page):
 
 
 ft.app(main)
-# ft.app(target=main, port=8550)
+# ft.app(target=main, port=8550) 

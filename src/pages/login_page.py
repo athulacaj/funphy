@@ -13,8 +13,8 @@ def get_view(page: ft.Page):
     
     
     # Create form fields
-    email = ft.TextField(label="Email", color=TEXT_COLOR, border_color=ACCENT_COLOR, focused_border_color=ACCENT_COLOR)
-    password = ft.TextField(label="Password", password=True, can_reveal_password=True, color=TEXT_COLOR, border_color=ACCENT_COLOR, focused_border_color=ACCENT_COLOR)
+    email = ft.TextField(label="Email", color=TEXT_COLOR, border_color=ft.Colors.WHITE, focused_border_color=ACCENT_COLOR,border=ft.InputBorder.UNDERLINE,)
+    password = ft.TextField(label="Password", password=True, can_reveal_password=True, color=TEXT_COLOR, border_color=ft.Colors.WHITE, focused_border_color=ACCENT_COLOR,border=ft.InputBorder.UNDERLINE,)
     # Create error text
     error_text = ft.Text("", color=ft.Colors.RED_400, size=12, visible=False)    # Create retry button (initially hidden)
     retry_button = ft.OutlinedButton(
@@ -88,6 +88,13 @@ def get_view(page: ft.Page):
                         ft.Container(
                             ft.Column(
                                 [
+                                    ft.Row([
+                                        ft.Container(
+                                            content=ft.Icon(ft.Icons.ACCOUNT_CIRCLE_OUTLINED, color=ft.Colors.WHITE, size=50),
+                                            alignment=ft.alignment.center,
+                                            padding=ft.padding.only(bottom=10),
+                                        ),
+                                    ], alignment=ft.MainAxisAlignment.CENTER),
                                     ft.Text("Welcome back!", size=30, weight=ft.FontWeight.BOLD, color=ACCENT_COLOR),
                                     email,
                                     password,
@@ -104,21 +111,30 @@ def get_view(page: ft.Page):
                                         alignment=ft.MainAxisAlignment.CENTER,
                                     ),
                                     retry_button,
-                                    ft.TextButton("Back", on_click=lambda e: page.go("/welcome"), style=ft.ButtonStyle(color=ACCENT_COLOR, padding=BUTTON_PADDING)),
+                                    ft.TextButton("Sign Up", on_click=lambda e: page.go("/signup"), style=ft.ButtonStyle(color=ACCENT_COLOR, padding=BUTTON_PADDING)),
                                 ],
                                 alignment=ft.MainAxisAlignment.CENTER,
                                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                                 spacing=20,
                                 expand=True,
                             ),
-                            expand=True,
                             alignment=ft.alignment.center,
-                            height=300,
+                            height=450,
+                            width=320,
+                            border_radius=30,
+                            border=ft.border.all(1, ft.Colors.with_opacity(0.8,ft.Colors.WHITE)),
+                            # bgcolor=ft.Colors.with_opacity(0.15,ft.Colors.BLUE_200),
+                            # bgcolor="#1c55af",
+                            blur=ft.Blur(10, 10, ft.BlurTileMode.CLAMP),
+                            shadow=ft.BoxShadow(blur_radius=30, color=ft.Colors.with_opacity(0.05,ft.Colors.WHITE), offset=ft.Offset(0, 8)),
+                            padding=30,
                         ),
                     ],
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    expand=True,
                 ),
-            ],expand=True)
+            ], expand=True, alignment=ft.alignment.center)
         ],
         bgcolor=BG_COLOR,
         padding=0

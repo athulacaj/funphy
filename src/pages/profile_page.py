@@ -50,7 +50,7 @@ def profile_page(page: ft.Page):
                     icon_color=TEXT_COLOR,
                     icon_size=30
                 ),
-                title=ft.Text("Home", size=25, weight=ft.FontWeight.W_600, color=ACCENT_COLOR),
+                title=ft.Text("Profile", size=25, weight=ft.FontWeight.W_600, color=TEXT_COLOR),
                 center_title=True,
                 bgcolor=BG_COLOR,
                 elevation=0,
@@ -85,21 +85,21 @@ def profile_page(page: ft.Page):
                             width=300,
                         ),
                         
-                        ft.Container(height=10),
-                        ft.Container(
-                            ft.Column([
-                                ft.Text("Change Avatar", size=16, color=TEXT_COLOR),
-                                ft.Row([
-                                    ft.IconButton(ft.Icons.FEMALE, icon_color=ft.Colors.PINK_400, on_click=change_avatar),
-                                    ft.IconButton(ft.Icons.MALE, icon_color=ft.Colors.BLUE_400, on_click=change_avatar),
-                                    ft.IconButton(ft.Icons.PALETTE, icon_color=ft.Colors.GREEN_400, on_click=change_avatar),
-                                ], alignment=ft.MainAxisAlignment.START, spacing=10),
-                            ]),
-                            padding=10,
-                            border=ft.border.all(2, ACCENT_COLOR),
-                            border_radius=10,
-                            width=300,
-                        ),
+                        # ft.Container(height=10),
+                        # ft.Container(
+                        #     ft.Column([
+                        #         ft.Text("Change Avatar", size=16, color=TEXT_COLOR),
+                        #         ft.Row([
+                        #             ft.IconButton(ft.Icons.FEMALE, icon_color=ft.Colors.PINK_400, on_click=change_avatar),
+                        #             ft.IconButton(ft.Icons.MALE, icon_color=ft.Colors.BLUE_400, on_click=change_avatar),
+                        #             ft.IconButton(ft.Icons.PALETTE, icon_color=ft.Colors.GREEN_400, on_click=change_avatar),
+                        #         ], alignment=ft.MainAxisAlignment.START, spacing=10),
+                        #     ]),
+                        #     padding=10,
+                        #     border=ft.border.all(2, ACCENT_COLOR),
+                        #     border_radius=10,
+                        #     width=300,
+                        # ),
                         
                         ft.Container(height=10),
                         ft.Container(

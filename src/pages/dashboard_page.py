@@ -306,17 +306,26 @@ def dashboard_page(page: ft.Page):
     page.run_task(start_star_animation)
 
     # Dashboard content
+    # Create user avatar with first letter of user name
+    user_initial = user_name[0].upper() if user_name else "U"
+    user_avatar = ft.Container(
+        content=ft.Text(user_initial, color=ft.Colors.WHITE, size=28, weight=ft.FontWeight.W_600),
+        width=50,
+        height=50,
+        margin=ft.margin.all(6),
+        bgcolor=ft.Colors.TRANSPARENT,
+        border_radius=25,
+        border=ft.border.all(1, ft.Colors.with_opacity(0.5, ft.Colors.WHITE)),
+        alignment=ft.alignment.center,
+        on_click=lambda _:page.go("/profile")
+    )
     return ft.View(
         "/dashboard",
         [
             ft.AppBar(
-                # leading=ft.IconButton(
-                #     ft.Icons.CHEVRON_LEFT,
-                #     on_click=lambda _: page.go("/modules_details"),
-                #     icon_color=TEXT_COLOR,
-                #     icon_size=30
-                # ),
-                title=ft.Text(f"Welcome, {user_name}!", size=25, weight=ft.FontWeight.W_600, color=ACCENT_COLOR),
+                
+                leading=user_avatar,
+                title=ft.Text(f"Welcome, {user_name}!", size=20, weight=ft.FontWeight.W_600, color=TEXT_COLOR),
                 center_title=True,
                 bgcolor=BG_COLOR,
                 elevation=0,
@@ -327,11 +336,11 @@ def dashboard_page(page: ft.Page):
                     #     on_click=on_search
                     # ),
                     ft.PopupMenuButton(items=[
-                        ft.PopupMenuItem(
-                            text="Profile",
-                            icon=ft.Icons.PERSON,
-                            on_click=lambda e: page.go("/profile")
-                        ),
+                        # ft.PopupMenuItem(
+                        #     text="Profile",
+                        #     icon=ft.Icons.PERSON,
+                        #     on_click=lambda e: page.go("/profile")
+                        # ),
                          ft.PopupMenuItem(
                             text="Logout",
                             icon=ft.Icons.LOGOUT,

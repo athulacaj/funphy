@@ -1,5 +1,5 @@
 import flet as ft
-from .utils import BG_COLOR,get_background_image,ConfettiWidget, TEXT_COLOR, PRIMARY_COLOR, ACCENT_COLOR
+from .utils import BG_COLOR,APPBAR_FONT_SIZE,get_background_image,ConfettiWidget, TEXT_COLOR, PRIMARY_COLOR, ACCENT_COLOR
 from .db import AppDatabase
 
 # Word search puzzle data based on the image
@@ -417,10 +417,10 @@ def word_puzzle_page(page: ft.Page):
 
     appbar = ft.AppBar(
         leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=on_back),
-        title=ft.Text("PHYSICS WORDSEARCH", weight=ft.FontWeight.W_600),
+        title=ft.Text("PHYSICS WORDSEARCH",size=APPBAR_FONT_SIZE),
         bgcolor=BG_COLOR, # Defined in utils
         center_title=True,
-        elevation=2,
+        # elevation=2,
         color=TEXT_COLOR,
 
     )
@@ -438,7 +438,7 @@ def word_puzzle_page(page: ft.Page):
                     padding=ft.padding.all(30),
                     alignment=ft.alignment.center,
                     # bgcolor=ft.Colors.with_opacity(0.6, BG_COLOR), # Assuming BG_COLOR is defined
-                    bgcolor=ft.Colors.with_opacity(0.6, "0x2E2E2E") # Example, replace with your BG_COLOR
+                    # bgcolor=ft.Colors.with_opacity(0.6, "0x2E2E2E") # Example, replace with your BG_COLOR
                 ),
                 confetti
             ])

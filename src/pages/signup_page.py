@@ -64,7 +64,8 @@ def signup_page(page: ft.Page):
                 # Content
                 ft.Container(
                     ft.Column(
-                        [                            ft.Text("Create an Account", size=30, weight=ft.FontWeight.BOLD, color=ACCENT_COLOR),
+                        [   
+                            ft.Text("Sign Up", size=30, weight=ft.FontWeight.BOLD, color=ACCENT_COLOR),
                             name,
                             email,
                             password,
@@ -81,7 +82,7 @@ def signup_page(page: ft.Page):
                                 ],
                                 alignment=ft.MainAxisAlignment.CENTER,
                             ),
-                            ft.TextButton("Back", on_click=lambda e: page.go("/welcome"), style=ft.ButtonStyle(color=ACCENT_COLOR, padding=BUTTON_PADDING)),
+                            ft.TextButton("Login", on_click=lambda e: page.go("/login"), style=ft.ButtonStyle(color=ACCENT_COLOR, padding=BUTTON_PADDING)),
                         ],
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -90,6 +91,7 @@ def signup_page(page: ft.Page):
                     ),
                     expand=True,
                     alignment=ft.alignment.center,
+                    padding=ft.padding.all(20)
                 ),
             ],expand=True)
         ],

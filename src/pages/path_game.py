@@ -227,6 +227,7 @@ class PizzaMazeGame(ft.Container):
         self.game_grid_column.controls = [
             ft.Row(
                 spacing=2,
+                alignment=ft.MainAxisAlignment.CENTER,
                 controls=[self.create_cell(row, col) for col in range(self.grid_size)]
             ) for row in range(self.grid_size)
         ]
@@ -237,15 +238,19 @@ class PizzaMazeGame(ft.Container):
         self.game_grid_container = ft.Container(
                 content=self.build_game_grid(),
                 padding=20,
-                bgcolor=BG_COLOR,  # Use BG_COLOR for grid container
-                border_radius=10
+                bgcolor=ft.Colors.TRANSPARENT,  # Use BG_COLOR for grid container
+                border_radius=10,
+                alignment=ft.alignment.center,  # Center the grid in the container
+            
             )
         
 
         return ft.Container(
-            bgcolor=BG_COLOR,  # Use BG_COLOR for main container
+            bgcolor=ft.Colors.TRANSPARENT,  # Use BG_COLOR for main container
+            padding=ft.padding.all(16),
             content=ft.Column(
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                alignment=ft.MainAxisAlignment.CENTER,
                 controls=[
                     self.title_text,
                     self.info_row,
@@ -275,8 +280,8 @@ class PizzaMazeGame(ft.Container):
             bgcolor = ft.Colors.WHITE
 
         return ft.Container(
-            width=25,
-            height=25,
+            width=28,
+            height=28,
             bgcolor=bgcolor,
             border=ft.border.all(1, ft.Colors.GREY_400),
             border_radius=4,
@@ -588,7 +593,7 @@ def path_game(page: ft.Page):
                     get_background_image(),
                     PizzaMazeGame(page),
                     confetti
-        ]),
+        ],expand=True, alignment=ft.alignment.center),
     ],
     appbar=ft.AppBar(
         leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=go_back, tooltip="Back"),
@@ -597,5 +602,6 @@ def path_game(page: ft.Page):
         bgcolor=BG_COLOR, # Defined in utils
         # bgcolor=ft.Colors.BLACK12 # Adjust color as needed
     ),
-    bgcolor=BG_COLOR
+    bgcolor=BG_COLOR,
+    padding=0
 )

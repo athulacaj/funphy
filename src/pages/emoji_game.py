@@ -124,7 +124,7 @@ def build_emoj_game(page: ft.Page):
         bgcolor=BG_COLOR, # Defined in utils
         center_title=True,
         color=TEXT_COLOR,
-        elevation=2,
+        # elevation=2,
     )
 
     def build_main_content_container():
@@ -229,7 +229,7 @@ def build_emoj_game(page: ft.Page):
             padding=16,
             alignment=ft.alignment.center,
             width=400,
-            bgcolor=BG_COLOR,
+            bgcolor=ft.Colors.TRANSPARENT,
             border_radius=16,
             margin=ft.margin.symmetric(vertical=8, horizontal=0),
             expand=False
@@ -343,8 +343,9 @@ def build_emoj_game(page: ft.Page):
                     get_background_image(),
                     initial_content,
                     confetti
-                ]),
+                ],expand=True),
             ],
         appbar=appbar,
+        padding=0,
         bgcolor=BG_COLOR # Set bgcolor for the View, consistent with previous version
     )

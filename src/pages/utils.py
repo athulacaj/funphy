@@ -13,6 +13,7 @@ ACCENT_COLOR = "#36F1CD"  # Aqua Mint
 SNACK_COLOR = "#04332A"  # Aqua Mint
 TEXT_COLOR = ft.Colors.WHITE
 BUTTON_PADDING = ft.padding.symmetric(vertical=12, horizontal=24)
+APPBAR_FONT_SIZE = 20
 # Path to background image
 # BG_IMAGE_PATH = os.path.join(os.path.dirname(__file__), "..", "assets", "icon.png")
 
@@ -30,9 +31,9 @@ def get_background_image(showImage=True):
 
     return ft.Container(
             content=ft.Image(
-                src="icon.png",  # Ensure this path is correct
+                src="splash_android.png",  # Ensure this path is correct
                 fit=ft.ImageFit.COVER,
-                opacity=0.2,
+                opacity=0.35,
             ) if showImage else None,  # Show image only if showImage is True
             alignment=ft.alignment.center,  # Center content within container
             expand=True,
@@ -43,7 +44,7 @@ def get_background_image(showImage=True):
                 end=ft.alignment.bottom_center,
                 colors=[
                     ft.Colors.with_opacity(1,BG_COLOR),  # hsla(244, 80%, 24%, 1)
-                    ft.Colors.with_opacity(1,"#400576"),  # hsla(271, 94%, 49%, 1)
+                    ft.Colors.with_opacity(1,"#571A8F"),  # hsla(271, 94%, 49%, 1)
                     ft.Colors.with_opacity(1,BG_COLOR),
                 ],
                 stops=[0.0, 0.5, 1.0],

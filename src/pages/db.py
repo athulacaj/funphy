@@ -43,12 +43,12 @@ global_db={
             "beginner_feedback": {
                 "score": 1600
             },
-            # "intermediate_feedback": {
-            #     "score": 500
-            # },
-            # "advanced_feedback": {
-            #     "score": 920
-            # },
+            "intermediate_feedback": {
+                "score": 500
+            },
+            "advanced_feedback": {
+                "score": 920
+            },
             "notes": [],
             "play_sound": True
         }
