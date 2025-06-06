@@ -24,9 +24,9 @@ async def main(page: ft.Page):
     )
     page.theme_mode = ft.ThemeMode.DARK  # Set theme mode to dark
     click1_audio = fa.Audio(
-    src="audio/click1.wav",
-    autoplay=False,
-)
+        src="audio/click1.wav",
+        autoplay=False,
+    )
     error_audio = fa.Audio(
         src="audio/error1.wav",
         autoplay=False,
@@ -35,14 +35,23 @@ async def main(page: ft.Page):
         src="audio/win2.wav",
         autoplay=False,
     )
+
     
     page.overlay.append(click1_audio)
     page.overlay.append(error_audio)
     page.overlay.append(audio1)
+    def pause_all_audio():
+        try:
+            click1_audio.pause()
+            error_audio.pause()
+            audio1.pause()
+        except Exception as e:
+            pass
     def play_click_sound():
         play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
         if play_sound:
             try:
+                pause_all_audio()
                 click1_audio.seek(0)
                 click1_audio.play()
             except Exception as e:
@@ -51,6 +60,7 @@ async def main(page: ft.Page):
         play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True   
         if play_sound: 
             try:
+                pause_all_audio()
                 error_audio.seek(0)
                 error_audio.play()
             except Exception as e:
@@ -59,6 +69,7 @@ async def main(page: ft.Page):
         play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True   
         if play_sound:
             try:
+                pause_all_audio()
                 audio1.seek(0)
                 audio1.play()
             except Exception as e:

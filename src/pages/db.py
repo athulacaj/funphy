@@ -3,9 +3,10 @@
 import json
 import asyncio
 import flet as ft
+import os
 
-# app_data_path = os.getenv("FLET_APP_STORAGE_DATA")
-# app_temp_path = os.getenv("FLET_APP_STORAGE_TEMP")
+app_data_path = os.getenv("FLET_APP_STORAGE_DATA")
+app_temp_path = os.getenv("FLET_APP_STORAGE_TEMP")
 
 # # Determine the base directory of the application (my-app)
 # # __file__ is .../my-app/src/pages/db.py
@@ -26,7 +27,10 @@ import flet as ft
 #         os.makedirs(app_temp_path, exist_ok=True)
 
 # my_file_path = os.path.join(app_data_path, "app_db.json")
-my_file_path = "app_db.json"
+app_data_path = os.getenv("FLET_APP_STORAGE_DATA") 
+app_data_path=app_data_path if app_data_path else ""
+my_file_path = os.path.join(app_data_path, "app_db.json")
+
 
 global_db={
     "users": {
@@ -70,43 +74,43 @@ class AppDatabase:
     async def initialize():
         """Initialize the database if it doesn't exist"""
         pass
-        # try:
-        #     with open(my_file_path, "r") as f:
-        #         file_content = f.read()
-        #         if file_content:
-        #             loaded_db = json.loads(file_content)
-        #             AppDatabase.db = loaded_db
-        #             # Ensure essential keys exist if loaded db is partial or malformed
-        #             if "users" not in AppDatabase.db or not isinstance(AppDatabase.db["users"], dict):
-        #                 AppDatabase.db["users"] = {}
-        #             if "logined_user" not in AppDatabase.db or not isinstance(AppDatabase.db["logined_user"], dict):
-        #                 AppDatabase.db["logined_user"] = {}
-        #         else:
-        #             # File is empty, initialize with default structure
-        #             AppDatabase.db = {"users": {}, "logined_user": {}}
-        #     print(f"Database content after initialize: {AppDatabase.db}")
-        # except FileNotFoundError:
-        #     print(f"Database file '{my_file_path}' not found. Initializing with empty DB.")
-        #     AppDatabase.db = {"users": {}, "logined_user": {}}
-        # except json.JSONDecodeError:
-        #     print(f"Error decoding JSON from '{my_file_path}'. Initializing with empty DB.")
-        #     AppDatabase.db = {"users": {}, "logined_user": {}}
-        # except Exception as e:
-        #     error_msg = str(e)
-        #     print(f"Error initializing database: {error_msg}. Initializing with empty DB.")
-        #     AppDatabase.db = {"users": {}, "logined_user": {}} # Fallback
+        try:
+            with open(my_file_path, "r") as f:
+                file_content = f.read()
+                if file_content:
+                    loaded_db = json.loads(file_content)
+                    AppDatabase.db = loaded_db
+                    # Ensure essential keys exist if loaded db is partial or malformed
+                    if "users" not in AppDatabase.db or not isinstance(AppDatabase.db["users"], dict):
+                        AppDatabase.db["users"] = {}
+                    if "logined_user" not in AppDatabase.db or not isinstance(AppDatabase.db["logined_user"], dict):
+                        AppDatabase.db["logined_user"] = {}
+                else:
+                    # File is empty, initialize with default structure
+                    AppDatabase.db = {"users": {}, "logined_user": {}}
+            print(f"Database content after initialize: {AppDatabase.db}")
+        except FileNotFoundError:
+            print(f"Database file '{my_file_path}' not found. Initializing with empty DB.")
+            AppDatabase.db = {"users": {}, "logined_user": {}}
+        except json.JSONDecodeError:
+            print(f"Error decoding JSON from '{my_file_path}'. Initializing with empty DB.")
+            AppDatabase.db = {"users": {}, "logined_user": {}}
+        except Exception as e:
+            error_msg = str(e)
+            print(f"Error initializing database: {error_msg}. Initializing with empty DB.")
+            AppDatabase.db = {"users": {}, "logined_user": {}} # Fallback
 
     @staticmethod
     async def save_db():
         """Save current DB state to the file"""
-        return
+        # return
         with open(my_file_path, "w") as f:
             f.write(json.dumps(AppDatabase.db, indent=4))
 
     @staticmethod
     def save_db_2():
         """Save current DB state to the file"""
-        return
+        # return
         with open(my_file_path, "w") as f:
             f.write(json.dumps(AppDatabase.db, indent=4))
     @staticmethod
