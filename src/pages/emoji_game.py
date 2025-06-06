@@ -253,6 +253,7 @@ def build_emoj_game(page: ft.Page):
             page.update()
             if(can_show_animation):
                 page.confetti.animate_confetti()
+                page.play_audio1()
  
 
     def save_progress():
@@ -263,20 +264,20 @@ def build_emoj_game(page: ft.Page):
         if (ch in state["guessed"] and state["completed"]) or (ch in state["guessed"]):
             # If the letter is already guessed and the question is completed, do nothing
             state["click_count"] += 1
-            page.confetti.play_error_sound()
+            page.play_error_sound()
             return                                          
         if state["completed"]:
             # Allow clicking letters even if completed, but it won't change score or guessed set
             # state["click_count"] += 1 # Optionally count clicks after completion
-            page.confetti.play_error_sound()
+            page.play_error_sound()
             return
 
         if ch in state["guessed"]:
             state["click_count"] += 1 # Count clicks on already guessed letters
             # No UI update needed as the letter is already shown as guessed
-            page.confetti.play_error_sound()
+            page.play_error_sound()
             return
-        page.confetti.play_click_sound()
+        page.play_click_sound()
         state["guessed"].add(ch)
         state["click_count"] += 1
         

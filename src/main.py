@@ -22,6 +22,7 @@ async def main(page: ft.Page):
             bgcolor=ft.Colors.with_opacity(1, SNACK_COLOR)
         )
     )
+    page.theme_mode = ft.ThemeMode.DARK  # Set theme mode to dark
     click1_audio = fa.Audio(
     src="audio/click1.wav",
     autoplay=False,
@@ -31,7 +32,7 @@ async def main(page: ft.Page):
         autoplay=False,
     )
     audio1 = fa.Audio(
-        src="audio/win1.wav",
+        src="audio/win2.wav",
         autoplay=False,
     )
     

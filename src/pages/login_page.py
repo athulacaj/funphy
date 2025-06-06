@@ -119,7 +119,7 @@ def get_view(page: ft.Page):
                                 expand=True,
                             ),
                             alignment=ft.alignment.center,
-                            height=450,
+                            height=500,
                             width=320,
                             border_radius=30,
                             border=ft.border.all(1, ft.Colors.with_opacity(0.8,ft.Colors.WHITE)),

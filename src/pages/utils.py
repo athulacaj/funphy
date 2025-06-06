@@ -162,8 +162,6 @@ def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     confetti_button = ft.ElevatedButton("Confetti!", on_click=animate_confetti, bgcolor=ft.Colors.BLUE_500, color=ft.Colors.WHITE)
 
     column = ft.Column([
-        click1_audio,
-        error_audio,
         confetti_stack,
         # confetti_button
     ])

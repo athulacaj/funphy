@@ -325,9 +325,9 @@ class PizzaMazeGame(ft.Container):
         row, col = map(int, e.control.data.split(","))
 
         if (row, col) in self.walls:
-            self.page.confetti.play_error_sound()
+            self.page.play_error_sound()
             return
-        self.page.confetti.play_click_sound()
+        self.page.play_click_sound()
 
         if not self.is_drawing:
             if (row, col) == self.start_pos:
@@ -463,11 +463,13 @@ class PizzaMazeGame(ft.Container):
         self.enable_game_interactions(False)
 
         if self.current_level < MAX_LEVELS:
-            self.page.confetti.animate_confetti() 
+            self.page.confetti.animate_confetti()
+            self.page.play_audio1()
             self.next_level_button.visible = True
             self.next_level_button.update()  # Ensure update is called immediately after visibility change
         else:
             self.page.confetti.animate_confetti() 
+            self.page.play_audio1()
             self.level_text.value = "Congratulations! All levels completed!"
             self.next_level_button.visible = False
             self.level_text.update()

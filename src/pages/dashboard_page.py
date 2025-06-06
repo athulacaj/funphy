@@ -351,7 +351,9 @@ def dashboard_page(page: ft.Page):
                             icon=ft.Icons.SETTINGS,
                             on_click=lambda e: page.go("/settings")
                         ),
-                    ]),
+                    ],
+                    icon_color=TEXT_COLOR,
+                    ),
                 ],
             ),
             ft.Stack([
