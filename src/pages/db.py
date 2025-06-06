@@ -92,13 +92,16 @@ class AppDatabase:
         except FileNotFoundError:
             print(f"Database file '{my_file_path}' not found. Initializing with empty DB.")
             AppDatabase.db = {"users": {}, "logined_user": {}}
+            AppDatabase.db = global_db
         except json.JSONDecodeError:
             print(f"Error decoding JSON from '{my_file_path}'. Initializing with empty DB.")
             AppDatabase.db = {"users": {}, "logined_user": {}}
+            AppDatabase.db = global_db
         except Exception as e:
             error_msg = str(e)
             print(f"Error initializing database: {error_msg}. Initializing with empty DB.")
             AppDatabase.db = {"users": {}, "logined_user": {}} # Fallback
+            AppDatabase.db = global_db
 
     @staticmethod
     async def save_db():

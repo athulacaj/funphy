@@ -19,7 +19,8 @@
             "advanced_feedback": {
                 "score": 920
             },
-            "notes": []
+            "notes": [],
+            "play_sound": true
         }
     },
     "logined_user": {

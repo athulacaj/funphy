@@ -42,9 +42,10 @@ async def main(page: ft.Page):
     page.overlay.append(audio1)
     def pause_all_audio():
         try:
-            click1_audio.pause()
-            error_audio.pause()
-            audio1.pause()
+            page.overlay.clear()
+            page.overlay.append(click1_audio)
+            page.overlay.append(error_audio)
+            page.overlay.append(audio1)
         except Exception as e:
             pass
     def play_click_sound():
