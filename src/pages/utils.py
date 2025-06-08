@@ -170,4 +170,10 @@ def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     # column.play_error_sound = play_error_sound  # Expose play_error_sound as an attribute
     return column
 
+# Text colors matching BG_COLOR
+TEXT_COLOR_PRIMARY = ft.Colors.WHITE  # High contrast
+TEXT_COLOR_SECONDARY = ft.Colors.BLUE_GREY_100  # Soft contrast
+TEXT_COLOR_ACCENT = ft.Colors.CYAN_200  # Accent/highlight
+TEXT_COLOR_MUTED = ft.Colors.GREY_100  # Muted/disabled
+
 

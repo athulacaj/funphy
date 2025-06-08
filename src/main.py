@@ -7,6 +7,7 @@ from pages.path_game import path_game
 from pages.emoji_game import build_emoj_game 
 from pages.word_puzzle_page import word_puzzle_page
 from pages.profile_page import profile_page
+from pages.typing_game import typing_game  # Added import for typing_game
 import flet_audio as fa
 
 
@@ -46,6 +47,7 @@ async def main(page: ft.Page):
         except Exception as e:
             pass
     def play_click_sound():
+        return
         play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
         if play_sound:
             try:
@@ -56,6 +58,7 @@ async def main(page: ft.Page):
             except Exception as e:
                 pass
     def play_error_sound():
+        return
         play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True   
         if play_sound: 
             try:
@@ -69,8 +72,8 @@ async def main(page: ft.Page):
         play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True   
         if play_sound:
             try:
-                pause_all_audio()
-                page.overlay.append(audio1)
+                # pause_all_audio()
+                # page.overlay.append(audio1)
                 audio1.seek(0)
                 audio1.play()
             except Exception as e:
@@ -130,6 +133,8 @@ async def main(page: ft.Page):
             page.views.append(references_page(page))
         elif page.route == "/videos": # Added route
             page.views.append(videos_view(page)) 
+        elif page.route == "/typing_game": # Added route
+            page.views.append(typing_game(page)) 
         
         # page.overlay.append(error_audio)
         # page.overlay.append(audio1)
@@ -152,3 +157,4 @@ async def main(page: ft.Page):
 
 ft.app(main)
 # ft.app(target=main, port=8550) 
+ 

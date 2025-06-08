@@ -242,7 +242,7 @@ def dashboard_page(page: ft.Page):
                                     icon=ft.Icons.PUBLIC,
                                     label="BEGINNER",
                                     unlocked=True,
-                                    on_click=lambda e: page.go("/word_puzzle"),
+                                    on_click=lambda e: page.go("/typing_game"),
                                     bgcolor=ft.Colors.GREEN_ACCENT_700,
                                     border_color=ft.Colors.GREEN_ACCENT_400,
                                     star_color=ft.Colors.AMBER,
