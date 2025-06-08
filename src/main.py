@@ -83,7 +83,7 @@ async def main(page: ft.Page):
     page.play_click_sound = play_click_sound
     page.play_error_sound = play_error_sound
     page.play_audio1 = play_audio1
-
+    page.overlay.append(audio1)
 
     def route_change(route):    
         page.views.clear()

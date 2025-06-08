@@ -205,10 +205,12 @@ def typing_game(page: ft.Page):
         if input_field.current.value == word:
             timer_running.current = False
             feedback_text.current.value = "Correct! 🎉"
+            page.confetti.animate_confetti()
+            page.play_audio1()
             input_field.current.disabled = True
             page.update()
             async def pause_and_next():
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(1)
                 next_word()
                 lv.scroll_to(offset=0, duration=1000)
             page.run_task(pause_and_next)
