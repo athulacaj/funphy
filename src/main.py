@@ -43,9 +43,6 @@ async def main(page: ft.Page):
     def pause_all_audio():
         try:
             page.overlay.clear()
-            page.overlay.append(click1_audio)
-            page.overlay.append(error_audio)
-            page.overlay.append(audio1)
         except Exception as e:
             pass
     def play_click_sound():
@@ -53,6 +50,7 @@ async def main(page: ft.Page):
         if play_sound:
             try:
                 pause_all_audio()
+                page.overlay.append(click1_audio)
                 click1_audio.seek(0)
                 click1_audio.play()
             except Exception as e:
@@ -62,6 +60,7 @@ async def main(page: ft.Page):
         if play_sound: 
             try:
                 pause_all_audio()
+                page.overlay.append(error_audio)
                 error_audio.seek(0)
                 error_audio.play()
             except Exception as e:
@@ -71,6 +70,7 @@ async def main(page: ft.Page):
         if play_sound:
             try:
                 pause_all_audio()
+                page.overlay.append(audio1)
                 audio1.seek(0)
                 audio1.play()
             except Exception as e:
