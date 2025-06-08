@@ -1,5 +1,4 @@
 import flet as ft
-import os
 from .db import AppDatabase
 
 from .utils import BG_COLOR,get_background_image, PRIMARY_COLOR,ConfettiWidget, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
@@ -120,11 +119,12 @@ def build_emoj_game(page: ft.Page):
         page.go("/dashboard") # Navigate to dashboard
 
     appbar = ft.AppBar(
-        leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=on_back),
+        leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=on_back,),
         title=ft.Text("Emoji Science Quiz", weight=ft.FontWeight.W_600),
         bgcolor=BG_COLOR, # Defined in utils
         center_title=True,
-        elevation=2,
+        color=TEXT_COLOR,
+        # elevation=2,
     )
 
     def build_main_content_container():
@@ -229,7 +229,7 @@ def build_emoj_game(page: ft.Page):
             padding=16,
             alignment=ft.alignment.center,
             width=400,
-            bgcolor=BG_COLOR,
+            bgcolor=ft.Colors.TRANSPARENT,
             border_radius=16,
             margin=ft.margin.symmetric(vertical=8, horizontal=0),
             expand=False
@@ -253,6 +253,7 @@ def build_emoj_game(page: ft.Page):
             page.update()
             if(can_show_animation):
                 page.confetti.animate_confetti()
+                page.play_audio1()
  
 
     def save_progress():
@@ -263,20 +264,20 @@ def build_emoj_game(page: ft.Page):
         if (ch in state["guessed"] and state["completed"]) or (ch in state["guessed"]):
             # If the letter is already guessed and the question is completed, do nothing
             state["click_count"] += 1
-            page.confetti.play_error_sound()
+            page.play_error_sound()
             return                                          
         if state["completed"]:
             # Allow clicking letters even if completed, but it won't change score or guessed set
             # state["click_count"] += 1 # Optionally count clicks after completion
-            page.confetti.play_error_sound()
+            page.play_error_sound()
             return
 
         if ch in state["guessed"]:
             state["click_count"] += 1 # Count clicks on already guessed letters
             # No UI update needed as the letter is already shown as guessed
-            page.confetti.play_error_sound()
+            page.play_error_sound()
             return
-        page.confetti.play_click_sound()
+        page.play_click_sound()
         state["guessed"].add(ch)
         state["click_count"] += 1
         
@@ -343,8 +344,9 @@ def build_emoj_game(page: ft.Page):
                     get_background_image(),
                     initial_content,
                     confetti
-                ]),
+                ],expand=True),
             ],
         appbar=appbar,
+        padding=0,
         bgcolor=BG_COLOR # Set bgcolor for the View, consistent with previous version
     )

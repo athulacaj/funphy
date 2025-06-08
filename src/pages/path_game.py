@@ -227,6 +227,7 @@ class PizzaMazeGame(ft.Container):
         self.game_grid_column.controls = [
             ft.Row(
                 spacing=2,
+                alignment=ft.MainAxisAlignment.CENTER,
                 controls=[self.create_cell(row, col) for col in range(self.grid_size)]
             ) for row in range(self.grid_size)
         ]
@@ -237,15 +238,19 @@ class PizzaMazeGame(ft.Container):
         self.game_grid_container = ft.Container(
                 content=self.build_game_grid(),
                 padding=20,
-                bgcolor=BG_COLOR,  # Use BG_COLOR for grid container
-                border_radius=10
+                bgcolor=ft.Colors.TRANSPARENT,  # Use BG_COLOR for grid container
+                border_radius=10,
+                alignment=ft.alignment.center,  # Center the grid in the container
+            
             )
         
 
         return ft.Container(
-            bgcolor=BG_COLOR,  # Use BG_COLOR for main container
+            bgcolor=ft.Colors.TRANSPARENT,  # Use BG_COLOR for main container
+            padding=ft.padding.all(16),
             content=ft.Column(
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                alignment=ft.MainAxisAlignment.CENTER,
                 controls=[
                     self.title_text,
                     self.info_row,
@@ -275,8 +280,8 @@ class PizzaMazeGame(ft.Container):
             bgcolor = ft.Colors.WHITE
 
         return ft.Container(
-            width=25,
-            height=25,
+            width=28,
+            height=28,
             bgcolor=bgcolor,
             border=ft.border.all(1, ft.Colors.GREY_400),
             border_radius=4,
@@ -320,9 +325,9 @@ class PizzaMazeGame(ft.Container):
         row, col = map(int, e.control.data.split(","))
 
         if (row, col) in self.walls:
-            self.page.confetti.play_error_sound()
+            self.page.play_error_sound()
             return
-        self.page.confetti.play_click_sound()
+        self.page.play_click_sound()
 
         if not self.is_drawing:
             if (row, col) == self.start_pos:
@@ -458,11 +463,13 @@ class PizzaMazeGame(ft.Container):
         self.enable_game_interactions(False)
 
         if self.current_level < MAX_LEVELS:
-            self.page.confetti.animate_confetti() 
+            self.page.confetti.animate_confetti()
+            self.page.play_audio1()
             self.next_level_button.visible = True
             self.next_level_button.update()  # Ensure update is called immediately after visibility change
         else:
             self.page.confetti.animate_confetti() 
+            self.page.play_audio1()
             self.level_text.value = "Congratulations! All levels completed!"
             self.next_level_button.visible = False
             self.level_text.update()
@@ -588,12 +595,15 @@ def path_game(page: ft.Page):
                     get_background_image(),
                     PizzaMazeGame(page),
                     confetti
-        ]),
+        ],expand=True, alignment=ft.alignment.center),
     ],
     appbar=ft.AppBar(
         leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=go_back, tooltip="Back"),
         title=ft.Text("Path Maze Game"),
+        color=TEXT_COLOR,
+        bgcolor=BG_COLOR, # Defined in utils
         # bgcolor=ft.Colors.BLACK12 # Adjust color as needed
     ),
-    bgcolor=BG_COLOR
+    bgcolor=BG_COLOR,
+    padding=0
 )

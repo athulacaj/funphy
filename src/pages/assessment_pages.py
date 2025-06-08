@@ -191,9 +191,10 @@ def _create_base_view(page: ft.Page, controls: list, title: str, route_suffix: s
                     alignment=ft.alignment.center,
                     padding=20
                 )
-            ])
+            ],expand=True)
         ],
-        bgcolor=BG_COLOR
+        bgcolor=BG_COLOR,
+        padding=0
     )
 
 def user_assessment_intro_page(page: ft.Page):
@@ -203,7 +204,7 @@ def user_assessment_intro_page(page: ft.Page):
     content = [
         ft.Text(
             "User Assessment",
-            size=32,
+            size=24,
             weight=ft.FontWeight.BOLD,
             color=ACCENT_COLOR,
             text_align=ft.TextAlign.CENTER,
@@ -266,7 +267,7 @@ def diagnostic_assessment_page(page: ft.Page):
     content = [
         ft.Text(
             "Diagnostic Assessment",
-            size=32,
+            size=24,
             weight=ft.FontWeight.BOLD,
             color=ACCENT_COLOR,
             text_align=ft.TextAlign.CENTER,
@@ -422,7 +423,7 @@ def assessment_results_page(page: ft.Page):
     content = [
         ft.Text(
             "Assessment Results",
-            size=32,
+            size=24,
             weight=ft.FontWeight.BOLD,
             color=ACCENT_COLOR,
             text_align=ft.TextAlign.CENTER,

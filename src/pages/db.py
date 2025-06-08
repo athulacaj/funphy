@@ -1,42 +1,79 @@
 # filepath: c:\Users\athul\OneDrive\Desktop\projects\md first-flet-app\my-app\src\storage\db.py
-import os
+# import os
 import json
 import asyncio
 import flet as ft
+import os
 
 app_data_path = os.getenv("FLET_APP_STORAGE_DATA")
 app_temp_path = os.getenv("FLET_APP_STORAGE_TEMP")
 
-# Determine the base directory of the application (my-app)
-# __file__ is .../my-app/src/pages/db.py
-# os.path.dirname(__file__) is .../my-app/src/pages
-# os.path.join(os.path.dirname(__file__), "..", "..") is .../my-app
-APP_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+# # Determine the base directory of the application (my-app)
+# # __file__ is .../my-app/src/pages/db.py
+# # os.path.dirname(__file__) is .../my-app/src/pages
+# # os.path.join(os.path.dirname(__file__), "..", "..") is .../my-app
+# APP_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-if app_data_path is None:
-    app_data_path = os.path.join(APP_ROOT_DIR, "storage", "data")
-    # Create the directory if it doesn't exist
-    if not os.path.exists(app_data_path):
-        os.makedirs(app_data_path, exist_ok=True)
+# if app_data_path is None:
+#     app_data_path = os.path.join(APP_ROOT_DIR, "storage", "data")
+#     # Create the directory if it doesn't exist
+#     if not os.path.exists(app_data_path):
+#         os.makedirs(app_data_path, exist_ok=True)
 
-if app_temp_path is None:
-    app_temp_path = os.path.join(APP_ROOT_DIR, "storage", "temp")
-    # Create the directory if it doesn't exist
-    if not os.path.exists(app_temp_path):
-        os.makedirs(app_temp_path, exist_ok=True)
+# if app_temp_path is None:
+#     app_temp_path = os.path.join(APP_ROOT_DIR, "storage", "temp")
+#     # Create the directory if it doesn't exist
+#     if not os.path.exists(app_temp_path):
+#         os.makedirs(app_temp_path, exist_ok=True)
 
+# my_file_path = os.path.join(app_data_path, "app_db.json")
+app_data_path = os.getenv("FLET_APP_STORAGE_DATA") 
+app_data_path=app_data_path if app_data_path else ""
 my_file_path = os.path.join(app_data_path, "app_db.json")
 
-class AppDatabase:
-    db = {
-        "users": {},
-        "logined_user": {}
+
+global_db={
+    "users": {
+        "funphy@gmail.com": {
+            "name": "funphy",
+            "email": "funphy@gmail.com",
+            "password": "123456",
+            "assessment_score": 3,
+            "assessment_feedback": [
+                "Beginner",
+                "Needs significant improvement in understanding basic concepts.",
+                "Start with foundational topics and build up knowledge gradually."
+            ],
+            "beginner_feedback": {
+                "score": 1600
+            },
+            "intermediate_feedback": {
+                "score": 500
+            },
+            "advanced_feedback": {
+                "score": 920
+            },
+            "notes": [],
+            "play_sound": True
+        }
+    },
+    "logined_user": {
+        "email": "funphy@gmail.com"
     }
+}
 
+class AppDatabase:
+    # db = {
+    #     "users": {},
+    #     "logined_user": {}
+    # }
+    db=global_db
 
+    
     @staticmethod
     async def initialize():
         """Initialize the database if it doesn't exist"""
+        pass
         try:
             with open(my_file_path, "r") as f:
                 file_content = f.read()
@@ -55,23 +92,28 @@ class AppDatabase:
         except FileNotFoundError:
             print(f"Database file '{my_file_path}' not found. Initializing with empty DB.")
             AppDatabase.db = {"users": {}, "logined_user": {}}
+            AppDatabase.db = global_db
         except json.JSONDecodeError:
             print(f"Error decoding JSON from '{my_file_path}'. Initializing with empty DB.")
             AppDatabase.db = {"users": {}, "logined_user": {}}
+            AppDatabase.db = global_db
         except Exception as e:
             error_msg = str(e)
             print(f"Error initializing database: {error_msg}. Initializing with empty DB.")
             AppDatabase.db = {"users": {}, "logined_user": {}} # Fallback
+            AppDatabase.db = global_db
 
     @staticmethod
     async def save_db():
         """Save current DB state to the file"""
+        # return
         with open(my_file_path, "w") as f:
             f.write(json.dumps(AppDatabase.db, indent=4))
 
     @staticmethod
     def save_db_2():
         """Save current DB state to the file"""
+        # return
         with open(my_file_path, "w") as f:
             f.write(json.dumps(AppDatabase.db, indent=4))
     @staticmethod

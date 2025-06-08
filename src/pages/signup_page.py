@@ -1,11 +1,11 @@
 import flet as ft
-import sys
-import os
+# import sys
+# import os
 from .utils import get_background_image, BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 from .db import AppDatabase
 
 # Find the root directory of the project and add it to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 def signup_page(page: ft.Page):
     # Create loading indicator
@@ -64,7 +64,8 @@ def signup_page(page: ft.Page):
                 # Content
                 ft.Container(
                     ft.Column(
-                        [                            ft.Text("Create an Account", size=30, weight=ft.FontWeight.BOLD, color=ACCENT_COLOR),
+                        [   
+                            ft.Text("Sign Up", size=30, weight=ft.FontWeight.BOLD, color=ACCENT_COLOR),
                             name,
                             email,
                             password,
@@ -81,7 +82,7 @@ def signup_page(page: ft.Page):
                                 ],
                                 alignment=ft.MainAxisAlignment.CENTER,
                             ),
-                            ft.TextButton("Back", on_click=lambda e: page.go("/welcome"), style=ft.ButtonStyle(color=ACCENT_COLOR, padding=BUTTON_PADDING)),
+                            ft.TextButton("Login", on_click=lambda e: page.go("/login"), style=ft.ButtonStyle(color=ACCENT_COLOR, padding=BUTTON_PADDING)),
                         ],
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -90,9 +91,10 @@ def signup_page(page: ft.Page):
                     ),
                     expand=True,
                     alignment=ft.alignment.center,
-                    height=page.window.height if page.window else 600,
+                    padding=ft.padding.all(20)
                 ),
-            ])
+            ],expand=True)
         ],
-        bgcolor=BG_COLOR  
+        bgcolor=BG_COLOR,
+        padding=0
     )

@@ -1,6 +1,8 @@
 import flet as ft
 from .utils import get_background_image, BG_COLOR, PRIMARY_COLOR, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
 from .db import AppDatabase
+import random
+import asyncio
 
 # Define colors from the image for better accuracy
 BEGINNER_BG_COLOR = ft.Colors.with_opacity(0.8, ft.Colors.GREEN_ACCENT_700)
@@ -59,6 +61,7 @@ def create_level_card(icon: ft.Icon, title: str, subtitle: str, progress_value: 
         ),
         on_click=on_click
     )
+
 
 def dashboard_page(page: ft.Page):
     # Check if user is logged in
@@ -122,79 +125,207 @@ def dashboard_page(page: ft.Page):
         page.go("/welcome")
         page.update()
         
-    # Game Map Section
+    # Game Map Section - Horizontal Levels Layout
+    def planet_level(icon, label, unlocked, on_click, bgcolor, border_color, star_color, score, stars, total_stars):
+        return ft.Column(
+            [
+                ft.Icon(ft.Icons.STAR, color=star_color if unlocked else ft.Colors.GREY_400, size=32),
+                ft.Container(
+                    content=ft.Icon(icon, color=ft.Colors.WHITE, size=36),
+                    width=64,
+                    height=64,
+                    bgcolor=bgcolor,
+                    border=ft.border.all(3, border_color if unlocked else ft.Colors.GREY_400),
+                    border_radius=32,
+                    alignment=ft.alignment.center,
+                    on_click=on_click if unlocked else None,
+                    shadow=ft.BoxShadow(
+                        spread_radius=2,
+                        blur_radius=8,
+                        color=ft.Colors.with_opacity(0.25, border_color),
+                        offset=ft.Offset(2, 4),
+                    ),
+                
+                ),
+                ft.Container(height=6),
+                ft.Text(label, size=14, weight=ft.FontWeight.BOLD, color=border_color if unlocked else ft.Colors.GREY_400),
+                ft.Text(f"Score: {score if score is not None else 'N/A'}", size=12, color=ft.Colors.WHITE70),
+                ft.Row(
+                    [ft.Icon(ft.Icons.STAR, color=star_color if i < stars else ft.Colors.GREY_400, size=16) for i in range(total_stars)],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    spacing=2,
+                ),
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=2,
+        )
+
+    # Horizontal layout for game map section
     game_map_section = ft.Container(
         ft.Column(
             [
-                ft.Text("Game Levels", size=28, weight=ft.FontWeight.BOLD, color=PRIMARY_COLOR, text_align=ft.TextAlign.CENTER),
-                ft.Container(height=15),
-                ft.Row(
-                    [
-                        create_level_card(
-                            icon=ft.Icon(ft.Icons.GRASS, color=ft.Colors.GREEN_ACCENT_400, size=30),
-                            title="BEGINNER",
-                            subtitle="BEGINNER",
-                            progress_value=beginner_progress_value, # Example: 50%
-                            score= beginner_score if beginner_score is not None else "N/A", # Use score from feedback if available
-                            stars=beginner_score_star,
-                            total_stars=5,
-                            unlocked=True,
-                            bgcolor=BEGINNER_BG_COLOR,
-                            on_click=lambda e: page.go("/word_puzzle")
-                        ),
-                        create_level_card(
-                            icon=ft.Icon(ft.Icons.LOCAL_FIRE_DEPARTMENT, color=ft.Colors.ORANGE_ACCENT_400, size=30),
-                            title="INTERMEDIATE", # Corrected spelling
-                            subtitle="INTERMEDIATE", # Corrected spelling
-                            progress_value=intermediate_progress_value, # Example: 50%
-                            score=intermediate_score if intermediate_score is not None else "N/A", # Use score from feedback if available
-                            stars=intermediate_score_star,
-                            total_stars=5,
-                            unlocked=is_beginner_unlocked, # Assuming intermediate is also unlocked for now
-                            bgcolor=INTERMEDIATE_BG_COLOR,
-                            # Add on_click to navigate to path_game
-                            on_click=lambda e: page.go("/path_game") if is_beginner_unlocked else None
-                        ),
-                        create_level_card(
-                            icon=ft.Icon(ft.Icons.DIAMOND, color=ft.Colors.BLUE_ACCENT_200, size=30), # Using diamond as a proxy for crystal
-                            title="ADVANCED",
-                            subtitle="ADVANCED",
-                            progress_value=advanced_progress_value, # Example: 50%
-                            score=advanced_score if advanced_score is not None else "N/A", # Use score from feedback if available
-                            stars=advanced_score_star,
-                            total_stars=5,
-                            unlocked=is_advanced_unlocked, # Assuming advanced is locked
-                            bgcolor=ADVANCED_BG_COLOR,
-                            # Add on_click to navigate to emoji_game if advanced is unlocked
-                            on_click=lambda e: page.go("/emoji_game") if is_advanced_unlocked else None
-                        ),
-                    ],
-                    alignment=ft.MainAxisAlignment.CENTER,
-                    spacing=25, # Increased spacing between cards
-                    wrap=True, # Allow wrapping on smaller screens
-                    vertical_alignment=ft.CrossAxisAlignment.START,
-                    expand=True, # Added to help with wrapping on mobile
-                )
+                ft.Container(
+                    content=ft.Stack(
+                        [
+                            # White path connector with box shadow
+                            ft.Container(
+                                width=4,
+                                height=70,
+                                left=100,
+                                bottom=120,
+                                rotate=ft.Rotate(45),
+                                bgcolor=ft.Colors.with_opacity(0.4, ft.Colors.WHITE),
+                                border_radius=6,
+                                
+                                shadow=ft.BoxShadow(
+                                    spread_radius=10,
+                                    blur_radius=24,
+                                    color=ft.Colors.with_opacity(0.7, ft.Colors.WHITE),
+                                    offset=ft.Offset(0, 0),
+                                ),
+                            ),
+                            
+                            ft.Container(
+                                width=4,
+                                height=80,
+                                left=125,
+                                top=65,
+                                rotate=ft.Rotate(-.8),
+                                bgcolor=ft.Colors.with_opacity(0.4, ft.Colors.WHITE),
+                                border_radius=6,
+                                
+                                shadow=ft.BoxShadow(
+                                    spread_radius=10,
+                                    blur_radius=24,
+                                    color=ft.Colors.with_opacity(0.7, ft.Colors.WHITE),
+                                    offset=ft.Offset(0, 0),
+                                ),
+                            ),
+                            
+                            ft.Container(
+                                planet_level(
+                                    icon=ft.Icons.PUBLIC,
+                                    label="INTERMEDIATE",
+                                    unlocked=is_beginner_unlocked,
+                                    on_click=lambda e: page.go("/path_game") if is_beginner_unlocked else None,
+                                    bgcolor=ft.Colors.ORANGE_ACCENT_700,
+                                    border_color=ft.Colors.ORANGE_ACCENT_400,
+                                    star_color=ft.Colors.AMBER,
+                                    score=f"{intermediate_score} / {intermediate_score_max}",
+                                    stars=intermediate_score_star,
+                                    total_stars=5,
+                                ),
+                                
+                                right=0,  # Zigzag: align right
+                                top=115,
+                            ),
+                            ft.Container(height=30),  # Spacer between levels
+                            ft.Container(
+                                planet_level(
+                                    icon=ft.Icons.PUBLIC,
+                                    label="ADVANCED",
+                                    unlocked=is_advanced_unlocked,
+                                    on_click=lambda e: page.go("/emoji_game") if is_advanced_unlocked else None,
+                                    bgcolor=ft.Colors.BLUE_ACCENT_700,
+                                    border_color=ft.Colors.BLUE_500,
+                                    star_color=ft.Colors.AMBER,
+                                    score=f"{advanced_score} / {advanced_score_max}",
+                                    stars=advanced_score_star,
+                                    total_stars=5,
+                                ),
+                                left=0,  # Zigzag: align left
+                                top=0,
+                            ),
+                            ft.Container(height=30),  # Spacer between levels
+                            ft.Container(
+                                planet_level(
+                                    icon=ft.Icons.PUBLIC,
+                                    label="BEGINNER",
+                                    unlocked=True,
+                                    on_click=lambda e: page.go("/typing_game"),
+                                    bgcolor=ft.Colors.GREEN_ACCENT_700,
+                                    border_color=ft.Colors.GREEN_ACCENT_400,
+                                    star_color=ft.Colors.AMBER,
+                                    score=f"{beginner_score} / {intermediate_score_max}",
+                                    stars=beginner_score_star,
+                                    total_stars=5,
+                                ),
+                                left=0,
+                                bottom=0  # Zigzag: align left at bottom
+                            ),
+                        ],
+                        height=400,
+                        width=250,
+                    ),
+                    alignment=ft.alignment.center,
+                    expand=True,
+                ),
             ],
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             spacing=10,
         ),
-        padding=ft.padding.symmetric(vertical=30, horizontal=20), # Added padding around the section
-        # margin=ft.margin.only(top=20) # Add some top margin
+        padding=ft.padding.symmetric(vertical=30, horizontal=20),
     )
 
+    # --- Animated White Stars Logic ---
+    num_stars = 16
+    star_states = [dict(left=0, top=0, size=16, visible=False) for _ in range(num_stars)]
+    star_controls = [ft.Container() for _ in range(num_stars)]
+
+    def update_stars():
+        for i, state in enumerate(star_states):
+            star_controls[i].content = ft.AnimatedSwitcher(
+                content=ft.Icon(ft.Icons.STAR, color=ft.Colors.with_opacity(0.15, ft.Colors.WHITE), size=state['size']) if state['visible'] else ft.Container(),
+                duration=300,
+            )
+            star_controls[i].left = state['left']
+            star_controls[i].top = state['top']
+            star_controls[i].width = 32
+            star_controls[i].height = 32
+        page.update()
+
+    async def star_pop_loop(i):
+        while True:
+            if(page.route != "/dashboard"):
+                break
+            await asyncio.sleep(random.uniform(0.8, 2.5))
+            star_states[i]['left'] = random.randint(0, 220)
+            star_states[i]['top'] = random.randint(0, 350)
+            star_states[i]['size'] = random.randint(12, 28)
+            star_states[i]['visible'] = True
+            update_stars()
+            await asyncio.sleep(random.uniform(0.5, 1.2))
+            star_states[i]['visible'] = False
+            update_stars()
+
+    async def start_star_animation():
+        await asyncio.sleep(0.5)
+        for i in range(num_stars):
+            asyncio.create_task(star_pop_loop(i))
+
+    # Schedule the animation to start after the page is loaded
+    page.run_task(start_star_animation)
+
     # Dashboard content
+    # Create user avatar with first letter of user name
+    user_initial = user_name[0].upper() if user_name else "U"
+    user_avatar = ft.Container(
+        content=ft.Text(user_initial, color=ft.Colors.WHITE, size=28, weight=ft.FontWeight.W_600),
+        width=50,
+        height=50,
+        margin=ft.margin.all(6),
+        bgcolor=ft.Colors.TRANSPARENT,
+        border_radius=25,
+        border=ft.border.all(1, ft.Colors.with_opacity(0.5, ft.Colors.WHITE)),
+        alignment=ft.alignment.center,
+        on_click=lambda _:page.go("/profile")
+    )
     return ft.View(
         "/dashboard",
         [
             ft.AppBar(
-                # leading=ft.IconButton(
-                #     ft.Icons.CHEVRON_LEFT,
-                #     on_click=lambda _: page.go("/modules_details"),
-                #     icon_color=TEXT_COLOR,
-                #     icon_size=30
-                # ),
-                title=ft.Text(f"Welcome, {user_name}! ({assessment_feedback})", size=30, weight=ft.FontWeight.W_600, color=ACCENT_COLOR),
+                
+                leading=user_avatar,
+                title=ft.Text(f"Welcome, {user_name}!", size=20, weight=ft.FontWeight.W_600, color=TEXT_COLOR),
                 center_title=True,
                 bgcolor=BG_COLOR,
                 elevation=0,
@@ -205,6 +336,11 @@ def dashboard_page(page: ft.Page):
                     #     on_click=on_search
                     # ),
                     ft.PopupMenuButton(items=[
+                        # ft.PopupMenuItem(
+                        #     text="Profile",
+                        #     icon=ft.Icons.PERSON,
+                        #     on_click=lambda e: page.go("/profile")
+                        # ),
                          ft.PopupMenuItem(
                             text="Logout",
                             icon=ft.Icons.LOGOUT,
@@ -215,64 +351,61 @@ def dashboard_page(page: ft.Page):
                             icon=ft.Icons.SETTINGS,
                             on_click=lambda e: page.go("/settings")
                         ),
-                    ]),
+                    ],
+                    icon_color=TEXT_COLOR,
+                    ),
                 ],
             ),
             ft.Stack([
                 # Background image container
                 get_background_image(),
-                
+                # Animated white stars (no custom control)
+                ft.Stack(star_controls, width=250, height=380),
                 # Content
                 ft.Container(
                     ft.Column(
                         [   
-                            ft.Text(f"Email: {user_email}", size=16, color=TEXT_COLOR),
-                            ft.Row([
-                                ft.ElevatedButton(
-                                    "Learning Modules",
-                                    on_click=lambda e: page.go("/learning_modules"),
-                                    style=ft.ButtonStyle(bgcolor=PRIMARY_COLOR, color=TEXT_COLOR, padding=BUTTON_PADDING)
-                                )
-                            ], spacing=10, alignment=ft.MainAxisAlignment.CENTER),
                             
-                            ft.Container(height=20),  # Spacer
+                            # ft.Container(height=20),  # Spacer
                             
                             *([
                                 # Game Map Section added here
                                 game_map_section,
                                 
                                 ft.Container(height=20) # Spacer
-                            ] if assessment_score is not None else []),
+                            ] if True else []),
 
-                            ft.Container(
-                                ft.Column(
-                                    [
-                                        # ft.Text("Dashboard Actions", size=24, weight=ft.FontWeight.W_500, color=PRIMARY_COLOR), # Changed title
-                                        
-                                        ft.Container(height=20),  # Spacer
-                                        
-                                        # Conditionally show the button
-                                        *([
+
+                              ft.Row([
+                                ft.Container(
+                                    content=ft.Row(
+                                        [
+                                            ft.Icon(ft.Icons.MENU_BOOK, color=ACCENT_COLOR, size=26),
                                             ft.ElevatedButton(
-                                                "Start Physics Assessment", 
-                                                on_click=lambda e: page.go("/assessment/intro"),
+                                                "Learning Modules",
+                                                on_click=lambda e: page.go("/learning_modules"),
                                                 style=ft.ButtonStyle(
-                                                    bgcolor=ACCENT_COLOR, 
-                                                    color=BG_COLOR, 
+                                                    bgcolor=PRIMARY_COLOR,
+                                                    color=TEXT_COLOR,
                                                     padding=BUTTON_PADDING
                                                 )
                                             )
-                                        ] if assessment_score is None else []),
-                                    ],
-                                    spacing=10,
-                                ),
-                                padding=20,
-                                border_radius=10,
-                                bgcolor=ft.Colors.BLACK12, # Kept original bgcolor for this specific container
-                                width=400, # Kept original width
-                            ),
+                                        ],
+                                        alignment=ft.MainAxisAlignment.CENTER,
+                                        spacing=8
+                                    ),
+                                    bgcolor=ft.Colors.with_opacity(0.12, PRIMARY_COLOR),
+                                    border_radius=16,
+                                    padding=ft.padding.symmetric(vertical=8, horizontal=18),
+                                    shadow=ft.BoxShadow(
+                                        spread_radius=1,
+                                        blur_radius=6,
+                                        color=ft.Colors.with_opacity(0.18, PRIMARY_COLOR),
+                                        offset=ft.Offset(1, 2),
+                                    ),
+                                )
+                            ], spacing=10, alignment=ft.MainAxisAlignment.CENTER),
                             
-                            ft.Container(height=20),  # Spacer
                         ],
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -282,9 +415,10 @@ def dashboard_page(page: ft.Page):
                     expand=True,
                     alignment=ft.alignment.center,
                 ),
-            ])
+            ],expand=True),
         ],
         bgcolor=BG_COLOR,
-        scroll=ft.ScrollMode.AUTO # Added scroll for potentially long content
+        padding=0
+        # scroll=ft.ScrollMode.AUTO # Added scroll for potentially long content
     )
 

@@ -1,22 +1,24 @@
 import flet as ft
 import random
 import asyncio
+from .utils import BG_COLOR,get_background_image, PRIMARY_COLOR,ConfettiWidget, ACCENT_COLOR, TEXT_COLOR, BUTTON_PADDING
+from .db import AppDatabase
 
 WORDS = [
     # Unit 1: Reference Frames, Displacement, and Velocity
     "A reference frame is a perspective from which motion is observed.",
     "Displacement is the shortest distance from the initial to the final position.",
-    "Velocity is the rate of change of displacement with time.",
+    # "Velocity is the rate of change of displacement with time.",
     # "Relative motion depends on the observer's reference frame.",
     # "A position vector points from the origin to the object's location.",
     # # Unit 2: Acceleration
-    # "Acceleration is the rate of change of velocity.",
-    # "Uniform acceleration means velocity changes at a constant rate.",
+    "Acceleration is the rate of change of velocity.",
+    "Uniform acceleration means velocity changes at a constant rate.",
     # "Instantaneous acceleration is acceleration at a specific moment.",
     # "Deceleration is negative acceleration, slowing an object down.",
     # # Unit 3: Momentum and Inertia
-    # "Momentum is the product of mass and velocity.",
-    # "Inertia is an object's resistance to changes in motion.",
+    "Momentum is the product of mass and velocity.",
+    "Inertia is an object's resistance to changes in motion.",
     # "Impulse is the change in momentum caused by a force.",
     # "Momentum is conserved in a closed system.",
     # "Mass is a measure of an object's inertia.",
@@ -110,22 +112,22 @@ def typing_game(page: ft.Page):
         for i, c in enumerate(word): 
             if i < len(typed):
                 if typed[i] == c:
-                    color = ft.Colors.GREEN_500
+                    color = ACCENT_COLOR
                 else:
                     color = ft.Colors.RED_500
                     isValid = False
                 
                 border = None
             elif i == len(typed):
-                color = ft.Colors.BLACK
-                border = ft.Border(bottom=ft.BorderSide(2, ft.Colors.BLUE_500))
+                color = ft.Colors.CYAN_100
+                border = ft.Border(bottom=ft.BorderSide(4, ACCENT_COLOR))
             else:
-                color = ft.Colors.BLACK
+                color = TEXT_COLOR
                 border = None
             letters.append(ft.Container(
                 content=ft.Text(c, size=30, weight=ft.FontWeight.W_600, color=color),
                 border=border,
-                padding=ft.padding.only(bottom=2),
+                padding=ft.padding.only(bottom=2,right=5),
                 key=str(i),
             ))
         if len(typed) > 0 and  isValid :
@@ -142,18 +144,43 @@ def typing_game(page: ft.Page):
         else:
             word_index.current += 1
         if word_index.current >= len(word_list.current):
-            feedback_text.current.value = "Level complete! 🎉"
-            input_field.current.disabled = True
-            start_button.current.disabled = False
-            restart_button.current.disabled = True
-            timer_text.current.value = ""
-            # Show next level button if not last level
-            if current_level.current < len(LEVELS) - 1:
-                next_level_button.current.visible = True
+            if current_level.current == len(LEVELS) - 1:
+                AppDatabase.save_self_user_data_2({"beginner_feedback":{"score": 450}})
+                # All levels complete
+                page.views[-1].controls = [
+                    ft.Stack([
+                        get_background_image(),
+                        ft.Container(
+                            content=ft.Column([
+                                ft.Text("🎉 All levels complete! 🎉", size=28, weight=ft.FontWeight.W_600, color=ft.Colors.GREEN_500),
+                            ], alignment="center", horizontal_alignment="center", spacing=20),
+                            alignment=ft.alignment.center,
+                            padding=40,
+                            bgcolor=ft.Colors.TRANSPARENT,
+                            border_radius=16,
+                        ),
+                        confetti
+                    ], expand=True)
+                ]
+                page.confetti.animate_confetti()
+                page.play_audio1()
+                page.update()
+                return
             else:
-                next_level_button.current.visible = False
-            page.update()
-            return
+                page.confetti.animate_confetti()
+                page.play_audio1()
+                feedback_text.current.value = "Level complete! 🎉"
+                input_field.current.disabled = True
+                start_button.current.disabled = False
+                restart_button.current.disabled = True
+                timer_text.current.value = ""
+                # Show next level button if not last level
+                if current_level.current < len(LEVELS) - 1:
+                    next_level_button.current.visible = True
+                else:
+                    next_level_button.current.visible = False
+                page.update()
+                return
         current_word.current = word_list.current[word_index.current]
         input_field.current.value = ""
         input_field.current.disabled = False
@@ -234,43 +261,68 @@ def typing_game(page: ft.Page):
             input_field.current.on_change = on_input_change
             page.update()
 
-    return ft.Container(
-            content= ft.Column(
-            controls=[
-                # ft.Text("Type the word shown below before the timer runs out!", size=18),
-                ft.Dropdown(
-                    ref=level_selector,
-                    width=120,
-                    value="0",
-                    options=[ft.dropdown.Option(str(i), text=LEVELS[i][0]) for i in range(3)],
-                    disabled=True
-                ),
-                ft.Row([
-           
-                    ft.ElevatedButton("Start", ref=start_button, on_click=start_game),
-                    ft.ElevatedButton("Restart", ref=restart_button, on_click=restart_game, disabled=True),
-                    ft.ElevatedButton("Next Level", ref=next_level_button, on_click=go_to_next_level, visible=False),
-                ], alignment=ft.MainAxisAlignment.CENTER),
-                ft.Text(ref=timer_text, size=20, color=ft.Colors.BLUE_500),
-                ft.Container(
-                    content=letter_row.current,
-                    alignment=ft.alignment.center,
-                    padding=0,
-                    expand=True,
-                ),
-                ft.TextField(ref=input_field, label="Type here...", on_submit=None, on_change=on_input_change, disabled=True, autofocus=True),
-                ft.Text(ref=feedback_text, size=20, color=ft.Colors.BLUE_500),
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=20
-        ),
-        padding=ft.padding.all(20),
+
+    # Add AppBar with back button
+    def on_back(e):
+        # page.go_back() if hasattr(page, 'go_back') else page.window_close()
+        page.go("/dashboard") # Navigate to dashboard
+    count= 0 if current_level.current is None else current_level.current
+    appbar = ft.AppBar(
+        leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=on_back,),
+        title=ft.Text(f"Typing Game", weight=ft.FontWeight.W_600),
+        bgcolor=BG_COLOR, # Defined in utils
+        center_title=True,
+        color=TEXT_COLOR,
+        # elevation=2,
     )
 
-def main(page: ft.Page):
-    page.session.set("play_sound", True)
-    page.add(typing_game(page))
 
+    confetti = ConfettiWidget()
+    page.confetti=confetti
+    return ft.View(
+        "/typing_game",
+        [
+            ft.Stack([
+            # Background image container
+                get_background_image(),
+                ft.Container(
+                content= ft.Column(
+                controls=[
+                    # ft.Text("Type the word shown below before the timer runs out!", size=18),
+                    ft.Dropdown(
+                        ref=level_selector,
+                        width=120,
+                        value="0",
+                        options=[ft.dropdown.Option(str(i), text=LEVELS[i][0]) for i in range(3)],
+                        disabled=True
+                    ),
+                    ft.Row([
+            
+                        ft.ElevatedButton("Start", ref=start_button, on_click=start_game,bgcolor=PRIMARY_COLOR, color=ft.Colors.WHITE,),
+                        ft.ElevatedButton("Restart", ref=restart_button, on_click=restart_game, disabled=True, bgcolor=PRIMARY_COLOR, color=ft.Colors.WHITE,),
+                        ft.ElevatedButton("Next Level", ref=next_level_button, on_click=go_to_next_level, visible=False, bgcolor=PRIMARY_COLOR, color=ft.Colors.WHITE,),
+                    ], alignment=ft.MainAxisAlignment.CENTER),
+                    ft.Text(ref=timer_text, size=20, color=TEXT_COLOR),
+                    ft.Container(
+                        content=letter_row.current,
+                        alignment=ft.alignment.center,
+                        padding=0,
+                        expand=True,
+                    ),
+                    ft.TextField(ref=input_field, label="Type here...", on_submit=None, on_change=on_input_change, disabled=True, autofocus=True),
+                    ft.Text(ref=feedback_text, size=20, color=ft.Colors.BLUE_500),
+                ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    spacing=20
+                ),
+                padding=ft.padding.all(20),
+            ),
+            confetti
+            ],expand=True),
 
-ft.app(target=main)
+        ],
+        padding=0,
+        bgcolor=BG_COLOR,
+        appbar=appbar,
+    )

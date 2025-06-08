@@ -1,56 +1,102 @@
 import flet as ft
-import os
 import random
 import threading
 from .db import AppDatabase
+import flet_audio as fa
 
 
 # Define theme colors
-BG_COLOR = "#0F111A"  # Deep Twilight
+# BG_COLOR = "#0F111A"  # Deep Twilight
+BG_COLOR = "#0d0745"  # Deep Twilight
 PRIMARY_COLOR = "#7B68EE"  # Medium Slate Blue
 ACCENT_COLOR = "#36F1CD"  # Aqua Mint
 SNACK_COLOR = "#04332A"  # Aqua Mint
 TEXT_COLOR = ft.Colors.WHITE
 BUTTON_PADDING = ft.padding.symmetric(vertical=12, horizontal=24)
+APPBAR_FONT_SIZE = 20
 # Path to background image
-BG_IMAGE_PATH = os.path.join(os.path.dirname(__file__), "..", "assets", "icon.png")
+# BG_IMAGE_PATH = os.path.join(os.path.dirname(__file__), "..", "assets", "icon.png")
 
 # Define reusable components
-def get_background_image():
+def get_background_image(showImage=True):
+    # return ft.Container(
+    #     expand=True,
+    #     alignment=ft.alignment.bottom_right,
+    #     content=ft.Image(
+    #         src="icon.png",  # Ensure this path is correct
+    #         fit=ft.ImageFit.COVER,
+    #         opacity=0.2,
+    #     ),
+    # )
+
     return ft.Container(
-        expand=True,
-        alignment=ft.alignment.bottom_right,
-        content=ft.Image(
-            src=BG_IMAGE_PATH,
-            fit=ft.ImageFit.COVER,
-            opacity=0.2,
-        ),
-    )
+            content=ft.Image(
+                src="splash_android.png",  # Ensure this path is correct
+                fit=ft.ImageFit.COVER,
+                opacity=0.35,
+            ) if showImage else None,  # Show image only if showImage is True
+            alignment=ft.alignment.center,  # Center content within container
+            expand=True,
+            margin=0,
+            padding=0,  # Remove inbuilt padding
+            gradient=ft.LinearGradient(
+                begin=ft.alignment.top_center,
+                end=ft.alignment.bottom_center,
+                colors=[
+                    ft.Colors.with_opacity(1,BG_COLOR),  # hsla(244, 80%, 24%, 1)
+                    ft.Colors.with_opacity(1,"#140c71"),  # hsla(271, 94%, 49%, 1)
+                    ft.Colors.with_opacity(1,BG_COLOR),
+                ],
+                stops=[0.0, 0.5, 1.0],
+            ),
+        )
+
+click1_audio = ft.Audio(
+    src="audio/click1.wav",
+    autoplay=False,
+)
+error_audio = fa.Audio(
+    src="audio/error1.wav",
+    autoplay=False,
+)
+audio1 = fa.Audio(
+    src="audio/win1.wav",
+    autoplay=False,
+)
+def play_click_sound():
+    play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
+    if play_sound:
+        try:
+            click1_audio.seek(0)
+            click1_audio.play()
+        except Exception as e:
+            pass
+def play_error_sound():
+    play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True   
+    if play_sound: 
+        try:
+            error_audio.seek(0)
+            error_audio.play()
+        except Exception as e:
+            pass
 
 
 def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
-    click1_audio = ft.Audio(
-        src="audio/click1.wav",
-        autoplay=False,
-    )
-    error_audio = ft.Audio(
-        src="audio/error1.wav",
-        autoplay=False,
-    )
-    audio1 = ft.Audio(
-        src="audio/win1.wav",
-        autoplay=False,
-    )
     play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True
-    def play_click_sound():
-        if play_sound: 
-            click1_audio.play()
-    def play_error_sound():
-       
-        click1_audio.pause()
-        click1_audio.seek(0)  # Reset audio position
-        if play_sound: 
-            click1_audio.play()
+    # def play_click_sound():
+    #     if play_sound:
+    #         try:
+    #             click1_audio.seek(0)
+    #             click1_audio.play()
+    #         except Exception as e:
+    #             pass
+    # def play_error_sound():       
+    #     if play_sound: 
+    #         try:
+    #             error_audio.seek(0)
+    #             error_audio.play()
+    #         except Exception as e:
+    #             pass
 
     def create_confetti_piece():
         return ft.Container(
@@ -90,7 +136,11 @@ def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     def animate_confetti(e=None):
         if(confetti_stack.visible is False):
             threading.Timer(0.1, animate_confetti).start()
-            audio1.play()
+            if play_sound:
+                try:
+                    audio1.play()
+                except Exception as e:
+                    pass
             threading.Timer(1.5,clearview).start()
         
         confetti_stack.visible = True
@@ -112,15 +162,18 @@ def ConfettiWidget(width=None, height=600, dot_count=300, distance=1300):
     confetti_button = ft.ElevatedButton("Confetti!", on_click=animate_confetti, bgcolor=ft.Colors.BLUE_500, color=ft.Colors.WHITE)
 
     column = ft.Column([
-        audio1,
-        click1_audio,
-        error_audio,
         confetti_stack,
         # confetti_button
     ])
     column.animate_confetti = animate_confetti  # Expose animate_confetti as an attribute
-    column.play_click_sound = play_click_sound  # Expose play_click_sound as an attribute
-    column.play_error_sound = play_error_sound  # Expose play_error_sound as an attribute
+    # column.play_click_sound = play_click_sound  # Expose play_click_sound as an attribute
+    # column.play_error_sound = play_error_sound  # Expose play_error_sound as an attribute
     return column
+
+# Text colors matching BG_COLOR
+TEXT_COLOR_PRIMARY = ft.Colors.WHITE  # High contrast
+TEXT_COLOR_SECONDARY = ft.Colors.BLUE_GREY_100  # Soft contrast
+TEXT_COLOR_ACCENT = ft.Colors.CYAN_200  # Accent/highlight
+TEXT_COLOR_MUTED = ft.Colors.GREY_100  # Muted/disabled
 
 

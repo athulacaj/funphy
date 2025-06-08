@@ -1,5 +1,5 @@
 [project]
-name = "my-app"
+name = "funPhy"
 version = "0.1.0"
 description = ""
 readme = "README.md"
@@ -9,7 +9,7 @@ authors = [
 ]
 dependencies = [
   "flet==0.28.3",
-  "flet-lottie==0.1.0",
+  "flet-audio==0.1.0",
 ]
 
 [tool.flet]
@@ -19,7 +19,7 @@ org = "com.mycompany"
 
 # project display name that is used as an app title on Android and iOS home screens,
 # shown in window titles and about app dialogs on desktop.
-product = "my-app"
+product = "funPhy"
 
 # company name to display in about app dialogs
 company = "Flet"
