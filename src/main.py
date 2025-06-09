@@ -72,9 +72,8 @@ async def main(page: ft.Page):
         play_sound=AppDatabase.get_self_user_2().get("play_sound", True) if AppDatabase.get_self_user_2() else True   
         if play_sound:
             try:
-                # pause_all_audio()
-                # page.overlay.append(audio1)
-                audio1.seek(0)
+                pause_all_audio()
+                page.overlay.append(audio1)
                 audio1.play()
             except Exception as e:
                 pass
