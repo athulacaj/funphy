@@ -126,7 +126,7 @@ async def main(page: ft.Page):
         elif page.route == "/modules_details": # Added route
             page.views.append(modules_details_view(page))
         elif page.route == "/lessons": # Added route
-            page.views.append(lessons_view(page))
+            page.views.append(lessons_view(page))  
         elif page.route == "/notes": # Added route
             page.views.append(notes_page(page))
         elif page.route == "/references": # Added route
@@ -150,11 +150,11 @@ async def main(page: ft.Page):
         page.session.set("user", self_user) # Store user data in session
         
     page.on_route_change = route_change
-    page.session.set("play_sound", True)  # Store user data in session
+    page.session.set("play_sound", True)  # Store user data in session  
 
     page.go(page.route or "/")
 
 
 ft.app(main)
-# ft.app(target=main, port=8550) 
+# ft.app(target=main, port=8550)  
  

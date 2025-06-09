@@ -275,6 +275,15 @@ def typing_game(page: ft.Page):
         bgcolor=BG_COLOR, # Defined in utils
         center_title=True,
         color=TEXT_COLOR,
+        actions=[
+            ft.Dropdown(
+                ref=level_selector,
+                width=130,
+                value="0",
+                options=[ft.dropdown.Option(str(i), text=LEVELS[i][0]) for i in range(3)],
+                disabled=True
+            ),
+        ]
         # elevation=2,
     )
 
@@ -291,13 +300,6 @@ def typing_game(page: ft.Page):
                 content= ft.Column(
                 controls=[
                     # ft.Text("Type the word shown below before the timer runs out!", size=18),
-                    ft.Dropdown(
-                        ref=level_selector,
-                        width=120,
-                        value="0",
-                        options=[ft.dropdown.Option(str(i), text=LEVELS[i][0]) for i in range(3)],
-                        disabled=True
-                    ),
                     ft.Row([
             
                         ft.ElevatedButton("Start", ref=start_button, on_click=start_game,bgcolor=PRIMARY_COLOR, color=ft.Colors.WHITE,),
@@ -316,9 +318,10 @@ def typing_game(page: ft.Page):
                 ],
                     alignment=ft.MainAxisAlignment.CENTER,
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                    spacing=20
+                    spacing=20,
+                    expand=True,
                 ),
-                padding=ft.padding.all(20),
+                padding=ft.padding.only(20, 10, 20, 0),
             ),
             confetti
             ],expand=True),
