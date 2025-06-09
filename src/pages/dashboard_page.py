@@ -131,7 +131,8 @@ def dashboard_page(page: ft.Page):
             [
                 ft.Icon(ft.Icons.STAR, color=star_color if unlocked else ft.Colors.GREY_400, size=32),
                 ft.Container(
-                    content=ft.Icon(icon, color=ft.Colors.WHITE, size=36),
+                    content=ft.Image(icon,border_radius=32, fit=ft.ImageFit.COVER),
+                    # padding=ft.padding.all(6),
                     width=64,
                     height=64,
                     bgcolor=bgcolor,
@@ -204,7 +205,7 @@ def dashboard_page(page: ft.Page):
                             
                             ft.Container(
                                 planet_level(
-                                    icon=ft.Icons.PUBLIC,
+                                    icon="icons/icon2.png",
                                     label="INTERMEDIATE",
                                     unlocked=is_beginner_unlocked,
                                     on_click=lambda e: page.go("/path_game") if is_beginner_unlocked else None,
@@ -222,7 +223,7 @@ def dashboard_page(page: ft.Page):
                             ft.Container(height=30),  # Spacer between levels
                             ft.Container(
                                 planet_level(
-                                    icon=ft.Icons.PUBLIC,
+                                    icon="icons/icon3.png",
                                     label="ADVANCED",
                                     unlocked=is_advanced_unlocked,
                                     on_click=lambda e: page.go("/emoji_game") if is_advanced_unlocked else None,
@@ -239,7 +240,7 @@ def dashboard_page(page: ft.Page):
                             ft.Container(height=30),  # Spacer between levels
                             ft.Container(
                                 planet_level(
-                                    icon=ft.Icons.PUBLIC,
+                                    icon="icons/icon1.jpeg",
                                     label="BEGINNER",
                                     unlocked=True,
                                     on_click=lambda e: page.go("/typing_game"),
